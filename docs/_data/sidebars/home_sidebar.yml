@@ -12,6 +12,9 @@ entries:
     - output: web,pdf
       title: Analysis By Person
       url: analyze_by_person.html
+    - output: web,pdf
+      title: Title
+      url: clock_plots.html
     output: web
     title: SALA
   output: web

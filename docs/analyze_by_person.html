@@ -85,31 +85,22 @@ nb_path: "00_analyze_by_person.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_raw_data" class="doc_header"><code>get_raw_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L6" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_raw_data</code>(<strong><code>key</code></strong>:<code>str</code>, <strong><code>directory</code></strong>:<code>dict</code>, <strong><code>grouping</code></strong>:<code>str</code>=<em><code>'Group'</code></em>)</p>
+<h3 id="get_raw_data" class="doc_header"><code>get_raw_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L6" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>get_raw_data</code>(<strong><code>key</code></strong>:<code>str</code>, <strong><code>directory</code></strong>:<code>dict</code>, <strong><code>grouping</code></strong>:<code>str</code>=<em><code>'Group'</code></em>)</p>
 </blockquote>
 <p>Loads raw actiwatch data for a particular season.</p>
-<p>Parameters</p>
-<p>key: str</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>key: str</p>
 
-<pre><code>The key to load actiwatch data from
-For example: v1
-
+<pre><code>The key to load actiwatch data from (for example, "v1")
 </code></pre>
 <p>directory: dict</p>
 
-<pre><code>Dictionary of valid seasons to retrieve actiwatch data from
-
+<pre><code>Dictionary of valid folders to load actiwatch data from.
+Folders should have .csv files in them.
 </code></pre>
 <p>grouping: str</p>
 
-<pre><code>The name of the generated column for specifying Grouping, where
-values will be the name of the key given. Defaults to 'Group'
-For example: Group
-
-</code></pre>
-<p>Returns</p>
-
-<pre><code>the loaded raw data for a particular season</code></pre>
+<pre><code>Name of the generated column for specifying groupings, where
+the values will be the name of the key given. Default = 'Group'</code></pre>
 
 </div>
 
@@ -345,53 +336,44 @@ Pass #2, data summary
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="process_timing_data" class="doc_header"><code>process_timing_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L35" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>process_timing_data</code>(<strong><code>location</code></strong>:<code>str</code>, <strong><code>outfile</code></strong>:<code>str</code>, <strong><code>thresholds</code></strong>:<code>list</code>, <strong><code>key</code></strong>:<code>str</code>, <strong><code>directory</code></strong>:<code>dict</code>, <strong><code>recalc_raw</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>recalc_timing</code></strong>:<code>bool</code>=<em><code>False</code></em>)</p>
+<h3 id="process_timing_data" class="doc_header"><code>process_timing_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L29" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>process_timing_data</code>(<strong><code>location</code></strong>:<code>str</code>, <strong><code>outfile</code></strong>:<code>str</code>, <strong><code>thresholds</code></strong>:<code>list</code>, <strong><code>key</code></strong>:<code>str</code>, <strong><code>directory</code></strong>:<code>dict</code>, <strong><code>recalc_raw</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>recalc_timing</code></strong>:<code>bool</code>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Setup timing and raw dataframes or recalculate their
 values if specified and necessary. Both operations take
 a long time and lots of memory. Ill-advised to recalculate
 timing specifically if the data has already been created.</p>
-<p>Parameters</p>
-<p>location: str</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>location: str</p>
 
-<pre><code>Location for calculating light
-
-For example: seattle
-
+<pre><code>Location for calculating light, for example 'Seattle'
 </code></pre>
 <p>outfile: str</p>
 
 <pre><code>File for re-written data to be placed in, or for data to be loaded from
-
 </code></pre>
 <p>thresholds: list</p>
 
 <pre><code>List of light thresholds for the watch data
-
 </code></pre>
 <p>key: str</p>
 
 <pre><code>The key to load actiwatch data from
-
 </code></pre>
 <p>directory: dict</p>
 
 <pre><code>Dictionary of valid seasons to retrieve actiwatch data from
-
 </code></pre>
 <p>recalc_raw: bool</p>
 
-<pre><code>Forces long recalculation process if true, loads processed data from disk otherwise
-
+<pre><code>Forces recalculation process if true, loads processed data from disk otherwise.
+Default value is 'False'
 </code></pre>
 <p>recalc_timing: bool</p>
 
-<pre><code>Forces long recalculation of light timing data, loads it from disk otherwise
-
+<pre><code>Forces recalculation of light timing data, loads it from disk otherwise.
+Default value is 'False'
 </code></pre>
-<p>Returns</p>
-
-<pre><code>(as a tuple) all the data, the timing data for a particular location</code></pre>
+<h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4>
+<pre><code>(as a tuple of pd.DataFrames) all the data, the timing data for a particular location</code></pre>
 
 </div>
 
@@ -626,18 +608,22 @@ For example: seattle
       <th>Time above threshold</th>
       <th>Time above threshold AM</th>
       <th>Minutes above threshold</th>
-      <th>Minutes above threshold AM</th>
-      <th>Lux minutes</th>
-      <th>Lux minutes AM</th>
-      <th>Group</th>
-      <th>Watch period</th>
-      <th>DayofWeek</th>
+      <th>...</th>
       <th>GroupDayofWeek</th>
       <th>GroupDayType</th>
       <th>Weekend/Holiday</th>
+      <th>Sunrise</th>
+      <th>Sunset</th>
+      <th>Sleep onset</th>
+      <th>Sleep offset</th>
+      <th>Sleep duration</th>
+      <th>Sleep onset MSLM</th>
+      <th>Sleep offset MSLM</th>
     </tr>
     <tr>
       <th>index</th>
+      <th></th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -672,15 +658,17 @@ For example: seattle
       <td>0 days 10:16:30</td>
       <td>0 days 04:52:00</td>
       <td>616.5</td>
-      <td>292.0</td>
-      <td>431942.250</td>
-      <td>266478.420</td>
-      <td>v1</td>
-      <td>0 days 00:00:30</td>
-      <td>3</td>
+      <td>...</td>
       <td>v1Thu</td>
       <td>v1Weekday</td>
       <td>False</td>
+      <td>2018-05-16 20:12:37.264718+00:00</td>
+      <td>2018-05-17 11:21:24.640097+00:00</td>
+      <td>2018-05-17 21:50:00</td>
+      <td>2018-05-18 05:31:00</td>
+      <td>0 days 07:41:00</td>
+      <td>1310.0</td>
+      <td>331.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -694,15 +682,17 @@ For example: seattle
       <td>0 days 10:17:00</td>
       <td>0 days 05:04:30</td>
       <td>617.0</td>
-      <td>304.5</td>
-      <td>706720.190</td>
-      <td>354358.550</td>
-      <td>v1</td>
-      <td>0 days 00:00:30</td>
-      <td>4</td>
+      <td>...</td>
       <td>v1Fri</td>
       <td>v1Weekday</td>
       <td>False</td>
+      <td>2018-05-10 20:20:17.050530+00:00</td>
+      <td>2018-05-11 11:13:48.602636+00:00</td>
+      <td>2018-05-11 21:58:30</td>
+      <td>2018-05-12 05:05:00</td>
+      <td>0 days 07:06:30</td>
+      <td>1318.5</td>
+      <td>305.0</td>
     </tr>
     <tr>
       <th>2</th>
@@ -716,15 +706,17 @@ For example: seattle
       <td>0 days 13:16:30</td>
       <td>0 days 05:03:30</td>
       <td>796.5</td>
-      <td>303.5</td>
-      <td>775243.645</td>
-      <td>166308.070</td>
-      <td>v1</td>
-      <td>0 days 00:00:30</td>
-      <td>6</td>
+      <td>...</td>
       <td>v1Sun</td>
       <td>v1Weekend/Holiday</td>
       <td>True</td>
+      <td>2018-05-12 20:17:36.639310+00:00</td>
+      <td>2018-05-13 11:16:23.346370+00:00</td>
+      <td>2018-05-13 21:39:30</td>
+      <td>2018-05-14 05:16:30</td>
+      <td>0 days 07:37:00</td>
+      <td>1299.5</td>
+      <td>316.5</td>
     </tr>
     <tr>
       <th>3</th>
@@ -738,15 +730,17 @@ For example: seattle
       <td>0 days 12:43:30</td>
       <td>0 days 05:39:00</td>
       <td>763.5</td>
-      <td>339.0</td>
-      <td>408969.375</td>
-      <td>195590.445</td>
-      <td>v1</td>
-      <td>0 days 00:00:30</td>
-      <td>0</td>
+      <td>...</td>
       <td>v1Mon</td>
       <td>v1Weekday</td>
       <td>False</td>
+      <td>2018-05-20 20:08:08.562556+00:00</td>
+      <td>2018-05-21 11:26:12.538105+00:00</td>
+      <td>2018-05-21 22:50:00</td>
+      <td>2018-05-22 06:00:30</td>
+      <td>0 days 07:10:30</td>
+      <td>1370.0</td>
+      <td>360.5</td>
     </tr>
     <tr>
       <th>4</th>
@@ -760,18 +754,21 @@ For example: seattle
       <td>0 days 08:35:30</td>
       <td>0 days 03:49:30</td>
       <td>515.5</td>
-      <td>229.5</td>
-      <td>174880.510</td>
-      <td>87783.270</td>
-      <td>v1</td>
-      <td>0 days 00:00:30</td>
-      <td>0</td>
+      <td>...</td>
       <td>v1Mon</td>
       <td>v1Weekday</td>
       <td>False</td>
+      <td>2018-05-13 20:16:19.055530+00:00</td>
+      <td>2018-05-14 11:17:39.760167+00:00</td>
+      <td>2018-05-14 21:37:30</td>
+      <td>2018-05-15 06:18:00</td>
+      <td>0 days 08:40:30</td>
+      <td>1297.5</td>
+      <td>378.0</td>
     </tr>
   </tbody>
 </table>
+<p>5 rows × 26 columns</p>
 </div>
 </div>
 
@@ -814,42 +811,34 @@ For example: seattle
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="set_sun_timings" class="doc_header"><code>set_sun_timings</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L147" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>set_sun_timings</code>(<strong><code>timing_data</code></strong>, <strong><code>loc</code></strong>:<code>str</code>, <strong><code>region</code></strong>:<code>str</code>, <strong><code>timezone</code></strong>:<code>str</code>, <strong><code>longitude</code></strong>:<code>float</code>, <strong><code>latitude</code></strong>:<code>float</code>)</p>
+<h3 id="set_sun_timings" class="doc_header"><code>set_sun_timings</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L134" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>set_sun_timings</code>(<strong><code>timing_data</code></strong>, <strong><code>loc</code></strong>:<code>str</code>, <strong><code>region</code></strong>:<code>str</code>, <strong><code>timezone</code></strong>:<code>str</code>, <strong><code>longitude</code></strong>:<code>float</code>, <strong><code>latitude</code></strong>:<code>float</code>)</p>
 </blockquote>
 <p>Given a location (city), calculate sunset and sunrise timings for the data</p>
-<p>Parameters</p>
-<p>timing_data: pd.DataFrame</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>timing_data: pd.DataFrame</p>
 
 <pre><code>Timing data
-
 </code></pre>
 <p>loc: str (any string)</p>
 
 <pre><code>Name of location to lookup for sunrise/sunset calculations
-
 </code></pre>
 <p>region: str (any string)</p>
 
 <pre><code>Name of the region the location belongs to
-
 </code></pre>
 <p>timezone: str</p>
 
-<pre><code>the location's timezone (a list of time zone names can be obtained from pytz.all_timezones)
-
+<pre><code>the location's timezone (a list of timezones can be obtained from pytz.all_timezones)
 </code></pre>
 <p>longitude: float</p>
 
 <pre><code>Longitude position of the location for sunrise/sunset calculations
-
 </code></pre>
 <p>latitude: float</p>
 
 <pre><code>Latitude position of the location for sunrise/sunset calculations
-
 </code></pre>
-<p>Returns</p>
-
+<h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4>
 <pre><code>Modified timing data with sunrise and sunset calculations</code></pre>
 
 </div>
@@ -919,14 +908,12 @@ For example: seattle
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="process_sleep_data" class="doc_header"><code>process_sleep_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L196" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>process_sleep_data</code>(<strong><code>timing_data</code></strong>, <strong><code>num_sleeps</code></strong>:<code>int</code>=<em><code>2</code></em>)</p>
+<h3 id="process_sleep_data" class="doc_header"><code>process_sleep_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L177" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>process_sleep_data</code>(<strong><code>timing_data</code></strong>, <strong><code>num_sleeps</code></strong>:<code>int</code>=<em><code>2</code></em>)</p>
 </blockquote>
 <p>Processes sleep data for existing timing data.</p>
-<p>Parameters</p>
-<p>timing_data: pd.DataFrame</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>timing_data: pd.DataFrame</p>
 
 <pre><code>Timing data
-
 </code></pre>
 <p>num_sleeps: int</p>
 
@@ -934,13 +921,11 @@ For example: seattle
 Default = 2, frame will store days with 3+ sleep instances
 
 </code></pre>
-<p>Returns</p>
-
+<h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4>
 <pre><code>short_frame: pd.DataFrame
 
     Onset, offset, and duration for sleep periods on days with
     more than num_sleeps number of sleep periods
-
 timing_data: pd.DataFrame
 
     Modified timing data with included sleep information</code></pre>
@@ -1170,6 +1155,64 @@ timing_data: pd.DataFrame
   </tbody>
 </table>
 </div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Exporting-Timing-Data">Exporting Timing Data<a class="anchor-link" href="#Exporting-Timing-Data"> </a></h2>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">export_timing_data</span><span class="p">(</span><span class="n">timing_data</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="export_timing_data" class="doc_header"><code>export_timing_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L297" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>export_timing_data</code>(<strong><code>timing_data</code></strong>)</p>
+</blockquote>
+<p>Exports timing data to parquet.</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>timing_data: pd.DataFrame</p>
+
+<pre><code>Timing data</code></pre>
+
 </div>
 
 </div>
