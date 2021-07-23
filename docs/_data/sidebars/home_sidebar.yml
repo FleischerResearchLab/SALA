@@ -13,7 +13,7 @@ entries:
       title: Analysis By Person
       url: analyze_by_person.html
     - output: web,pdf
-      title: Title
+      title: Making Clock Plots
       url: clock_plots.html
     output: web
     title: SALA

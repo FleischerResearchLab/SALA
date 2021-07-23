@@ -72,9 +72,11 @@ def process_timing_data(location: str,
         print("Loading raw data from disk...")
         results = Parallel(n_jobs=len(directory))(delayed(get_raw_data)(key, directory) for key in directory.keys())
         all_data = pd.concat(results)
+        # save data to parquet file
         all_data.to_parquet(outfile + "raw.parquet", engine = 'fastparquet',
                            compression = "gzip")
     else:
+        # read data from parquet file
         all_data = pd.read_parquet(outfile + "raw.parquet")
 
     if recalc_timing:
@@ -245,6 +247,7 @@ def process_sleep_data(timing_data, num_sleeps: int = 2):
                      "Sleep offset": [x.DateTime.max()],
                      "Sleep duration": [x.DateTime.max() - x.DateTime.min()]
                      }, index = x.DateTime.dt.normalize() ))
+        # if the value is = 0 -> np.int64 (not a DateTime)
         except AttributeError:
             sleeps = asleep.reset_index().groupby("Sleep period").apply( lambda x: pd.DataFrame({
              "Sleep onset": [pd.to_datetime(x.DateTime.min())],
