@@ -97,7 +97,6 @@ def firstAndLastLight(data, threshold_list, resamp=False):
                     min2fl.append(mins4am)
                     whoswatch.append(uid)
                     #print("{} {} {} of 0-lux with period {}\n".format(uid,a_day,len(daylight[daylight==0])*dperiod,dperiod))
-                
                 #print( len( whoswatch), len(lastlight), len(firstlight), len(min2ll), len(min2fl))
     return pd.DataFrame( {'UID': whoswatch, 'Date': datelist, 'Threshold': thresholds,
                           'Last Light': lastlight, 'Mins to LL from 4AM': min2ll,

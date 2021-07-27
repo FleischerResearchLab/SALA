@@ -85,27 +85,24 @@ def process_timing_data(location: str,
     """
     if recalc_raw:
         print("Loading raw data from disk...")
-        results = (
+        raw_results = (
             Parallel(n_jobs=len(directory))(delayed(get_raw_data)(key, directory) for key in directory.keys())
                    )
-        all_data = pd.concat(results)
+        all_data = pd.concat(raw_results)
         # save data to parquet file
         all_data.to_parquet(outfile + "raw.parquet", engine = 'fastparquet',
                            compression = "gzip")
-        return process_timing_data(location, outfile, thresholds, key, directory, False, recalc_timing)
     else:
         # read data from parquet file
         all_data = pd.read_parquet(outfile + "raw.parquet")
 
     if recalc_timing:
         print("Calculating light timing data...")
-        try:
-            results
-        except NameError:
-            results = (Parallel(n_jobs=len(thresholds))
-                (delayed(firstAndLastLight)(all_data, threshold) for threshold in thresholds)
+
+        timing_results = (Parallel(n_jobs=len(thresholds))
+            (delayed(firstAndLastLight)(all_data, threshold) for threshold in thresholds)
                       )
-        timing_data = pd.concat(results)
+        timing_data = pd.concat(timing_results)
         print("Adding holiday markers to timing data...")
         cal = calendar()
 
