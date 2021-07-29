@@ -5,6 +5,7 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 index = {"get_raw_data": "00_analyze_by_person.ipynb",
          "export_timing_data": "00_analyze_by_person.ipynb",
          "process_timing_data": "00_analyze_by_person.ipynb",
+         "remove_first_day": "00_analyze_by_person.ipynb",
          "set_sun_timings": "00_analyze_by_person.ipynb",
          "process_sleep_data": "00_analyze_by_person.ipynb",
          "map_mins_to_rads": "clock_plots.ipynb",

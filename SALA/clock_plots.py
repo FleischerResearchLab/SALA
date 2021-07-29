@@ -19,7 +19,7 @@ def map_mins_to_rads(d_series):
     p25 = d_series.quantile(0.25)
     p75 = d_series.quantile(0.75)
 
-    return ([x/1440.0*2*np.pi for x in np.arange(p25,p75)], med/1440.0*2*np.pi)
+    return ([x/1440.0*2*np.pi for x in np.arange(p25,p75)], median/1440.0*2*np.pi)
 
 # Cell
 def time_print(mins: float):
@@ -34,14 +34,18 @@ def time_print(mins: float):
 
     A printable format
     """
-    h = int(mints / 60.)
+    h = int(mins / 60.)
     m = int ( (mins - h * 60) )
     if h >= 24.0:
         h -= 24
     return '{:02d}:{:02d}'.format(h,m)
 
 # Cell
-def make_clock_plots(timing_data, group_by:str, thresholds: list = [], figsize: tuple = (5, 10)):
+def make_clock_plots(timing_data,
+                     group_by:str,
+                     thresholds: list = [],
+                     figsize: tuple = (5, 10),
+                     timezone: str = "America/Los_Angeles"):
     """Creates clock plots for a grouping within timing data.
 
     #### Parameters
@@ -58,6 +62,8 @@ def make_clock_plots(timing_data, group_by:str, thresholds: list = [], figsize: 
     figsize: tuple
 
         Desired size of outputted figure
+    timezone: str
+        Timezone of participant
     """
 
     sns.set_style("white")
@@ -74,10 +80,18 @@ def make_clock_plots(timing_data, group_by:str, thresholds: list = [], figsize: 
     f = plt.figure(figsize = figsize)
 
     # gn = groupname, grp = group
+
+    # IF STATEMENT THE SUNRISE SUNSET TO CHECK FOR TIMEZONE FIRST
     for gn, grp in enumerate(timing_data[group_by].unique()):
         ax = f.add_subplot(ng, 1, gn + 1, projection = "polar")
         tbg = timing_data[timing_data[group_by] == grp]
-        sunrise = (tbg['Sunrise']*60).median()
+        tbg["Sunrise"] = tbg["Sunrise"].apply(lambda x: x - pd.to_datetime(x.date())
+                                     .tz_localize(tz=timezone)).apply(
+                                      lambda x: x.total_seconds() / (60 * 60))
+        tbg["Sunset"] = tbg["Sunset"].apply(lambda x: x - pd.to_datetime(x.date())
+                                     .tz_localize(tz=timezone)).apply(
+                                      lambda x: x.total_seconds() / (60 * 60))
+        sunrise = (tbg["Sunrise"]*60).median()
         sunset = (tbg['Sunset']*60).median()
 
         dark = [x / 1440.0 * 2 * np.pi for x in np.arange(0, sunrise)]
@@ -107,11 +121,11 @@ def make_clock_plots(timing_data, group_by:str, thresholds: list = [], figsize: 
             # sometimes present in small datasets
             if (len(ll) > 0):
                 lli.append(ll)
-                lll.append('{:3d}lx {}-{}'.format(thr, tprint(onset.median()), tprint(offset.median())) )
+                lll.append('{:3d}lx {}-{}'.format(thr, time_print(onset.median()), time_print(offset.median())) )
                 added = True
             ll = ax.bar(offbox, np.full(len(offbox), box_rad),
                        width = mw, bottom = 1.0 - (i + 1) * box_rad * box_sep,
-                       color = gcols[i], linewidth = 0, alpha = 1.0)
+                       color = g_cols[i], linewidth = 0, alpha = 1.0)
             _ = ax.bar(offmed, box_rad,
                     width = 0.02, bottom = 1.0 - (i + 1) * box_rad * box_sep,
                     color = [0.2, 0.2, 0.2], linewidth = 0)
@@ -125,18 +139,18 @@ def make_clock_plots(timing_data, group_by:str, thresholds: list = [], figsize: 
         onbox, onmed = map_mins_to_rads(onset)
         p = ax.bar(offbox, np.full(len(offbox), 2 * box_rad),
                   width = mw, bottom = 1.0 - (i + 3) * box_rad * box_sep,
-                  color = gcols[-2], linewidth = 0, alpha = 1.0)
+                  color = g_cols[-2], linewidth = 0, alpha = 1.0)
         _ =ax.bar(offmed, 2 * box_rad, width = 0.02,
                   bottom = 1.0 - (i + 3) * box_rad * box_sep,
                   color=[0.2, 0.2, 0.2], linewidth=0)
         ll = ax.bar(onbox, np.full(len(onbox), 2 * box_rad),
                   width = mw, bottom = 1.0 - (i + 3) * box_rad * box_sep,
-                  color = gcols[-2], linewidth = 0, alpha = 1.0)
+                  color = g_cols[-2], linewidth = 0, alpha = 1.0)
         _ = ax.bar(onmed, 2 * box_rad,
                   width = 0.02, bottom = 1.0 - (i + 3) * box_rad * box_sep,
                   color = [0.2, 0.2, 0.2], linewidth = 0)
         lli.append(ll)
-        lll.append('Sleep {}-{}'.format(tprint(onset.median()), tprint(offset.median())) )
+        lll.append('Sleep {}-{}'.format(time_print(onset.median()), time_print(offset.median())) )
 
         thetat = np.arange(0,6)*60
         thetalbl = ['00:00','04:00','08:00','12:00','16:00','20:00']
