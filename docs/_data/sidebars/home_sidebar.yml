@@ -10,6 +10,9 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
+      title: Title
+      url: plot_light.html
+    - output: web,pdf
       title: Analysis By Person
       url: analyze_by_person.html
     - output: web,pdf
