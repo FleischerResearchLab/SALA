@@ -57,7 +57,7 @@ nb_path: "002_plot_light.ipynb"
         <span class="n">tinc</span> <span class="o">=</span> <span class="mi">5000</span>
         <span class="n">toplot</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Number of samples &quot;</span>
-        <span class="n">y_lim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span> <span class="p">[</span><span class="n">d1m</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">d2m</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span> <span class="p">)</span> <span class="o">*</span> <span class="mf">1.05</span>
+        <span class="n">y_lim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">d_list</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1.05</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">d_list</span><span class="p">:</span>
             <span class="n">dm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">d</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span> <span class="p">)</span>
             <span class="n">dlo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">dm</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
@@ -116,13 +116,6 @@ nb_path: "002_plot_light.ipynb"
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Note:">Note:<a class="anchor-link" href="#Note:"> </a></h2><p>The original notebook takes in processed "allData", prints all the quarters available in the data and then assuming each of these has a "White Light" column, creates lists with the values (the columns) and corresponding labels to throw at the function to plot.</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -475,7 +468,7 @@ nb_path: "002_plot_light.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plot_light</span><span class="p">([</span><span class="n">v1</span><span class="p">[</span><span class="s2">&quot;White Light&quot;</span><span class="p">]],</span> <span class="p">[</span><span class="s2">&quot;v1&quot;</span><span class="p">],</span> <span class="n">toplot</span> <span class="o">=</span> <span class="s2">&quot;counts&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -490,19 +483,196 @@ nb_path: "002_plot_light.ipynb"
 <div class="output_subarea output_text output_error">
 <pre>
 <span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-31-3e8445473168&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-red-intense-fg ansi-bold">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-10-3e8445473168&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>plot_light<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>v1<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#34;White Light&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#34;v1&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> toplot <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;counts&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
 
-<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-22-cb23ddd2b7a4&gt;</span> in <span class="ansi-cyan-fg">plot_light</span><span class="ansi-blue-intense-fg ansi-bold">(d_list, l_list, toplot, y_lim, y_label, palette)</span>
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-2-52f2d857f152&gt;</span> in <span class="ansi-cyan-fg">plot_light</span><span class="ansi-blue-intense-fg ansi-bold">(d_list, l_list, toplot, y_lim, y_label, palette)</span>
 <span class="ansi-green-fg">     20</span>         toplot <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;&#39;</span>
 <span class="ansi-green-fg">     21</span>         y_label <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;Number of samples &#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 22</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>y_lim <span class="ansi-yellow-intense-fg ansi-bold">=</span> np<span class="ansi-yellow-intense-fg ansi-bold">.</span>max<span class="ansi-yellow-intense-fg ansi-bold">(</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span>d1m<span class="ansi-yellow-intense-fg ansi-bold">.</span>max<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> d2m<span class="ansi-yellow-intense-fg ansi-bold">.</span>max<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span> <span class="ansi-cyan-intense-fg ansi-bold">1.05</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 22</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>y_lim <span class="ansi-yellow-intense-fg ansi-bold">=</span> np<span class="ansi-yellow-intense-fg ansi-bold">.</span>max<span class="ansi-yellow-intense-fg ansi-bold">(</span>np<span class="ansi-yellow-intense-fg ansi-bold">.</span>max<span class="ansi-yellow-intense-fg ansi-bold">(</span>d_list<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span> <span class="ansi-cyan-intense-fg ansi-bold">1.05</span>
 <span class="ansi-green-fg">     23</span>         <span class="ansi-green-intense-fg ansi-bold">for</span> d <span class="ansi-green-intense-fg ansi-bold">in</span> d_list<span class="ansi-yellow-intense-fg ansi-bold">:</span>
 <span class="ansi-green-fg">     24</span>             dm<span class="ansi-yellow-intense-fg ansi-bold">.</span>append<span class="ansi-yellow-intense-fg ansi-bold">(</span> d<span class="ansi-yellow-intense-fg ansi-bold">.</span>count<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>sort_index<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-yellow-intense-fg ansi-bold">)</span>
 
-<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;d1m&#39; is not defined</pre>
+<span class="ansi-green-intense-fg ansi-bold">&lt;__array_function__ internals&gt;</span> in <span class="ansi-cyan-fg">amax</span><span class="ansi-blue-intense-fg ansi-bold">(*args, **kwargs)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\numpy\core\fromnumeric.py</span> in <span class="ansi-cyan-fg">amax</span><span class="ansi-blue-intense-fg ansi-bold">(a, axis, out, keepdims, initial, where)</span>
+<span class="ansi-green-fg">   2665</span>     <span class="ansi-cyan-intense-fg ansi-bold">5</span>
+<span class="ansi-green-fg">   2666</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 2667</span><span class="ansi-yellow-intense-fg ansi-bold">     return _wrapreduction(a, np.maximum, &#39;max&#39;, axis, None, out,
+</span><span class="ansi-green-fg">   2668</span>                           keepdims=keepdims, initial=initial, where=where)
+<span class="ansi-green-fg">   2669</span> 
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\numpy\core\fromnumeric.py</span> in <span class="ansi-cyan-fg">_wrapreduction</span><span class="ansi-blue-intense-fg ansi-bold">(obj, ufunc, method, axis, dtype, out, **kwargs)</span>
+<span class="ansi-green-fg">     88</span>                 <span class="ansi-green-intense-fg ansi-bold">return</span> reduction<span class="ansi-yellow-intense-fg ansi-bold">(</span>axis<span class="ansi-yellow-intense-fg ansi-bold">=</span>axis<span class="ansi-yellow-intense-fg ansi-bold">,</span> out<span class="ansi-yellow-intense-fg ansi-bold">=</span>out<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>passkwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     89</span> 
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 90</span><span class="ansi-yellow-intense-fg ansi-bold">     </span><span class="ansi-green-intense-fg ansi-bold">return</span> ufunc<span class="ansi-yellow-intense-fg ansi-bold">.</span>reduce<span class="ansi-yellow-intense-fg ansi-bold">(</span>obj<span class="ansi-yellow-intense-fg ansi-bold">,</span> axis<span class="ansi-yellow-intense-fg ansi-bold">,</span> dtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> out<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>passkwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     91</span> 
+<span class="ansi-green-fg">     92</span> 
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\pandas\core\ops\common.py</span> in <span class="ansi-cyan-fg">new_method</span><span class="ansi-blue-intense-fg ansi-bold">(self, other)</span>
+<span class="ansi-green-fg">     67</span>         other <span class="ansi-yellow-intense-fg ansi-bold">=</span> item_from_zerodim<span class="ansi-yellow-intense-fg ansi-bold">(</span>other<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     68</span> 
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 69</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">return</span> method<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> other<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     70</span> 
+<span class="ansi-green-fg">     71</span>     <span class="ansi-green-intense-fg ansi-bold">return</span> new_method
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\pandas\core\arraylike.py</span> in <span class="ansi-cyan-fg">__le__</span><span class="ansi-blue-intense-fg ansi-bold">(self, other)</span>
+<span class="ansi-green-fg">     42</span>     <span class="ansi-yellow-intense-fg ansi-bold">@</span>unpack_zerodim_and_defer<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#34;__le__&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     43</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> __le__<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> other<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 44</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_cmp_method<span class="ansi-yellow-intense-fg ansi-bold">(</span>other<span class="ansi-yellow-intense-fg ansi-bold">,</span> operator<span class="ansi-yellow-intense-fg ansi-bold">.</span>le<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     45</span> 
+<span class="ansi-green-fg">     46</span>     <span class="ansi-yellow-intense-fg ansi-bold">@</span>unpack_zerodim_and_defer<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#34;__gt__&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\pandas\core\series.py</span> in <span class="ansi-cyan-fg">_cmp_method</span><span class="ansi-blue-intense-fg ansi-bold">(self, other, op)</span>
+<span class="ansi-green-fg">   5499</span> 
+<span class="ansi-green-fg">   5500</span>         <span class="ansi-green-intense-fg ansi-bold">with</span> np<span class="ansi-yellow-intense-fg ansi-bold">.</span>errstate<span class="ansi-yellow-intense-fg ansi-bold">(</span>all<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#34;ignore&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 5501</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>res_values <span class="ansi-yellow-intense-fg ansi-bold">=</span> ops<span class="ansi-yellow-intense-fg ansi-bold">.</span>comparison_op<span class="ansi-yellow-intense-fg ansi-bold">(</span>lvalues<span class="ansi-yellow-intense-fg ansi-bold">,</span> rvalues<span class="ansi-yellow-intense-fg ansi-bold">,</span> op<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">   5502</span> 
+<span class="ansi-green-fg">   5503</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_construct_result<span class="ansi-yellow-intense-fg ansi-bold">(</span>res_values<span class="ansi-yellow-intense-fg ansi-bold">,</span> name<span class="ansi-yellow-intense-fg ansi-bold">=</span>res_name<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\pandas\core\ops\array_ops.py</span> in <span class="ansi-cyan-fg">comparison_op</span><span class="ansi-blue-intense-fg ansi-bold">(left, right, op)</span>
+<span class="ansi-green-fg">    285</span> 
+<span class="ansi-green-fg">    286</span>     <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 287</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>res_values <span class="ansi-yellow-intense-fg ansi-bold">=</span> _na_arithmetic_op<span class="ansi-yellow-intense-fg ansi-bold">(</span>lvalues<span class="ansi-yellow-intense-fg ansi-bold">,</span> rvalues<span class="ansi-yellow-intense-fg ansi-bold">,</span> op<span class="ansi-yellow-intense-fg ansi-bold">,</span> is_cmp<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">True</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    288</span> 
+<span class="ansi-green-fg">    289</span>     <span class="ansi-green-intense-fg ansi-bold">return</span> res_values
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\pandas\core\ops\array_ops.py</span> in <span class="ansi-cyan-fg">_na_arithmetic_op</span><span class="ansi-blue-intense-fg ansi-bold">(left, right, op, is_cmp)</span>
+<span class="ansi-green-fg">    164</span> 
+<span class="ansi-green-fg">    165</span>     <span class="ansi-green-intense-fg ansi-bold">try</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 166</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>result <span class="ansi-yellow-intense-fg ansi-bold">=</span> func<span class="ansi-yellow-intense-fg ansi-bold">(</span>left<span class="ansi-yellow-intense-fg ansi-bold">,</span> right<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    167</span>     <span class="ansi-green-intense-fg ansi-bold">except</span> TypeError<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    168</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> is_object_dtype<span class="ansi-yellow-intense-fg ansi-bold">(</span>left<span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">or</span> is_object_dtype<span class="ansi-yellow-intense-fg ansi-bold">(</span>right<span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">and</span> <span class="ansi-green-intense-fg ansi-bold">not</span> is_cmp<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\pandas\core\computation\expressions.py</span> in <span class="ansi-cyan-fg">evaluate</span><span class="ansi-blue-intense-fg ansi-bold">(op, a, b, use_numexpr)</span>
+<span class="ansi-green-fg">    237</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> use_numexpr<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    238</span>             <span class="ansi-red-intense-fg ansi-bold"># error: &#34;None&#34; not callable</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 239</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> _evaluate<span class="ansi-yellow-intense-fg ansi-bold">(</span>op<span class="ansi-yellow-intense-fg ansi-bold">,</span> op_str<span class="ansi-yellow-intense-fg ansi-bold">,</span> a<span class="ansi-yellow-intense-fg ansi-bold">,</span> b<span class="ansi-yellow-intense-fg ansi-bold">)</span>  <span class="ansi-red-intense-fg ansi-bold"># type: ignore[misc]</span>
+<span class="ansi-green-fg">    240</span>     <span class="ansi-green-intense-fg ansi-bold">return</span> _evaluate_standard<span class="ansi-yellow-intense-fg ansi-bold">(</span>op<span class="ansi-yellow-intense-fg ansi-bold">,</span> op_str<span class="ansi-yellow-intense-fg ansi-bold">,</span> a<span class="ansi-yellow-intense-fg ansi-bold">,</span> b<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    241</span> 
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\pandas\core\computation\expressions.py</span> in <span class="ansi-cyan-fg">_evaluate_numexpr</span><span class="ansi-blue-intense-fg ansi-bold">(op, op_str, a, b)</span>
+<span class="ansi-green-fg">    126</span> 
+<span class="ansi-green-fg">    127</span>     <span class="ansi-green-intense-fg ansi-bold">if</span> result <span class="ansi-green-intense-fg ansi-bold">is</span> <span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 128</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>result <span class="ansi-yellow-intense-fg ansi-bold">=</span> _evaluate_standard<span class="ansi-yellow-intense-fg ansi-bold">(</span>op<span class="ansi-yellow-intense-fg ansi-bold">,</span> op_str<span class="ansi-yellow-intense-fg ansi-bold">,</span> a<span class="ansi-yellow-intense-fg ansi-bold">,</span> b<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    129</span> 
+<span class="ansi-green-fg">    130</span>     <span class="ansi-green-intense-fg ansi-bold">return</span> result
+
+<span class="ansi-green-intense-fg ansi-bold">~\anaconda3\lib\site-packages\pandas\core\computation\expressions.py</span> in <span class="ansi-cyan-fg">_evaluate_standard</span><span class="ansi-blue-intense-fg ansi-bold">(op, op_str, a, b)</span>
+<span class="ansi-green-fg">     67</span>     <span class="ansi-green-intense-fg ansi-bold">if</span> _TEST_MODE<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">     68</span>         _store_test_result<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-green-intense-fg ansi-bold">False</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 69</span><span class="ansi-yellow-intense-fg ansi-bold">     </span><span class="ansi-green-intense-fg ansi-bold">return</span> op<span class="ansi-yellow-intense-fg ansi-bold">(</span>a<span class="ansi-yellow-intense-fg ansi-bold">,</span> b<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     70</span> 
+<span class="ansi-green-fg">     71</span> 
+
+<span class="ansi-red-intense-fg ansi-bold">TypeError</span>: &#39;&lt;=&#39; not supported between instances of &#39;float&#39; and &#39;datetime.time&#39;</pre>
 </div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;White Light&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>White Light</th>
+    </tr>
+    <tr>
+      <th>DateTime</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2018-05-08 11:14:00</th>
+      <td>117.44</td>
+    </tr>
+    <tr>
+      <th>2018-05-08 11:14:30</th>
+      <td>336.86</td>
+    </tr>
+    <tr>
+      <th>2018-05-08 11:15:00</th>
+      <td>360.63</td>
+    </tr>
+    <tr>
+      <th>2018-05-08 11:15:30</th>
+      <td>356.14</td>
+    </tr>
+    <tr>
+      <th>2018-05-08 11:16:00</th>
+      <td>191.49</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2018-05-29 10:31:30</th>
+      <td>398.20</td>
+    </tr>
+    <tr>
+      <th>2018-05-29 10:32:00</th>
+      <td>423.84</td>
+    </tr>
+    <tr>
+      <th>2018-05-29 10:32:30</th>
+      <td>432.89</td>
+    </tr>
+    <tr>
+      <th>2018-05-29 10:33:00</th>
+      <td>161.03</td>
+    </tr>
+    <tr>
+      <th>2018-05-29 10:33:30</th>
+      <td>248.83</td>
+    </tr>
+  </tbody>
+</table>
+<p>54782 rows × 1 columns</p>
+</div>
+</div>
+
 </div>
 
 </div>
@@ -513,7 +683,8 @@ nb_path: "002_plot_light.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Missing-Variables:">Missing Variables:<a class="anchor-link" href="#Missing-Variables:"> </a></h2><h3 id="Function-Line-#-22:">Function Line # 22:<a class="anchor-link" href="#Function-Line-#-22:"> </a></h3><p>Can be found in the original SALA package cell in line # 32.</p>
+<h2 id="Missing-Variables:">Missing Variables:<a class="anchor-link" href="#Missing-Variables:"> </a></h2><h3 id="Function-Line-#-22:">Function Line # 22:<a class="anchor-link" href="#Function-Line-#-22:"> </a></h3><p>Can be found in the original SALA package in the "analyze by class-quarter" notebook, in the large
+cell with all the functions, line # 32.</p>
 
 <pre><code>1. d1m
 2. d2m</code></pre>
