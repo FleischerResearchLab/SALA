@@ -224,7 +224,6 @@ def set_sun_timings(timing_data,
 
     return timing_data
 
-
 # Cell
 def process_sleep_data(timing_data, num_sleeps: int = 2):
     """Processes sleep data for existing timing data.

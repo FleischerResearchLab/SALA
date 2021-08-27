@@ -10,14 +10,14 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Title
-      url: plot_light.html
-    - output: web,pdf
       title: Analysis By Person
       url: analyze_by_person.html
     - output: web,pdf
       title: Making Clock Plots
       url: clock_plots.html
+    - output: web,pdf
+      title: Plot Light
+      url: plot_light.html
     output: web
     title: SALA
   output: web

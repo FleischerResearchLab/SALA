@@ -56,7 +56,8 @@ nb_path: "00_analyze_by_person.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">directory</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="s1">&#39;data&#39;</span>
+    <span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="s1">&#39;data/v1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;v3&#39;</span><span class="p">:</span> <span class="s1">&#39;data/v3&#39;</span>
 <span class="p">}</span>
 </pre></div>
 
@@ -140,12 +141,12 @@ the values will be the name of the key given. Default = 'Group'</code></pre>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Found 1 csv files in data/. Pass #1, raw data
+<pre>Found 1 csv files in data/v1/. Pass #1, raw data
 .
 .
 Pass #2, data summary
 .
-.EOF without retrieving summary data: data\v1_sample.csv
+.EOF without retrieving summary data: data/v1\v1_sample.csv
 </pre>
 </div>
 </div>
@@ -201,73 +202,73 @@ Pass #2, data summary
   </thead>
   <tbody>
     <tr>
-      <th>2018-05-07 11:28:00</th>
+      <th>2018-06-06 14:58:00</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
     <tr>
-      <th>2018-05-07 11:28:30</th>
+      <th>2018-06-06 14:58:30</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
     <tr>
-      <th>2018-05-07 11:29:00</th>
+      <th>2018-06-06 14:59:00</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
     <tr>
-      <th>2018-05-07 11:29:30</th>
+      <th>2018-06-06 14:59:30</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
     <tr>
-      <th>2018-05-07 11:30:00</th>
+      <th>2018-06-06 15:00:00</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
   </tbody>
@@ -472,11 +473,11 @@ where its obvious that light data is non-existent (NaT)</p>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_first_day</span><span class="p">(</span><span class="n">timing_data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Example function hook for removing data for the first day</span>
 <span class="sd">    where its obvious that light data is non-existent (NaT)</span>
-<span class="sd">    </span>
+
 <span class="sd">     #### Parameters</span>
 
 <span class="sd">    timing_data: pd.DataFrame</span>
-<span class="sd">    </span>
+
 <span class="sd">        Timing data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
@@ -522,12 +523,6 @@ where its obvious that light data is non-existent (NaT)</p>
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Loading raw data from disk...
-Found 1 csv files in data/. Pass #1, raw data
-.
-.
-Pass #2, data summary
-.
-.EOF without retrieving summary data: data\v1_sample.csv
 Calculating light timing data...
 Adding holiday markers to timing data...
 </pre>
@@ -608,73 +603,73 @@ Adding holiday markers to timing data...
   </thead>
   <tbody>
     <tr>
-      <th>2018-05-07 11:28:00</th>
+      <th>2018-06-06 14:58:00</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
     <tr>
-      <th>2018-05-07 11:28:30</th>
+      <th>2018-06-06 14:58:30</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
     <tr>
-      <th>2018-05-07 11:29:00</th>
+      <th>2018-06-06 14:59:00</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
     <tr>
-      <th>2018-05-07 11:29:30</th>
+      <th>2018-06-06 14:59:30</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
     <tr>
-      <th>2018-05-07 11:30:00</th>
+      <th>2018-06-06 15:00:00</th>
       <td>0</td>
       <td>NaN</td>
-      <td>0.0</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>ACTIVE</td>
-      <td>v1data\v1</td>
+      <td>NaN</td>
+      <td>EXCLUDED</td>
+      <td>v1v1\v1</td>
       <td>v1</td>
     </tr>
   </tbody>
@@ -740,54 +735,54 @@ Adding holiday markers to timing data...
   </thead>
   <tbody>
     <tr>
-      <th>1</th>
-      <td>v1data\v1</td>
-      <td>2018-05-29</td>
+      <th>0</th>
+      <td>v1v1\v1</td>
+      <td>2018-07-03</td>
       <td>5</td>
-      <td>2018-05-29 10:33:30</td>
-      <td>393.0</td>
-      <td>2018-05-29 06:20:30</td>
-      <td>140.0</td>
+      <td>2018-07-03 23:31:00</td>
+      <td>1171.0</td>
+      <td>2018-07-03 07:00:30</td>
+      <td>180.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>v1v1\v1</td>
+      <td>2018-07-02</td>
+      <td>5</td>
+      <td>2018-07-02 23:25:00</td>
+      <td>1165.0</td>
+      <td>2018-07-02 07:57:30</td>
+      <td>237.0</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>v1data\v1</td>
-      <td>2018-05-22</td>
+      <td>v1v1\v1</td>
+      <td>2018-07-10</td>
       <td>5</td>
-      <td>2018-05-22 21:28:30</td>
-      <td>1048.0</td>
-      <td>2018-05-22 06:10:30</td>
-      <td>130.0</td>
+      <td>2018-07-10 08:08:00</td>
+      <td>248.0</td>
+      <td>2018-07-10 06:59:00</td>
+      <td>179.0</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>v1data\v1</td>
-      <td>2018-05-26</td>
+      <td>v1v1\v1</td>
+      <td>2018-06-27</td>
       <td>5</td>
-      <td>2018-05-26 20:38:00</td>
-      <td>998.0</td>
-      <td>2018-05-26 06:42:30</td>
-      <td>162.0</td>
+      <td>2018-06-27 22:57:00</td>
+      <td>1137.0</td>
+      <td>2018-06-27 09:12:30</td>
+      <td>312.0</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>v1data\v1</td>
-      <td>2018-05-08</td>
+      <td>v1v1\v1</td>
+      <td>2018-06-29</td>
       <td>5</td>
-      <td>2018-05-08 21:11:30</td>
-      <td>1031.0</td>
-      <td>2018-05-08 11:14:00</td>
-      <td>434.0</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>v1data\v1</td>
-      <td>2018-05-28</td>
-      <td>5</td>
-      <td>2018-05-28 21:29:00</td>
-      <td>1049.0</td>
-      <td>2018-05-28 09:12:00</td>
-      <td>312.0</td>
+      <td>2018-06-29 22:18:30</td>
+      <td>1098.0</td>
+      <td>2018-06-29 06:47:00</td>
+      <td>167.0</td>
     </tr>
   </tbody>
 </table>
@@ -852,53 +847,53 @@ Adding holiday markers to timing data...
   </thead>
   <tbody>
     <tr>
+      <th>0</th>
+      <td>0 days 12:47:30</td>
+      <td>0 days 03:37:30</td>
+      <td>767.5</td>
+      <td>217.5</td>
+      <td>377968.040</td>
+      <td>143815.500</td>
+      <td>v1</td>
+    </tr>
+    <tr>
       <th>1</th>
-      <td>0 days 03:27:00</td>
-      <td>0 days 03:27:00</td>
-      <td>207.0</td>
-      <td>207.0</td>
-      <td>185523.535</td>
-      <td>185523.535</td>
+      <td>0 days 09:06:30</td>
+      <td>0 days 03:49:00</td>
+      <td>546.5</td>
+      <td>229.0</td>
+      <td>221486.770</td>
+      <td>69199.365</td>
       <td>v1</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0 days 13:02:30</td>
-      <td>0 days 04:46:30</td>
-      <td>782.5</td>
-      <td>286.5</td>
-      <td>896929.330</td>
-      <td>430349.995</td>
+      <td>0 days 01:00:30</td>
+      <td>0 days 01:00:30</td>
+      <td>60.5</td>
+      <td>60.5</td>
+      <td>47044.555</td>
+      <td>47044.555</td>
       <td>v1</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0 days 10:04:30</td>
-      <td>0 days 04:42:00</td>
-      <td>604.5</td>
-      <td>282.0</td>
-      <td>619018.500</td>
-      <td>400917.470</td>
+      <td>0 days 10:25:00</td>
+      <td>0 days 02:23:00</td>
+      <td>625.0</td>
+      <td>143.0</td>
+      <td>640912.350</td>
+      <td>247699.580</td>
       <td>v1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0 days 05:52:00</td>
-      <td>0 days 00:43:30</td>
-      <td>352.0</td>
-      <td>43.5</td>
-      <td>307232.525</td>
-      <td>100225.540</td>
-      <td>v1</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>0 days 09:46:30</td>
-      <td>0 days 02:34:30</td>
-      <td>586.5</td>
-      <td>154.5</td>
-      <td>462110.020</td>
-      <td>244006.800</td>
+      <td>0 days 05:00:30</td>
+      <td>0 days 03:26:30</td>
+      <td>300.5</td>
+      <td>206.5</td>
+      <td>65985.730</td>
+      <td>64188.250</td>
       <td>v1</td>
     </tr>
   </tbody>
@@ -962,10 +957,18 @@ Adding holiday markers to timing data...
   </thead>
   <tbody>
     <tr>
-      <th>1</th>
+      <th>0</th>
       <td>0 days 00:00:30</td>
       <td>1</td>
       <td>v1Tues</td>
+      <td>v1Weekday</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0 days 00:00:30</td>
+      <td>0</td>
+      <td>v1Mon</td>
       <td>v1Weekday</td>
       <td>False</td>
     </tr>
@@ -980,26 +983,18 @@ Adding holiday markers to timing data...
     <tr>
       <th>3</th>
       <td>0 days 00:00:30</td>
-      <td>5</td>
-      <td>v1Sat</td>
-      <td>v1Weekend/Holiday</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0 days 00:00:30</td>
-      <td>1</td>
-      <td>v1Tues</td>
+      <td>2</td>
+      <td>v1Wed</td>
       <td>v1Weekday</td>
       <td>False</td>
     </tr>
     <tr>
-      <th>5</th>
+      <th>4</th>
       <td>0 days 00:00:30</td>
-      <td>0</td>
-      <td>v1Mon</td>
-      <td>v1Weekend/Holiday</td>
-      <td>True</td>
+      <td>4</td>
+      <td>v1Fri</td>
+      <td>v1Weekday</td>
+      <td>False</td>
     </tr>
   </tbody>
 </table>
@@ -1135,29 +1130,29 @@ Adding holiday markers to timing data...
   </thead>
   <tbody>
     <tr>
+      <th>0</th>
+      <td>2018-07-03 05:17:02.116743-07:00</td>
+      <td>2018-07-03 21:09:39.386344-07:00</td>
+    </tr>
+    <tr>
       <th>1</th>
-      <td>2018-05-29 05:17:42.002894-07:00</td>
-      <td>2018-05-29 20:56:10.558100-07:00</td>
+      <td>2018-07-02 05:16:22.672261-07:00</td>
+      <td>2018-07-02 21:09:58.273719-07:00</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2018-05-22 05:23:52.482623-07:00</td>
-      <td>2018-05-22 20:48:36.647993-07:00</td>
+      <td>2018-07-10 05:22:31.640667-07:00</td>
+      <td>2018-07-10 21:06:14.940775-07:00</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>2018-05-26 05:20:07.130923-07:00</td>
-      <td>2018-05-26 20:53:04.155872-07:00</td>
+      <td>2018-06-27 05:13:37.265731-07:00</td>
+      <td>2018-06-27 21:10:53.349244-07:00</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2018-05-08 05:41:16.005767-07:00</td>
-      <td>2018-05-08 20:30:56.873071-07:00</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>2018-05-28 05:18:28.040710-07:00</td>
-      <td>2018-05-28 20:55:09.892556-07:00</td>
+      <td>2018-06-29 05:14:36.884762-07:00</td>
+      <td>2018-06-29 21:10:39.206298-07:00</td>
     </tr>
   </tbody>
 </table>
@@ -1197,7 +1192,7 @@ Adding holiday markers to timing data...
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="process_sleep_data" class="doc_header"><code>process_sleep_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L229" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>process_sleep_data</code>(<strong><code>timing_data</code></strong>, <strong><code>num_sleeps</code></strong>:<code>int</code>=<em><code>2</code></em>)</p>
+<h3 id="process_sleep_data" class="doc_header"><code>process_sleep_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L228" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>process_sleep_data</code>(<strong><code>timing_data</code></strong>, <strong><code>num_sleeps</code></strong>:<code>int</code>=<em><code>2</code></em>)</p>
 </blockquote>
 <p>Processes sleep data for existing timing data.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>timing_data: pd.DataFrame</p>
@@ -1293,40 +1288,41 @@ timing_data: pd.DataFrame
   </thead>
   <tbody>
     <tr>
-      <th rowspan="5" valign="top">v1data\v1</th>
-      <th>2018-05-25</th>
-      <td>1</td>
-      <td>2018-05-26 00:56:30</td>
-      <td>2018-05-26 06:37:30</td>
-      <td>0 days 05:41:00</td>
+      <th rowspan="3" valign="top">v1v1\v1</th>
+      <th>2018-06-28</th>
+      <td>0</td>
+      <td>2018-06-29 00:40:30</td>
+      <td>2018-06-29 06:41:00</td>
+      <td>0 days 06:00:30</td>
     </tr>
     <tr>
-      <th>2018-05-25</th>
+      <th>2018-06-28</th>
       <td>2</td>
-      <td>2018-05-26 15:19:00</td>
-      <td>2018-05-26 17:30:30</td>
-      <td>0 days 02:11:30</td>
+      <td>2018-06-29 13:42:00</td>
+      <td>2018-06-29 15:23:30</td>
+      <td>0 days 01:41:30</td>
     </tr>
     <tr>
-      <th>2018-05-25</th>
-      <td>0</td>
-      <td>2018-05-25 21:43:00</td>
-      <td>2018-05-25 23:33:30</td>
-      <td>0 days 01:50:30</td>
-    </tr>
-    <tr>
-      <th>2018-05-16</th>
+      <th>2018-06-28</th>
       <td>1</td>
-      <td>2018-05-17 02:13:30</td>
-      <td>2018-05-17 06:03:30</td>
-      <td>0 days 03:50:00</td>
+      <td>2018-06-29 08:50:30</td>
+      <td>2018-06-29 09:04:00</td>
+      <td>0 days 00:13:30</td>
     </tr>
     <tr>
-      <th>2018-05-16</th>
+      <th rowspan="2" valign="top">v3v3\v3</th>
+      <th>2018-09-24</th>
       <td>0</td>
-      <td>2018-05-16 23:22:30</td>
-      <td>2018-05-17 00:16:30</td>
-      <td>0 days 00:54:00</td>
+      <td>2018-09-24 21:31:00</td>
+      <td>2018-09-25 04:44:30</td>
+      <td>0 days 07:13:30</td>
+    </tr>
+    <tr>
+      <th>2018-09-24</th>
+      <td>1</td>
+      <td>2018-09-25 09:16:00</td>
+      <td>2018-09-25 10:30:00</td>
+      <td>0 days 01:14:00</td>
     </tr>
   </tbody>
 </table>
@@ -1394,44 +1390,44 @@ timing_data: pd.DataFrame
   </thead>
   <tbody>
     <tr>
+      <th>0</th>
+      <td>2018-07-03 23:57:30</td>
+      <td>2018-07-04 06:14:00</td>
+      <td>0 days 06:16:30</td>
+      <td>1437.5</td>
+      <td>374.0</td>
+    </tr>
+    <tr>
       <th>1</th>
-      <td>2018-05-29 00:00:00</td>
-      <td>2018-05-29 00:00:00</td>
-      <td>0 days 00:00:00</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>2018-07-02 23:35:30</td>
+      <td>2018-07-03 06:35:30</td>
+      <td>0 days 07:00:00</td>
+      <td>1415.5</td>
+      <td>395.5</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2018-05-22 21:33:30</td>
-      <td>2018-05-23 05:22:30</td>
-      <td>0 days 07:49:00</td>
-      <td>1293.5</td>
-      <td>322.5</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2018-05-26 00:00:00</td>
-      <td>2018-05-26 00:00:00</td>
+      <td>2018-07-10 00:00:00</td>
+      <td>2018-07-10 00:00:00</td>
       <td>0 days 00:00:00</td>
       <td>0.0</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>2018-05-08 21:20:00</td>
-      <td>2018-05-09 05:31:00</td>
-      <td>0 days 08:11:00</td>
-      <td>1280.0</td>
-      <td>331.0</td>
+      <th>3</th>
+      <td>2018-06-27 23:07:30</td>
+      <td>2018-06-28 06:57:00</td>
+      <td>0 days 07:49:30</td>
+      <td>1387.5</td>
+      <td>417.0</td>
     </tr>
     <tr>
-      <th>5</th>
-      <td>2018-05-28 21:42:00</td>
-      <td>2018-05-29 06:13:00</td>
-      <td>0 days 08:31:00</td>
-      <td>1302.0</td>
-      <td>373.0</td>
+      <th>4</th>
+      <td>2018-06-29 22:20:00</td>
+      <td>2018-06-30 07:44:00</td>
+      <td>0 days 09:24:00</td>
+      <td>1340.0</td>
+      <td>464.0</td>
     </tr>
   </tbody>
 </table>

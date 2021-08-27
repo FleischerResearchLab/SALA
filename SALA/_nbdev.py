@@ -10,10 +10,12 @@ index = {"get_raw_data": "00_analyze_by_person.ipynb",
          "process_sleep_data": "00_analyze_by_person.ipynb",
          "map_mins_to_rads": "01_clock_plots.ipynb",
          "time_print": "01_clock_plots.ipynb",
-         "make_clock_plots": "01_clock_plots.ipynb"}
+         "make_clock_plots": "01_clock_plots.ipynb",
+         "plot_light": "02_plot_light.ipynb"}
 
 modules = ["analyze_by_person.py",
-           "clock_plots.py"]
+           "clock_plots.py",
+           "plot_light.py"]
 
 doc_url = "https://tktran11.github.io/SALA/"
 
