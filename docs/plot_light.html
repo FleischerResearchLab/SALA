@@ -31,7 +31,10 @@ nb_path: "02_plot_light.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="How-to-Plot-Light">How to Plot Light<a class="anchor-link" href="#How-to-Plot-Light"> </a></h2><p>Three types of plots are creatable using plot_light. The first, "mean/sem" is a graph of the mean amount of light over the course of a day, beginning at 4am. The second is "counts", with the number of light exposure counts at a given time. The last is "quantiles", plotting the interquartile range of light. Immediately following the function documentation will be an extensive example of its usage.</p>
+<h2 id="How-to-Plot-Light">How to Plot Light<a class="anchor-link" href="#How-to-Plot-Light"> </a></h2><p>Three types of plots are creatable using plot_light, each serving a different purpose.</p>
+<p>Since light exposure for a given time of day is not normally distributed (in fact, it tends to be exponential), a preferred measure of central tendency is quartiles. To plot this, selecting top plot as "quantiles" will present the interquartile range of light exposure.</p>
+<p>Top plot can also be set to "counts", which gives the amount of data present. This is helpful in examining the data for particular patient behavior. One such use case would be viewing people who are tend to stay up late at night.</p>
+<p>Setting top plot to "mean/sem" gives a graph of the mean amount of light over the course of a day. This is particularly useful to find strong outliers, which may be physiologically relevant.</p>
 
 </div>
 </div>
@@ -54,7 +57,7 @@ nb_path: "02_plot_light.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="plot_light" class="doc_header"><code>plot_light</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/plot_light.py#L6" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>plot_light</code>(<strong><code>d_list</code></strong>, <strong><code>l_list</code></strong>, <strong><code>palette</code></strong>, <strong><code>toplot</code></strong>=<em><code>'mean/sem'</code></em>, <strong><code>y_lim</code></strong>=<em><code>1200</code></em>, <strong><code>y_label</code></strong>=<em><code>'Lux'</code></em>)</p>
+<h3 id="plot_light" class="doc_header"><code>plot_light</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/plot_light.py#L6" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>plot_light</code>(<strong><code>d_list</code></strong>, <strong><code>l_list</code></strong>, <strong><code>palette</code></strong>, <strong><code>toplot</code></strong>=<em><code>'mean/sem'</code></em>, <strong><code>y_lim</code></strong>=<em><code>2000</code></em>, <strong><code>y_label</code></strong>=<em><code>'Lux'</code></em>)</p>
 </blockquote>
 <p>Creates various light plots to aggregate data based on time of day.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>d_list: list</p>
@@ -131,7 +134,7 @@ nb_path: "02_plot_light.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">file_prefix</span><span class="o">+</span><span class="s1">&#39;raw.parquet&#39;</span><span class="p">)</span>
-<span class="n">all_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">all_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>

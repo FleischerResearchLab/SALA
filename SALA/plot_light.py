@@ -5,7 +5,7 @@ __all__ = ['plot_light']
 # Cell
 def plot_light(d_list, l_list, palette,
                toplot = "mean/sem",
-               y_lim = 1200, y_label = "Lux"):
+               y_lim = 2000, y_label = "Lux"):
 
     """ Creates various light plots to aggregate data based on time of day.
 

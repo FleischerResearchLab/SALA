@@ -31,17 +31,17 @@ nb_path: "00_analyze_by_person.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Loading-Actiwatch-Data">Loading Actiwatch Data<a class="anchor-link" href="#Loading-Actiwatch-Data"> </a></h2><p>To begin processing raw data for analysis, all folders containing Actiwatch data should be loaded into a dictionary. Dictionary keys should be identifying names for the folder where the data is stored, which should be used as the value.</p>
+<h2 id="Loading-Actiwatch-Data">Loading Actiwatch Data<a class="anchor-link" href="#Loading-Actiwatch-Data"> </a></h2><p>Actiwatch data is best served loaded in a directory style setup with key value pairings. This is intended to provide a generally flexible method for labeling groups within the data for easier by-group searching and analysis.</p>
 <p>For example:</p>
 <p>The below directory uses</p>
 <ol>
-<li><p><strong>key</strong> = v1</p>
-
-<pre><code> v1 indicates visit number 1, or baseline</code></pre>
-</li>
-<li><p><strong>value</strong> = data</p>
-
-<pre><code> data indicates that the csv files to be loaded are stored in a folder called "data"</code></pre>
+<li><strong>key</strong> = indicates the group name (for example, base_ or follow<em>up</em>), that is used to both name the grouping within the Group column, and as the front of the generated UID.</li>
+</ol>
+<ol>
+<li><p><strong>value</strong> = indicates that the csv files to be loaded are stored in a folder called "data/v1 or data/v3". The trailing part of the naming convention (after the / ) is appended to the UID. The remaining part of the UID is built using the file name within the subfolder.</p>
+<p>Following this structure an example file titled 'user1234' would net a UID of <em>base_v1\user1234</em> as
+ its key is <em>base_</em>, its stored in <em>v1</em>, and the title of the csv is <em>user1234</em>.</p>
+<p>Also note that the name for their "group" will match the key value used for the directory.</p>
 </li>
 </ol>
 
@@ -56,8 +56,8 @@ nb_path: "00_analyze_by_person.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">directory</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="s1">&#39;data/v1&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;v3&#39;</span><span class="p">:</span> <span class="s1">&#39;data/v3&#39;</span>
+    <span class="s1">&#39;base_&#39;</span><span class="p">:</span> <span class="s1">&#39;data/v1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;follow_up_&#39;</span><span class="p">:</span> <span class="s1">&#39;data/v3&#39;</span>
 <span class="p">}</span>
 </pre></div>
 
@@ -88,7 +88,7 @@ nb_path: "00_analyze_by_person.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h3 id="get_raw_data" class="doc_header"><code>get_raw_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L7" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>get_raw_data</code>(<strong><code>key</code></strong>:<code>str</code>, <strong><code>directory</code></strong>:<code>dict</code>, <strong><code>grouping</code></strong>:<code>str</code>=<em><code>'Group'</code></em>)</p>
 </blockquote>
-<p>Loads raw actiwatch data for a particular season.</p>
+<p>Loads raw actiwatch data for a particular group based on a string key.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>key: str</p>
 
 <pre><code>The key to load actiwatch data from (for example, "v1")
@@ -127,8 +127,8 @@ the values will be the name of the key given. Default = 'Group'</code></pre>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">raw_data</span> <span class="o">=</span> <span class="n">get_raw_data</span><span class="p">(</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="p">)</span>
-<span class="n">raw_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">raw_data</span> <span class="o">=</span> <span class="n">get_raw_data</span><span class="p">(</span><span class="s1">&#39;base_&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="p">)</span>
+<span class="n">raw_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> 
 </pre></div>
 
     </div>
@@ -146,7 +146,7 @@ the values will be the name of the key given. Default = 'Group'</code></pre>
 .
 Pass #2, data summary
 .
-.EOF without retrieving summary data: data/v1\v1_sample.csv
+.EOF without retrieving summary data: data/v1\user1234_v1sample.csv
 </pre>
 </div>
 </div>
@@ -202,74 +202,74 @@ Pass #2, data summary
   </thead>
   <tbody>
     <tr>
-      <th>2018-06-06 14:58:00</th>
+      <th>2018-06-25 12:31:00</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>37.09</td>
+      <td>28.4</td>
+      <td>15.5</td>
+      <td>14.5</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
     <tr>
-      <th>2018-06-06 14:58:30</th>
+      <th>2018-06-25 12:31:30</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>170.0</td>
+      <td>0.0</td>
+      <td>156.15</td>
+      <td>159.0</td>
+      <td>59.9</td>
+      <td>65.3</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
     <tr>
-      <th>2018-06-06 14:59:00</th>
+      <th>2018-06-25 12:32:00</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>194.0</td>
+      <td>0.0</td>
+      <td>149.03</td>
+      <td>113.0</td>
+      <td>49.8</td>
+      <td>50.6</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
     <tr>
-      <th>2018-06-06 14:59:30</th>
+      <th>2018-06-25 12:32:30</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>473.95</td>
+      <td>365.0</td>
+      <td>161.0</td>
+      <td>161.0</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
     <tr>
-      <th>2018-06-06 15:00:00</th>
+      <th>2018-06-25 12:33:00</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>62.0</td>
+      <td>0.0</td>
+      <td>317.82</td>
+      <td>264.0</td>
+      <td>112.0</td>
+      <td>115.0</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
   </tbody>
 </table>
@@ -328,7 +328,7 @@ Pass #2, data summary
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Recalculating-Timing-Data-(if-Necessary)">Recalculating Timing Data (if Necessary)<a class="anchor-link" href="#Recalculating-Timing-Data-(if-Necessary)"> </a></h2><p>Sometimes it may be valuable to calculate (or recalculate) the timing data. The ability to do so is provided using the below function, which sets up the timing and raw dataframes.</p>
-<p>In this example, we'll go ahead and use the Seattle as our location for determining sunlight (sunset and sunrise timings), and ask the function to recalculate both the raw and timing data. Example thresholds for lux are also specified below. The outfile specified is where the data will be written to.</p>
+<p>In this example, we'll go ahead and use the city of Seattle as our location for determining sunlight (sunset and sunrise timings), and ask the function to recalculate both the raw and timing data. Example thresholds for lux are also specified below. The outfile specified is where the data will be written to.</p>
 
 </div>
 </div>
@@ -342,7 +342,6 @@ Pass #2, data summary
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">recalculate_raw</span> <span class="o">=</span> <span class="kc">False</span> 
 <span class="n">recalculate_timing</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">location</span> <span class="o">=</span> <span class="s2">&quot;seattle&quot;</span>
 <span class="n">thresholds</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">1000</span><span class="p">]</span> <span class="p">]</span> 
 <span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;../SALA/example_output/&quot;</span>
 </pre></div>
@@ -372,17 +371,13 @@ Pass #2, data summary
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="process_timing_data" class="doc_header"><code>process_timing_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L45" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>process_timing_data</code>(<strong><code>location</code></strong>:<code>str</code>, <strong><code>outfile</code></strong>:<code>str</code>, <strong><code>thresholds</code></strong>:<code>list</code>, <strong><code>key</code></strong>:<code>str</code>, <strong><code>directory</code></strong>:<code>dict</code>, <strong><code>recalc_raw</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>recalc_timing</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>export_hook</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="process_timing_data" class="doc_header"><code>process_timing_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L45" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>process_timing_data</code>(<strong><code>outfile</code></strong>:<code>str</code>, <strong><code>thresholds</code></strong>:<code>list</code>, <strong><code>directory</code></strong>:<code>dict</code>, <strong><code>recalc_raw</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>recalc_timing</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>export_hook</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Setup timing and raw dataframes or recalculate their
 values if specified and necessary. Both operations take
 a long time and lots of memory. Ill-advised to recalculate
 timing specifically if the data has already been created.</p>
-<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>location: str</p>
-
-<pre><code>Location for calculating light, for example 'Seattle'
-</code></pre>
-<p>outfile: str</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>outfile: str</p>
 
 <pre><code>File for re-written data to be placed in, or for data to be loaded from
 </code></pre>
@@ -445,7 +440,7 @@ documentation for example.
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L162" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>timing_data</code></strong>)</p>
+<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L158" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>timing_data</code></strong>)</p>
 </blockquote>
 <p>Example function hook for removing data for the first day
 where its obvious that light data is non-existent (NaT)</p>
@@ -509,7 +504,7 @@ where its obvious that light data is non-existent (NaT)</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_data</span><span class="p">,</span> <span class="n">timing_data</span> <span class="o">=</span> <span class="n">process_timing_data</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">remove_first_day</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_data</span><span class="p">,</span> <span class="n">timing_data</span> <span class="o">=</span> <span class="n">process_timing_data</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">remove_first_day</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -542,7 +537,7 @@ Adding holiday markers to timing data...
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -603,74 +598,74 @@ Adding holiday markers to timing data...
   </thead>
   <tbody>
     <tr>
-      <th>2018-06-06 14:58:00</th>
+      <th>2018-06-25 12:31:00</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>37.09</td>
+      <td>28.4</td>
+      <td>15.5</td>
+      <td>14.5</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
     <tr>
-      <th>2018-06-06 14:58:30</th>
+      <th>2018-06-25 12:31:30</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>170.0</td>
+      <td>0.0</td>
+      <td>156.15</td>
+      <td>159.0</td>
+      <td>59.9</td>
+      <td>65.3</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
     <tr>
-      <th>2018-06-06 14:59:00</th>
+      <th>2018-06-25 12:32:00</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>194.0</td>
+      <td>0.0</td>
+      <td>149.03</td>
+      <td>113.0</td>
+      <td>49.8</td>
+      <td>50.6</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
     <tr>
-      <th>2018-06-06 14:59:30</th>
+      <th>2018-06-25 12:32:30</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>473.95</td>
+      <td>365.0</td>
+      <td>161.0</td>
+      <td>161.0</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
     <tr>
-      <th>2018-06-06 15:00:00</th>
+      <th>2018-06-25 12:33:00</th>
       <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>EXCLUDED</td>
-      <td>v1v1\v1</td>
-      <td>v1</td>
+      <td>62.0</td>
+      <td>0.0</td>
+      <td>317.82</td>
+      <td>264.0</td>
+      <td>112.0</td>
+      <td>115.0</td>
+      <td>1.0</td>
+      <td>ACTIVE</td>
+      <td>base_v1\user1234</td>
+      <td>base_</td>
     </tr>
   </tbody>
 </table>
@@ -736,37 +731,7 @@ Adding holiday markers to timing data...
   <tbody>
     <tr>
       <th>0</th>
-      <td>v1v1\v1</td>
-      <td>2018-07-03</td>
-      <td>5</td>
-      <td>2018-07-03 23:31:00</td>
-      <td>1171.0</td>
-      <td>2018-07-03 07:00:30</td>
-      <td>180.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>v1v1\v1</td>
-      <td>2018-07-02</td>
-      <td>5</td>
-      <td>2018-07-02 23:25:00</td>
-      <td>1165.0</td>
-      <td>2018-07-02 07:57:30</td>
-      <td>237.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>v1v1\v1</td>
-      <td>2018-07-10</td>
-      <td>5</td>
-      <td>2018-07-10 08:08:00</td>
-      <td>248.0</td>
-      <td>2018-07-10 06:59:00</td>
-      <td>179.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>v1v1\v1</td>
+      <td>base_v1\user1234</td>
       <td>2018-06-27</td>
       <td>5</td>
       <td>2018-06-27 22:57:00</td>
@@ -775,14 +740,44 @@ Adding holiday markers to timing data...
       <td>312.0</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>v1v1\v1</td>
+      <th>1</th>
+      <td>base_v1\user1234</td>
+      <td>2018-07-09</td>
+      <td>5</td>
+      <td>2018-07-09 23:19:00</td>
+      <td>1159.0</td>
+      <td>2018-07-09 06:39:00</td>
+      <td>159.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>base_v1\user1234</td>
       <td>2018-06-29</td>
       <td>5</td>
       <td>2018-06-29 22:18:30</td>
       <td>1098.0</td>
       <td>2018-06-29 06:47:00</td>
       <td>167.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>base_v1\user1234</td>
+      <td>2018-07-16</td>
+      <td>5</td>
+      <td>2018-07-16 16:24:30</td>
+      <td>744.0</td>
+      <td>2018-07-16 14:40:00</td>
+      <td>640.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>base_v1\user1234</td>
+      <td>2018-07-02</td>
+      <td>5</td>
+      <td>2018-07-02 23:25:00</td>
+      <td>1165.0</td>
+      <td>2018-07-02 07:57:30</td>
+      <td>237.0</td>
     </tr>
   </tbody>
 </table>
@@ -848,53 +843,53 @@ Adding holiday markers to timing data...
   <tbody>
     <tr>
       <th>0</th>
-      <td>0 days 12:47:30</td>
-      <td>0 days 03:37:30</td>
-      <td>767.5</td>
-      <td>217.5</td>
-      <td>377968.040</td>
-      <td>143815.500</td>
-      <td>v1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0 days 09:06:30</td>
-      <td>0 days 03:49:00</td>
-      <td>546.5</td>
-      <td>229.0</td>
-      <td>221486.770</td>
-      <td>69199.365</td>
-      <td>v1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0 days 01:00:30</td>
-      <td>0 days 01:00:30</td>
-      <td>60.5</td>
-      <td>60.5</td>
-      <td>47044.555</td>
-      <td>47044.555</td>
-      <td>v1</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>0 days 10:25:00</td>
       <td>0 days 02:23:00</td>
       <td>625.0</td>
       <td>143.0</td>
-      <td>640912.350</td>
+      <td>640912.35</td>
       <td>247699.580</td>
-      <td>v1</td>
+      <td>base_</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>1</th>
+      <td>0 days 13:56:00</td>
+      <td>0 days 04:35:30</td>
+      <td>836.0</td>
+      <td>275.5</td>
+      <td>1132776.31</td>
+      <td>678370.985</td>
+      <td>base_</td>
+    </tr>
+    <tr>
+      <th>2</th>
       <td>0 days 05:00:30</td>
       <td>0 days 03:26:30</td>
       <td>300.5</td>
       <td>206.5</td>
-      <td>65985.730</td>
+      <td>65985.73</td>
       <td>64188.250</td>
-      <td>v1</td>
+      <td>base_</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0 days 00:02:30</td>
+      <td>0 days 00:00:00</td>
+      <td>2.5</td>
+      <td>0.0</td>
+      <td>214.50</td>
+      <td>0.000</td>
+      <td>base_</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0 days 09:06:30</td>
+      <td>0 days 03:49:00</td>
+      <td>546.5</td>
+      <td>229.0</td>
+      <td>221486.77</td>
+      <td>69199.365</td>
+      <td>base_</td>
     </tr>
   </tbody>
 </table>
@@ -959,41 +954,41 @@ Adding holiday markers to timing data...
     <tr>
       <th>0</th>
       <td>0 days 00:00:30</td>
-      <td>1</td>
-      <td>v1Tues</td>
-      <td>v1Weekday</td>
+      <td>2</td>
+      <td>base_Wed</td>
+      <td>base_Weekday</td>
       <td>False</td>
     </tr>
     <tr>
       <th>1</th>
       <td>0 days 00:00:30</td>
       <td>0</td>
-      <td>v1Mon</td>
-      <td>v1Weekday</td>
+      <td>base_Mon</td>
+      <td>base_Weekday</td>
       <td>False</td>
     </tr>
     <tr>
       <th>2</th>
       <td>0 days 00:00:30</td>
-      <td>1</td>
-      <td>v1Tues</td>
-      <td>v1Weekday</td>
+      <td>4</td>
+      <td>base_Fri</td>
+      <td>base_Weekday</td>
       <td>False</td>
     </tr>
     <tr>
       <th>3</th>
       <td>0 days 00:00:30</td>
-      <td>2</td>
-      <td>v1Wed</td>
-      <td>v1Weekday</td>
+      <td>0</td>
+      <td>base_Mon</td>
+      <td>base_Weekday</td>
       <td>False</td>
     </tr>
     <tr>
       <th>4</th>
       <td>0 days 00:00:30</td>
-      <td>4</td>
-      <td>v1Fri</td>
-      <td>v1Weekday</td>
+      <td>0</td>
+      <td>base_Mon</td>
+      <td>base_Weekday</td>
       <td>False</td>
     </tr>
   </tbody>
@@ -1011,7 +1006,7 @@ Adding holiday markers to timing data...
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Setting-Sunset-and-Sunrise-Timings">Setting Sunset and Sunrise Timings<a class="anchor-link" href="#Setting-Sunset-and-Sunrise-Timings"> </a></h2><p>Sunset and sunrise timings can also be calculated for actiwatch data. To do so, the specific location to be calculated for is required. Of most importance for the calculation is the longitude and latitude.</p>
+<h2 id="Setting-Sunset-and-Sunrise-Timings">Setting Sunset and Sunrise Timings<a class="anchor-link" href="#Setting-Sunset-and-Sunrise-Timings"> </a></h2><p>Sunset and sunrise timings can also be calculated for actiwatch data. To do so, the specific location (longidtude and latitude) is required to be fed into the astral package. A label for the location (e.g. a city name like Seattle) is also helpful for clarity.</p>
 
 </div>
 </div>
@@ -1034,7 +1029,7 @@ Adding holiday markers to timing data...
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="set_sun_timings" class="doc_header"><code>set_sun_timings</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L179" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>set_sun_timings</code>(<strong><code>timing_data</code></strong>, <strong><code>loc</code></strong>:<code>str</code>, <strong><code>region</code></strong>:<code>str</code>, <strong><code>timezone</code></strong>:<code>str</code>, <strong><code>latitude</code></strong>:<code>float</code>, <strong><code>longitude</code></strong>:<code>float</code>)</p>
+<h3 id="set_sun_timings" class="doc_header"><code>set_sun_timings</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L175" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>set_sun_timings</code>(<strong><code>timing_data</code></strong>, <strong><code>loc</code></strong>:<code>str</code>, <strong><code>region</code></strong>:<code>str</code>, <strong><code>timezone</code></strong>:<code>str</code>, <strong><code>latitude</code></strong>:<code>float</code>, <strong><code>longitude</code></strong>:<code>float</code>)</p>
 </blockquote>
 <p>Given a location (city), calculate sunset and sunrise timings for the data</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>timing_data: pd.DataFrame</p>
@@ -1131,28 +1126,28 @@ Adding holiday markers to timing data...
   <tbody>
     <tr>
       <th>0</th>
-      <td>2018-07-03 05:17:02.116743-07:00</td>
-      <td>2018-07-03 21:09:39.386344-07:00</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2018-07-02 05:16:22.672261-07:00</td>
-      <td>2018-07-02 21:09:58.273719-07:00</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2018-07-10 05:22:31.640667-07:00</td>
-      <td>2018-07-10 21:06:14.940775-07:00</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>2018-06-27 05:13:37.265731-07:00</td>
       <td>2018-06-27 21:10:53.349244-07:00</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>1</th>
+      <td>2018-07-09 05:21:39.214048-07:00</td>
+      <td>2018-07-09 21:06:51.768689-07:00</td>
+    </tr>
+    <tr>
+      <th>2</th>
       <td>2018-06-29 05:14:36.884762-07:00</td>
       <td>2018-06-29 21:10:39.206298-07:00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2018-07-16 05:28:18.610888-07:00</td>
+      <td>2018-07-16 21:01:42.757393-07:00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2018-07-02 05:16:22.672261-07:00</td>
+      <td>2018-07-02 21:09:58.273719-07:00</td>
     </tr>
   </tbody>
 </table>
@@ -1169,7 +1164,14 @@ Adding holiday markers to timing data...
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Adding-Sleep-Information">Adding Sleep Information<a class="anchor-link" href="#Adding-Sleep-Information"> </a></h2><p>Adding sleep information to the timing data is also possible. The below function adds sleep data, splitting a sleep day at 6pm (under the assumption that people generally do not sleep/end their day at 6pm).</p>
+<h2 id="Adding-Sleep-Information">Adding Sleep Information<a class="anchor-link" href="#Adding-Sleep-Information"> </a></h2><p>Adding sleep information to the timing data is also possible. The below function adds sleep data, allowing a "sleep day" to be split at a customizable time. The outputs of the function are</p>
+
+<pre><code>1. short_frame: 
+    a separate dataframe meant to be a quick way of visually subsetting and               viewing bi/polyphasic instances. This frame defaults to storing occurances 
+    of at least 3 sleep periods within a "sleep day", but can be modified.
+
+2. timing_data:
+    modifies input timing data to have all sleep period information</code></pre>
 
 </div>
 </div>
@@ -1192,17 +1194,21 @@ Adding holiday markers to timing data...
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="process_sleep_data" class="doc_header"><code>process_sleep_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L228" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>process_sleep_data</code>(<strong><code>timing_data</code></strong>, <strong><code>num_sleeps</code></strong>:<code>int</code>=<em><code>2</code></em>)</p>
+<h3 id="process_sleep_data" class="doc_header"><code>process_sleep_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/analyze_by_person.py#L224" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>process_sleep_data</code>(<strong><code>timing_data</code></strong>, <strong><code>sleep_split</code></strong>:<code>str</code>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>:<code>int</code>=<em><code>3</code></em>)</p>
 </blockquote>
 <p>Processes sleep data for existing timing data.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>timing_data: pd.DataFrame</p>
 
 <pre><code>Timing data
 </code></pre>
+<p>sleep_split: str</p>
+
+<pre><code>Time to split the sleep day. Default is "18:00", which is 6:00PM.
+</code></pre>
 <p>num_sleeps: int</p>
 
 <pre><code>Cutoff for number of sleeps to display in first resulting frame.
-Default = 2, frame will store days with 3+ sleep instances
+Default = 3, frame will store days with 3+ sleep instances
 
 </code></pre>
 <h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4>
@@ -1288,7 +1294,7 @@ timing_data: pd.DataFrame
   </thead>
   <tbody>
     <tr>
-      <th rowspan="3" valign="top">v1v1\v1</th>
+      <th rowspan="3" valign="top">base_v1\user1234</th>
       <th>2018-06-28</th>
       <td>0</td>
       <td>2018-06-29 00:40:30</td>
@@ -1310,7 +1316,7 @@ timing_data: pd.DataFrame
       <td>0 days 00:13:30</td>
     </tr>
     <tr>
-      <th rowspan="2" valign="top">v3v3\v3</th>
+      <th rowspan="2" valign="top">follow_up_v3\user1234</th>
       <th>2018-09-24</th>
       <td>0</td>
       <td>2018-09-24 21:31:00</td>
@@ -1391,30 +1397,6 @@ timing_data: pd.DataFrame
   <tbody>
     <tr>
       <th>0</th>
-      <td>2018-07-03 23:57:30</td>
-      <td>2018-07-04 06:14:00</td>
-      <td>0 days 06:16:30</td>
-      <td>1437.5</td>
-      <td>374.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2018-07-02 23:35:30</td>
-      <td>2018-07-03 06:35:30</td>
-      <td>0 days 07:00:00</td>
-      <td>1415.5</td>
-      <td>395.5</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2018-07-10 00:00:00</td>
-      <td>2018-07-10 00:00:00</td>
-      <td>0 days 00:00:00</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>2018-06-27 23:07:30</td>
       <td>2018-06-28 06:57:00</td>
       <td>0 days 07:49:30</td>
@@ -1422,12 +1404,36 @@ timing_data: pd.DataFrame
       <td>417.0</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>1</th>
+      <td>2018-07-09 23:38:30</td>
+      <td>2018-07-10 06:57:00</td>
+      <td>0 days 07:18:30</td>
+      <td>1418.5</td>
+      <td>417.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
       <td>2018-06-29 22:20:00</td>
       <td>2018-06-30 07:44:00</td>
       <td>0 days 09:24:00</td>
       <td>1340.0</td>
       <td>464.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2018-07-16 00:00:00</td>
+      <td>2018-07-16 00:00:00</td>
+      <td>0 days 00:00:00</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2018-07-02 23:35:30</td>
+      <td>2018-07-03 06:35:30</td>
+      <td>0 days 07:00:00</td>
+      <td>1415.5</td>
+      <td>395.5</td>
     </tr>
   </tbody>
 </table>

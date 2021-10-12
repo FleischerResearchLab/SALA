@@ -5,7 +5,7 @@ __all__ = ['get_raw_data', 'export_timing_data', 'process_timing_data', 'remove_
 
 # Cell
 def get_raw_data(key:str, directory: dict, grouping:str = 'Group'):
-    """Loads raw actiwatch data for a particular season.
+    """Loads raw actiwatch data for a particular group based on a string key.
 
     #### Parameters
 
@@ -23,7 +23,7 @@ def get_raw_data(key:str, directory: dict, grouping:str = 'Group'):
 
     """
     raw_data, summary_data = load_actiwatch_data(directory[key],uidprefix = key)
-    raw_data['Group'] = key
+    raw_data[grouping] = key
     return raw_data
 
 # Cell
@@ -42,10 +42,9 @@ def export_timing_data(timing_data):
        )
 
 # Cell
-def process_timing_data(location: str,
+def process_timing_data(
                      outfile: str,
                      thresholds: list,
-                     key: str,
                      directory: dict,
                      recalc_raw: bool = False,
                      recalc_timing: bool = False,
@@ -58,9 +57,6 @@ def process_timing_data(location: str,
 
     #### Parameters
 
-    location: str
-
-        Location for calculating light, for example 'Seattle'
     outfile: str
 
         File for re-written data to be placed in, or for data to be loaded from
@@ -129,13 +125,13 @@ def process_timing_data(location: str,
 
         # add days of week to data
         for index, row in timing_data.iterrows():
-            day_group.append(row["Group"].split(location)[0] + days[row["DayofWeek"]])
+            day_group.append(row["Group"] + days[row["DayofWeek"]])
             if holidays.isin([row["Date"]]).any():
-                dtp_group.append(row['Group'].split(location)[0] + "Weekend/Holiday")
+                dtp_group.append(row['Group'] + "Weekend/Holiday")
                 wknd_holiday.append(True)
             else:
                 dtp_group.append(
-                    row["Group"].split(location)[0] + day_type[row["DayofWeek"]]
+                    row["Group"] + day_type[row["DayofWeek"]]
                 )
                 wknd_holiday.append(row['DayofWeek'] > 4)
 
@@ -225,7 +221,7 @@ def set_sun_timings(timing_data,
     return timing_data
 
 # Cell
-def process_sleep_data(timing_data, num_sleeps: int = 2):
+def process_sleep_data(timing_data, sleep_split: str = "18:00", num_sleeps: int = 3):
     """Processes sleep data for existing timing data.
 
     #### Parameters
@@ -233,10 +229,13 @@ def process_sleep_data(timing_data, num_sleeps: int = 2):
     timing_data: pd.DataFrame
 
         Timing data
+    sleep_split: str
+
+        Time to split the sleep day. Default is "18:00", which is 6:00PM.
     num_sleeps: int
 
         Cutoff for number of sleeps to display in first resulting frame.
-        Default = 2, frame will store days with 3+ sleep instances
+        Default = 3, frame will store days with 3+ sleep instances
 
     #### Returns
 
@@ -265,7 +264,7 @@ def process_sleep_data(timing_data, num_sleeps: int = 2):
 
         # taking raw timing data entry and splitting a "sleep day" at 6pm
         # under the assumption that people do not end their days that early
-        day_split = all_data.query("UID == @UID").loc[today +" 18:00":nextday + " 18:00"]
+        day_split = all_data.query("UID == @UID").loc[today +" " + sleep_split:nextday + " 18:00"]
 
         # REST-S = watch thinks user is asleep
         asleep = day_split[ day_split["Interval Status"] == "REST-S"].copy()
@@ -324,7 +323,7 @@ def process_sleep_data(timing_data, num_sleeps: int = 2):
         sleep_count = sleeps.shape[0]
 
         # adding to short_frame
-        if sleep_count > num_sleeps:
+        if sleep_count >= num_sleeps:
             sleeps['UID'] = UID
             sleeps['DT'] = DT
             sleeps.reset_index(drop = True).set_index(['UID','DT'])
