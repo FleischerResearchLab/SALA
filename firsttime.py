@@ -29,20 +29,19 @@ def firstAndLastLight(data, threshold_list, resamp=False):
     tluxminAM = []
 
     for uid in ids:
-            print(uid)
             these_rows = (data.UID == uid) & (data['Interval Status'].isin(['ACTIVE','REST'])) & np.logical_not(data['Off-Wrist Status'])
             
-            assert (these_rows.sum() > 0),"OOOPS!!#!#! "+uid+" has no ACTIVE rows"
+            assert (these_rows.sum() > 0),"ISSUE: "+uid+" has no ACTIVE rows"
                 
                 
             daysofdata = set( data[ these_rows ].index.date )
             
             if 'Group' in data.columns:
-                group = data[data.UID == uid].iloc[0,:].Group
+                group = data[data.UID == uid].iloc[0,:]["Group"]
             elif 'Season' in data.columns:
-                group = data[data.UID == uid].iloc[0,:].Season
+                group = data[data.UID == uid].iloc[0,:]["Season"]
             else:
-                print("OOOPS!!#!  No group variable??")
+                print("ISSUE: Potentially no group variable?")
                 raise ValueError
                 
             for a_day in daysofdata:
@@ -62,7 +61,7 @@ def firstAndLastLight(data, threshold_list, resamp=False):
                 
                 for a_thresh in threshold_list:                                  
                     thresholds.append(a_thresh)
-                    if a_thresh==0:
+                    if a_thresh == 0 :
                         abovethresh = daylight.index[ daylight < 5] # 0 theshold is a request to calculate under 5 lux
                         abovethreshAM = daylight[:thisday + ' 12:00'].index[ daylight[:thisday + ' 12:00'] < 5]
                     else:
@@ -78,8 +77,8 @@ def firstAndLastLight(data, threshold_list, resamp=False):
                     try:
                         timelight = abovethresh[-1] # last time is above threshold
                         mins4am = (timelight.time().hour - 4) * 60 + timelight.time().minute
-                        if mins4am<0: # if after midnight, then value above is negative
-                            mins4am += 24*60 # fix by adding 24 hours to it
+                        if mins4am < 0: # if after midnight, then value above is negative
+                            mins4am += 24 * 60 # fix by adding 24 hours (in minutes) to it
                     except IndexError: # there is no above threshold level all day long
                         timelight = np.nan
                         mins4am = np.nan
@@ -88,16 +87,14 @@ def firstAndLastLight(data, threshold_list, resamp=False):
                     try:
                         timelight = abovethresh[0] # first time is above threshold
                         mins4am = (timelight.time().hour - 4) * 60 + timelight.time().minute
-                        if mins4am<0: # if after midnight, then value above is negative
-                            mins4am += 24*60 # fix by adding 24 hours to it
+                        if mins4am < 0: # if after midnight, then value above is negative
+                            mins4am += 24 * 60 # fix by adding 24 hours (in minutes) to it
                     except IndexError: # there is no above threshold level all day long
                         timelight = np.nan
                         mins4am = np.nan
                     firstlight.append(timelight)
                     min2fl.append(mins4am)
                     whoswatch.append(uid)
-                    #print("{} {} {} of 0-lux with period {}\n".format(uid,a_day,len(daylight[daylight==0])*dperiod,dperiod))
-                #print( len( whoswatch), len(lastlight), len(firstlight), len(min2ll), len(min2fl))
     return pd.DataFrame( {'UID': whoswatch, 'Date': datelist, 'Threshold': thresholds,
                           'Last Light': lastlight, 'Mins to LL from 4AM': min2ll,
                           'First Light': firstlight, 'Mins to FL from 4AM': min2fl,

@@ -46,7 +46,7 @@ def load_actiwatch_data(path,uidprefix=''):
             while True:
                 currentFilePosition = f.tell()
                 line = f.readline()
-                if line == '': #empty line read if EOF
+                if line == '': # empty line read if EOF
                     print('EOF without retrieving raw data: ' + afile)
                     break # get out of this loop so we can go on to next file
                 cells = line.split(',') # comma seperated values (CSV)            
