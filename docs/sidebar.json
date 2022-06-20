@@ -1,8 +1,7 @@
 {
   "SALA": {
     "Overview": "/",
-    "Analysis By Person": "analyze_by_person.html",
-    "Making Clock Plots": "clock_plots.html",
-    "Plot Light": "plot_light.html"
+    "SALA": "SALA.html",
+    "Plots": "plots.html"
   }
 }

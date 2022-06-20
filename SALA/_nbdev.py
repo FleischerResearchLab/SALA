@@ -2,20 +2,13 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"get_raw_data": "00_analyze_by_person.ipynb",
-         "export_timing_data": "00_analyze_by_person.ipynb",
-         "process_timing_data": "00_analyze_by_person.ipynb",
-         "remove_first_day": "00_analyze_by_person.ipynb",
-         "set_sun_timings": "00_analyze_by_person.ipynb",
-         "process_sleep_data": "00_analyze_by_person.ipynb",
-         "map_mins_to_rads": "01_clock_plots.ipynb",
-         "time_print": "01_clock_plots.ipynb",
-         "make_clock_plots": "01_clock_plots.ipynb",
-         "plot_light": "02_plot_light.ipynb"}
+index = {"SALA": "00_SALA.ipynb",
+         "remove_first_day": "00_SALA.ipynb",
+         "ClockPlot": "01_plots.ipynb",
+         "LightPlot": "01_plots.ipynb"}
 
-modules = ["analyze_by_person.py",
-           "clock_plots.py",
-           "plot_light.py"]
+modules = ["SALA.py",
+           "plots.py"]
 
 doc_url = "https://tktran11.github.io/SALA/"
 
