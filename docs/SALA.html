@@ -44,28 +44,42 @@ nb_path: "00_SALA.ipynb"
 </blockquote>
 <p>DataFrame-like storage for actiwatch data loaded either from a directory of csv files
 or an existing SALA or dataframe object.</p>
-<h2 id="Attributes">Attributes<a class="anchor-link" href="#Attributes"> </a></h2><p>data: pd.DataFrame
-    Dataframe of processed timing data</p>
-<p>timezone: str
+
+<pre><code>Attributes
+----------
+data: pd.DataFrame
+    Dataframe of processed timing data
+
+timezone: str
     Single timezone specified for all data within the object. A list of
-    valid timezones can be obtained from pytz.all_timezones</p>
-<p>latitude: float
-    Latitude position for sunrise/sunset calculations</p>
-<p>longitude: float
-    Longitude position for sunrise/sunset calculations</p>
-<h2 id="Methods">Methods<a class="anchor-link" href="#Methods"> </a></h2><p>init(data=None, directory=None, timezone=None, latitude=None, longitude=None)
-    Initialization with a pre-parsed dataframe or raw data and other details</p>
-<p>get_raw_data(key, directory, grouping='Group')
-    Loads raw actiwatch data</p>
-<p>export_timing_data(timing_data)
-    Exports timing data to a parquet file</p>
-<p>process_timing_data(outfile, thresholds, directory, recalc_raw, recalc_timing, export_hook)
+    valid timezones can be obtained from pytz.all_timezones
+
+latitude: float
+    Latitude position for sunrise/sunset calculations
+
+longitude: float
+    Longitude position for sunrise/sunset calculations
+
+Methods
+-------
+init(data=None, directory=None, timezone=None, latitude=None, longitude=None)
+    Initialization with a pre-parsed dataframe or raw data and other details
+
+get_raw_data(key, directory, grouping='Group')
+    Loads raw actiwatch data
+
+export_timing_data(timing_data)
+    Exports timing data to a parquet file
+
+process_timing_data(outfile, thresholds, directory, recalc_raw, recalc_timing, export_hook)
     Handle unprocessed data into two formats: a dataframe with all raw data, another with
-    only processed timing data</p>
-<p>set_sun_timings(timing_data)
-    Calculates sunset and sunrise timing for a single dataframe</p>
-<p>process_sleep_data
-    Processes sleep data for existing timing data</p>
+    only processed timing data
+
+set_sun_timings(timing_data)
+    Calculates sunset and sunrise timing for a single dataframe
+
+process_sleep_data
+    Processes sleep data for existing timing data</code></pre>
 
 </div>
 

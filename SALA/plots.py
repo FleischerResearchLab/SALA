@@ -11,14 +11,14 @@ class ClockPlot:
     SALA module.
 
 
-    Methods
-    -------
-    mins_to_radians(data)
-        Maps a series of minutes to radians for plot making.
-    print_time(mins)
-        Takes in a time as a float and returns a printable format.
-    plot(timing_data, group_by, thresholds=[], figsize=(5,10), timezone=None)
-        Creates a clock-shaped plot for grouping with SALA-styled timing data.
+        Methods
+        -------
+        mins_to_radians(data)
+            Maps a series of minutes to radians for plot making.
+        print_time(mins)
+            Takes in a time as a float and returns a printable format.
+        plot(timing_data, group_by, thresholds=[], figsize=(5,10), timezone=None)
+            Creates a clock-shaped plot for grouping with SALA-styled timing data.
     """
 
     @staticmethod

@@ -9,41 +9,41 @@ class SALA:
     or an existing SALA or dataframe object.
 
 
-    Attributes
-    ----------
-    data: pd.DataFrame
-        Dataframe of processed timing data
+        Attributes
+        ----------
+        data: pd.DataFrame
+            Dataframe of processed timing data
 
-    timezone: str
-        Single timezone specified for all data within the object. A list of
-        valid timezones can be obtained from pytz.all_timezones
+        timezone: str
+            Single timezone specified for all data within the object. A list of
+            valid timezones can be obtained from pytz.all_timezones
 
-    latitude: float
-        Latitude position for sunrise/sunset calculations
+        latitude: float
+            Latitude position for sunrise/sunset calculations
 
-    longitude: float
-        Longitude position for sunrise/sunset calculations
+        longitude: float
+            Longitude position for sunrise/sunset calculations
 
-    Methods
-    -------
-    init(data=None, directory=None, timezone=None, latitude=None, longitude=None)
-        Initialization with a pre-parsed dataframe or raw data and other details
+        Methods
+        -------
+        init(data=None, directory=None, timezone=None, latitude=None, longitude=None)
+            Initialization with a pre-parsed dataframe or raw data and other details
 
-    get_raw_data(key, directory, grouping='Group')
-        Loads raw actiwatch data
+        get_raw_data(key, directory, grouping='Group')
+            Loads raw actiwatch data
 
-    export_timing_data(timing_data)
-        Exports timing data to a parquet file
+        export_timing_data(timing_data)
+            Exports timing data to a parquet file
 
-    process_timing_data(outfile, thresholds, directory, recalc_raw, recalc_timing, export_hook)
-        Handle unprocessed data into two formats: a dataframe with all raw data, another with
-        only processed timing data
+        process_timing_data(outfile, thresholds, directory, recalc_raw, recalc_timing, export_hook)
+            Handle unprocessed data into two formats: a dataframe with all raw data, another with
+            only processed timing data
 
-    set_sun_timings(timing_data)
-        Calculates sunset and sunrise timing for a single dataframe
+        set_sun_timings(timing_data)
+            Calculates sunset and sunrise timing for a single dataframe
 
-    process_sleep_data
-        Processes sleep data for existing timing data
+        process_sleep_data
+            Processes sleep data for existing timing data
     """
 
     def __init__(self, data=None, directory=None, timezone=None, latitude=None, longitude=None):
