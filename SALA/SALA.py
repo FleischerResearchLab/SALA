@@ -262,7 +262,7 @@ class SALA:
             cal.holidays(start = timing_data.Date.min(), end = timing_data.Date.max())
         )
             # retrieve day number (e.g. 0) from date index
-            timing_data["DayofWeek"] = pd.DatetimeIndex(timing_data["Date"]).day_of_week
+            timing_data["DayofWeek"] = pd.DatetimeIndex(timing_data["Date"]).dayofweek
             days = ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"]
             day_type = ["Weekday","Weekday","Weekday",
                     "Weekday","Weekday","Weekend/Holiday","Weekend/Holiday"]
