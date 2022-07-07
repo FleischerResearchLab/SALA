@@ -11,42 +11,57 @@ class SALA:
 
         Attributes
         ----------
-        data: pd.DataFrame
-            Dataframe of processed timing data
+        data: pd.DataFrame or None
+            Initialized as None, but can be set as a dataframe, which is expected to contain
+            light and sleep information consistent with SALA formatting. It should only be
+            pre-set to an existing dataframe when trying to migrate existing data to a SALA
+            object.
 
         timezone: str
             Single timezone specified for all data within the object. A list of
-            valid timezones can be obtained from pytz.all_timezones
+            valid timezones can be obtained from pytz.all_timezones. Note that it is impossible
+            for different timezones to be present (all data must be converted to a single timezone)
 
         latitude: float
-            Latitude position for sunrise/sunset calculations
+            Latitude position for sunrise/sunset calculations.
 
         longitude: float
-            Longitude position for sunrise/sunset calculations
+            Longitude position for sunrise/sunset calculations.
 
         Methods
         -------
         init(data=None, directory=None, timezone=None, latitude=None, longitude=None)
-            Initialization with a pre-parsed dataframe or raw data and other details
+            Initialization with a pre-processed SALA-eqsue dataframe or raw data and file details
+            for loading and processing data.
 
-        get_raw_data(key, directory, grouping='Group')
-            Loads raw actiwatch data
+        get_raw_data_from_key(key, directory, grouping='Group')
+            Loads and combines all raw data from multiple csv files within a specified file source
+            based on a given key. Key indicates a grouping of multiple csvs.
 
-        export_timing_data(timing_data)
-            Exports timing data to a parquet file
+        get_raw_data(directory, grouping='Group')
+            Loads and combines all raw data from multiple csv files for all keys within
+            a directory for a given directory of file sources.
 
-        process_timing_data(outfile, thresholds, directory, recalc_raw, recalc_timing, export_hook)
-            Handle unprocessed data into two formats: a dataframe with all raw data, another with
-            only processed timing data
+        export(data)
+            Exports the data within a SALA object to a parquet file format.
 
-        set_sun_timings(timing_data)
-            Calculates sunset and sunrise timing for a single dataframe
+        process_data(raw_data, thresholds)
+            Handles unprocessed combined raw data outputting first and last light times,
+            and group identifiers for all specified light thresholds.
+
+        sun_timings()
+            Calculates sunset and sunrise timing information for currently stored SALA
+            data, based on the timezone info within the stored data.
+
+        do_everything()
+            TO ADD AFTER TESTING OTHER NEW FUNCTIONS.
 
         process_sleep_data
-            Processes sleep data for existing timing data
+            Processes sleep data for existing timing data, generating a summary dataframe
+            based on the number of sleep periods within the data.
     """
 
-    def __init__(self, data=None, directory=None, timezone=None, latitude=None, longitude=None):
+    def __init__(self, latitude, longitude, timezone, data=None, directory = None):
         """
         Initializes a SALA object either from existing parsed timing data, or from a directory
         of csvs. Timezone information can be optionally included to allow for sunset, sunrise
@@ -54,23 +69,24 @@ class SALA:
 
         #### Parameters
 
+            timezone: str
+                A valid timezone (a list of timezones can be obtained from pytz.all_timezones).
+
+            latitude: float
+                Latitude position for sunrise/sunset calculations. Northern latitudes
+                should be positive values.
+
+            longitude: float
+                Longitude position for sunrise/sunset calculations. Eastern longitudes
+                should be positive values.
+
             data: pd.DataFrame (optional)
-                Pre-parsed dataframe.
+                If not None, data should be a pre-processed SALA-format dataframe, expected to contain
+                details on light and sleep information.
 
             directory: dictionary (optional)
                 Dictionary of valid folder names to load actiwatch data from.
                 Folders should have .csv files in them.
-
-            timezone: str (optional)
-                A valid timezone (a list of timezones can be obtained from pytz.all_timezones).
-
-            latitude: float (optional)
-                Latitude position for sunrise/sunset calculations. Northern latitudes
-                should be positive values.
-
-            longitude: float (optional)
-                Longitude position for sunrise/sunset calculations. Eastern longitudes
-                should be positive values.
         """
         self._data = data
         self._directory = directory
@@ -138,14 +154,15 @@ class SALA:
             raise TypeError("Error: longitude must be a numeric")
         self._longitude = value
 
-    def get_raw_data(self, key, directory = None, grouping = 'Group'):
-        """Loads raw actiwatch data for a particular group based on a string key.
+    def get_raw_data_from_key(self, key, directory = None, grouping = 'Group'):
+        """Loads and combines raw actiwatch data from any csv files found in
+           the specified directory matching a particular key within the directory.
 
             #### Parameters
 
             key: str
 
-                The key to load actiwatch data from (for example, "v1")
+                The key to load actiwatch data from (for example, "v1").
 
             directory: dict
 
@@ -161,7 +178,7 @@ class SALA:
 
             #### Returns
 
-            All of the raw unprocessed data within the directory.
+            All of the raw unprocessed data within the directory matching a specified key.
 
     """
         if directory is None and self._directory is None:
@@ -172,139 +189,136 @@ class SALA:
         raw_data[grouping] = key
         return raw_data
 
-    def export(self, timing_data, outfile):
-        """
-        Exports existing timing data to a parquet format.
+    def get_raw_data(self, outfile, directory = None, grouping = 'Group', export = True):
+        """Loads and combines raw actiwatch data from any csv files found in
+           the specified directory for all keys within the directory.
 
-        #### Parameters
-            timing_data: pd.DataFrame
-
-            Timing data
+            #### Parameters
 
             outfile: str
 
                 Directory to save to. (e.g. ../SALA/example_output/)
+
+            directory: dict
+
+                Dictionary of valid folders to load actiwatch data from.
+                Folders should have .csv files in them. If no dictionary
+                is provided, it uses the one initialized as part of the SALA
+                object.
+
+            grouping: str
+
+                Name of the generated column for specifying groupings, where
+                the values will be the name of the key given. Default = 'Group'.
+
+            export: bool
+
+                Whether or not to export combined raw data to a parquet file saved in the designated
+                outfile location.
+
+            #### Returns
+
+            All of the raw unprocessed data within the directory for all keys as a single
+            dataframe.
+
+    """
+        if directory is None and self._directory is None:
+            raise ValueError("Error: a valid source of data must be provided.")
+        if directory is not None:
+            self._directory = directory
+        raw_results = (
+            Parallel(n_jobs=len(self._directory))(delayed(self.get_raw_data_from_key)(key, self._directory) for key in self._directory.keys())
+                   )
+        # save data to parquet file
+        all_data = pd.concat(raw_results)
+
+        if export:
+            all_data.to_parquet(outfile + "raw.parquet", engine = 'fastparquet',
+                                   compression = "gzip")
+
+        return pd.read_parquet(outfile + "raw.parquet")
+
+    def export(self, outfile, data=None):
+        """
+        Exports existing timing data to a parquet format.
+
+        #### Parameters
+            outfile: str
+
+                Directory to save to. (e.g. ../SALA/example_output/)
+            data: pd.DataFrame
+
+            Desired dataframe for exporting.
         """
 
-        if self.data is None and timing_data is None:
+        if self.data is None and data is None:
             raise Exception("Error: no timing data available to export.")
+        if data is None:
+            data = self.data
         # putting date information in a parquet valid format
-        timing_data["Date"] = timing_data["Date"].values.astype("datetime64[s]")
-        timing_data.to_parquet(f"{outfile}timing.parquet",
+        data["Date"] = data["Date"].values.astype("datetime64[s]")
+        data.to_parquet(f"{outfile}timing.parquet",
                                engine = "fastparquet", compression="gzip")
 
 
     def process_data(self,
-                     outfile,
-                     thresholds,
-                     calc_raw = False,
-                     calc_timing = False,
-                     export_hook = None):
-        """Process existing timing and raw data dataframes by loading them
-        from disk or calculating their values if specified.
+                     raw_data,
+                     thresholds):
+        """Handles unprocessed combined raw data outputting first and last light times,
+            and group identifiers for all specified light thresholds.
 
         #### Parameters
 
-        outfile: str
+        raw_data: pd.DataFrame
 
-            File for re-written data to be placed in, or for data to be loaded from.
+            Combined dataframe of all raw data from desired directory. This can be
+            accomplished by using the get_raw_data function within the SALA class.
 
         thresholds: list
 
             List of light thresholds for the watch data.
 
-        key: str
-
-            The key to load actiwatch data from.
-
-        calc_raw: bool
-
-            Forces calculation process if true, loads processed data from disk otherwise.
-            Default value is 'False'
-
-        calc_timing: bool
-
-            Forces calculation of light timing data and exports the resulting data,
-            loads it from disk otherwise.
-            Default value is 'False'
-
-        export_hook: function
-
-            Placeholder for user to use their own function during data processing.
-            This function should take in the timing data as a parameter. See
-            documentation for example.
         #### Returns
 
-            (as a tuple of pd.DataFrames) all the data, the processed timing data
+            Processed timing data in a dataframe format, with specific identifier columns based
+            on weekday and weekend/holiday groupings.
         """
-        if calc_raw:
-            print("Loading raw data from disk...")
-            raw_results = (
-            Parallel(n_jobs=len(self._directory))(delayed(self.get_raw_data)(key, self._directory) for key in self._directory.keys())
-                   )
-            all_data = pd.concat(raw_results)
-            # save data to parquet file
-            all_data.to_parquet(outfile + "raw.parquet", engine = 'fastparquet',
-                               compression = "gzip")
-        else:
-            all_data = pd.read_parquet(outfile + "raw.parquet")
+        timing_results = (Parallel(n_jobs=len(thresholds))
+        (delayed(firstAndLastLight)(raw_data, threshold) for threshold in thresholds)
+                         )
+        timing_data = pd.concat(timing_results)
 
-        if calc_timing:
-            print("Processing light timing data...")
-            timing_results = (Parallel(n_jobs=len(thresholds))
-            (delayed(firstAndLastLight)(all_data, threshold) for threshold in thresholds)
-                             )
-            timing_data = pd.concat(timing_results)
+        # loading federal holidays to classify dates as weekend/holiday
+        cal = calendar()
+        holidays = (
+        cal.holidays(start = timing_data.Date.min(), end = timing_data.Date.max())
+    )
+        # retrieve day number (e.g. 0) from date index
+        timing_data["DayofWeek"] = pd.DatetimeIndex(timing_data["Date"]).dayofweek
+        days = ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        day_type = ["Weekday","Weekday","Weekday",
+                "Weekday","Weekday","Weekend/Holiday","Weekend/Holiday"]
 
-            # loading federal holidays to classify dates as weekend/holiday
-            cal = calendar()
-            holidays = (
-            cal.holidays(start = timing_data.Date.min(), end = timing_data.Date.max())
-        )
-            # retrieve day number (e.g. 0) from date index
-            timing_data["DayofWeek"] = pd.DatetimeIndex(timing_data["Date"]).dayofweek
-            days = ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"]
-            day_type = ["Weekday","Weekday","Weekday",
-                    "Weekday","Weekday","Weekend/Holiday","Weekend/Holiday"]
+        # result should be a combination of Group identifier and the day of the week (e.g. Mon)
+        timing_data["GroupDayofWeek"] = (timing_data["Group"] + np.array(days)[timing_data["DayofWeek"]])
 
-            # result should be a combination of Group identifier and the day of the week (e.g. Mon)
-            timing_data["GroupDayofWeek"] = (timing_data["Group"] + np.array(days)[timing_data["DayofWeek"]])
+        is_holiday = pd.to_datetime(timing_data["Date"]).isin(holidays)
+        weekends = (timing_data["Group"] + "Weekend/Holiday")
 
-            is_holiday = pd.to_datetime(timing_data["Date"]).isin(holidays)
-            weekends = (timing_data["Group"] + "Weekend/Holiday")
+         # result should be a combination of Group identifier and day type (e.g. Weekday)
+        day_types = (timing_data["Group"] + np.array(day_type)[timing_data["DayofWeek"]])
 
-             # result should be a combination of Group identifier and day type (e.g. Weekday)
-            day_types = (timing_data["Group"] + np.array(day_type)[timing_data["DayofWeek"]])
+        timing_data["GroupDayType"] = day_types.where(~is_holiday).combine_first(weekends.where(is_holiday))
+        timing_data["Weekend/Holiday"] = ((timing_data["DayofWeek"] > 4) | is_holiday)
 
-            timing_data["GroupDayType"] = day_types.where(~is_holiday).combine_first(weekends.where(is_holiday))
-            timing_data["Weekend/Holiday"] = ((timing_data["DayofWeek"] > 4) | is_holiday)
+        self._data = timing_data
+        timing_data["Watch period"] = pd.to_timedelta(timing_data["Watch period"])
 
-            # function hook for extra processing before exporting to parquet
-            if export_hook:
-                timing_data = export_hook(timing_data)
+        return timing_data
 
-            # setting and exporting timing data
-            self._data = timing_data
-            timing_data["Watch period"] = pd.to_timedelta(timing_data["Watch period"])
-            self.export(timing_data, outfile)
-        else:
-            timing_data = pd.read_parquet(outfile + "timing.parquet", engine = "fastparquet")
-
-        return all_data, timing_data
-
-    def sun_timings(self, location, region):
-        """Given a location (city) and region as additional markers,
-        calculate sunset and sunrise timings.
-
-        #### Parameters
-
-        location: str (any string)
-
-            Name of the location to lookup.
-
-        region: str (any string)
-
-            Region that the location is located in.
+    def sun_timings(self):
+        """Calculates sunrise and sunset timing information for data present in the
+        SALA object.
 
         #### Returns
 
@@ -315,7 +329,7 @@ class SALA:
             raise ValueError("Error: Missing timezone, latitude, or longitude info.")
 
         # add location info for calculating astral data
-        city = LocationInfo(location, region, self._timezone, self._latitude, self._longitude)
+        city = LocationInfo("location", "region", self._timezone, self._latitude, self._longitude)
         self._data["Sunrise"] = self._data["Date"].apply( lambda x: sun.sunrise(city.observer,
                                                                            x,
                                                                            tzinfo = city.tzinfo))
@@ -324,14 +338,67 @@ class SALA:
                                                                          tzinfo = city.tzinfo))
         return self._data
 
-    def process_sleep(self, sleep_split = "18:00", num_sleeps = 3):
+
+    def do_everything(self, outfile, thresholds, directory = None, grouping = "Group", export = True):
+        """Handles the full SALA pipeline (excluding sleep period analysis), from processing and combining raw data
+        to parsing and calculating processed data with sunrise and sunset information. First loads and compiles
+        all existing raw data for every key within the given directory. Then processes all raw data, calculating
+        additional information for all specified light thresholds. Also adds sunrise and sunset information.
+
+        #### Parameters
+
+        outfile: str
+
+                Directory to save to. (e.g. ../SALA/example_output/)
+
+        thresholds: list
+
+            List of light thresholds for the watch data.
+
+        directory: dict
+
+            Dictionary of valid folders to load actiwatch data from.
+            Folders should have .csv files in them. If no dictionary
+            is provided, it uses the one initialized as part of the SALA
+            object.
+
+        grouping: str
+
+            Name of the generated column for specifying groupings, where
+            the values will be the name of the key given. Default = 'Group'.
+
+        export: bool
+
+            Whether or not to export processed timing data to a parquet file saved in the designated
+            outfile location.
+
+        #### Returns
+
+            Processed timing data in a dataframe format, with specific identifier columns based
+            on weekday and weekend/holiday groupings, and included sunrise and sunset calculations.
+        """
+        if directory == None:
+            directory = self.directory
+
+        raw_data = self.get_raw_data(outfile, directory, grouping)
+        data = self.process_data(raw_data, thresholds)
+        self.sun_timings()
+
+        if export:
+            self.export(data = self.data, outfile = outfile)
+
+        return self._data
+
+
+    def process_sleep(self, raw_data, sleep_split = "18:00", num_sleeps = 3):
         """Processes sleep data for existing timing data.
 
         #### Parameters
 
-        timing_data: pd.DataFrame
+        raw_data: pd.DataFrame
 
-            Timing data
+            Combined dataframe of all raw data from desired directory. This can be
+            accomplished by using the get_raw_data function within the SALA class.
 
         sleep_split: str
 
@@ -372,7 +439,7 @@ class SALA:
 
             # taking raw timing data entry and splitting a "sleep day" at 6pm
             # under the assumption that people do not end their days that early
-            day_split = all_data.query("UID == @UID").loc[today +" " + sleep_split:nextday + " 18:00"]
+            day_split = raw_data.query("UID == @UID").loc[today +" " + sleep_split:nextday + " 18:00"]
 
             # REST-S = watch thinks user is asleep
             asleep = day_split[ day_split["Interval Status"] == "REST-S"].copy()
@@ -451,14 +518,10 @@ class SALA:
 
 # Cell
 def remove_first_day(timing_data):
-    """Example function hook for removing data for the first day
-    where its obvious that light data is non-existent (NaT)
-
-     #### Parameters
-
-    timing_data: pd.DataFrame
-
-        Timing data
+    """An example function that removes data
+    from the first day of recording. Typically the first
+    day has no light data for these watches (represented
+    as (NaT)
     """
     data = (
     timing_data[(timing_data["Last Light"].apply(np.isnat) == False)

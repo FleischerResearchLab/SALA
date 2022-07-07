@@ -40,46 +40,61 @@ nb_path: "00_SALA.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="SALA" class="doc_header"><code>class</code> <code>SALA</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L6" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SALA</code>(<strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>timezone</code></strong>=<em><code>None</code></em>, <strong><code>latitude</code></strong>=<em><code>None</code></em>, <strong><code>longitude</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="SALA" class="doc_header"><code>class</code> <code>SALA</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L6" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SALA</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>DataFrame-like storage for actiwatch data loaded either from a directory of csv files
 or an existing SALA or dataframe object.</p>
 
 <pre><code>Attributes
 ----------
-data: pd.DataFrame
-    Dataframe of processed timing data
+data: pd.DataFrame or None
+    Initialized as None, but can be set as a dataframe, which is expected to contain
+    light and sleep information consistent with SALA formatting. It should only be
+    pre-set to an existing dataframe when trying to migrate existing data to a SALA
+    object.
 
 timezone: str
     Single timezone specified for all data within the object. A list of
-    valid timezones can be obtained from pytz.all_timezones
+    valid timezones can be obtained from pytz.all_timezones. Note that it is impossible
+    for different timezones to be present (all data must be converted to a single timezone)
 
 latitude: float
-    Latitude position for sunrise/sunset calculations
+    Latitude position for sunrise/sunset calculations.
 
 longitude: float
-    Longitude position for sunrise/sunset calculations
+    Longitude position for sunrise/sunset calculations.
 
 Methods
 -------
 init(data=None, directory=None, timezone=None, latitude=None, longitude=None)
-    Initialization with a pre-parsed dataframe or raw data and other details
+    Initialization with a pre-processed SALA-eqsue dataframe or raw data and file details
+    for loading and processing data.
 
-get_raw_data(key, directory, grouping='Group')
-    Loads raw actiwatch data
+get_raw_data_from_key(key, directory, grouping='Group')
+    Loads and combines all raw data from multiple csv files within a specified file source
+    based on a given key. Key indicates a grouping of multiple csvs.
 
-export_timing_data(timing_data)
-    Exports timing data to a parquet file
+get_raw_data(directory, grouping='Group')
+    Loads and combines all raw data from multiple csv files for all keys within
+    a directory for a given directory of file sources.
 
-process_timing_data(outfile, thresholds, directory, recalc_raw, recalc_timing, export_hook)
-    Handle unprocessed data into two formats: a dataframe with all raw data, another with
-    only processed timing data
+export(data)
+    Exports the data within a SALA object to a parquet file format.
 
-set_sun_timings(timing_data)
-    Calculates sunset and sunrise timing for a single dataframe
+process_data(raw_data, thresholds)
+    Handles unprocessed combined raw data outputting first and last light times,
+    and group identifiers for all specified light thresholds.
+
+sun_timings()
+    Calculates sunset and sunrise timing information for currently stored SALA
+    data, based on the timezone info within the stored data.
+
+do_everything()
+    TO ADD AFTER TESTING OTHER NEW FUNCTIONS.
 
 process_sleep_data
-    Processes sleep data for existing timing data</code></pre>
+    Processes sleep data for existing timing data, generating a summary dataframe
+    based on the number of sleep periods within the data.</code></pre>
 
 </div>
 
@@ -100,11 +115,11 @@ process_sleep_data
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Creating-SALA-Objects">Creating SALA Objects<a class="anchor-link" href="#Creating-SALA-Objects"> </a></h2><p>To access the full range of SALA based commands, a SALA object should be created. This can be done by initializing an instance of a SALA object using the initialization method provided. By default, a SALA object can be created without providing any of the necessary data for processing. Below are the intended uses for each of the parameters and how their presence controls SALA functionality. Access to (and manipulation of) these properities is available after initialization as well.</p>
-<h4 id="Data">Data<a class="anchor-link" href="#Data"> </a></h4><p>This consists of stored processed timing data within SALA. It is meant to be initialized in cases where pre-parsed data with SALA-like manipulations already exist. Unprocessed data should instead be generated using functions within SALA.</p>
-<h4 id="Directory">Directory<a class="anchor-link" href="#Directory"> </a></h4><p>If no processed data exists, a dictionary of strings denoting the locations of files to be processed must be provided in order for data to be processed.</p>
-<h4 id="Timezone,-Latitude,-Longitude">Timezone, Latitude, Longitude<a class="anchor-link" href="#Timezone,-Latitude,-Longitude"> </a></h4><p>These location specific information pieces are necessary in generating accurate sunrise
-and sunset timings.</p>
+<h2 id="Creating-SALA-Objects">Creating SALA Objects<a class="anchor-link" href="#Creating-SALA-Objects"> </a></h2><p>SALA objects can be created by using the initialization method provided. This method requires location specific information and either existing data or a data source directory:</p>
+<h4 id="Latitude,-Longitude,-Timezone">Latitude, Longitude, Timezone<a class="anchor-link" href="#Latitude,-Longitude,-Timezone"> </a></h4><p>These location specific information pieces are necessary in generating accurate sunrise and sunset timings.</p>
+<h4 id="Data">Data<a class="anchor-link" href="#Data"> </a></h4><p>This should consist of a processed dataframe in SALA-style, with corresponding columns such as 
+"First Light", "Date", "Lux Minutes", etc. Data should be entered as a variable in cases where existing data missing sunrise or sunset data is available or for immediate use with SALA-style plots.</p>
+<h4 id="Directory">Directory<a class="anchor-link" href="#Directory"> </a></h4><p>In most cases, it is preferred to have a directory entered. A directory should be in dictionary style, where keys denote file groupings (e.g. baseline versus intervention) and the values denote relative file paths/folders to find csv stored data in.</p>
 
 </div>
 </div>
@@ -120,29 +135,30 @@ and sunset timings.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.__init__" class="doc_header"><code>SALA.__init__</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L49" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.__init__</code>(<strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>timezone</code></strong>=<em><code>None</code></em>, <strong><code>latitude</code></strong>=<em><code>None</code></em>, <strong><code>longitude</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="SALA.__init__" class="doc_header"><code>SALA.__init__</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L64" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.__init__</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Initializes a SALA object either from existing parsed timing data, or from a directory
 of csvs. Timezone information can be optionally included to allow for sunset, sunrise
 data to be added.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4>
-<pre><code>data: pd.DataFrame (optional)
-    Pre-parsed dataframe.
-
-directory: dictionary (optional)
-    Dictionary of valid folder names to load actiwatch data from.
-    Folders should have .csv files in them.
-
-timezone: str (optional)
+<pre><code>timezone: str
     A valid timezone (a list of timezones can be obtained from pytz.all_timezones).
 
-latitude: float (optional)
+latitude: float
     Latitude position for sunrise/sunset calculations. Northern latitudes
     should be positive values.
 
-longitude: float (optional)
+longitude: float
     Longitude position for sunrise/sunset calculations. Eastern longitudes
-    should be positive values.</code></pre>
+    should be positive values.
+
+data: pd.DataFrame (optional)
+    If not None, data should be a pre-processed SALA-format dataframe, expected to contain
+    details on light and sleep information.
+
+directory: dictionary (optional)
+    Dictionary of valid folder names to load actiwatch data from.
+    Folders should have .csv files in them.</code></pre>
 
 </div>
 
@@ -156,7 +172,7 @@ longitude: float (optional)
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>A SALA object can be initialized as follows:</p>
+<p>SALA objects can be initialized in one of two methods.</p>
 
 </div>
 </div>
@@ -172,7 +188,14 @@ longitude: float (optional)
     <span class="s1">&#39;base_&#39;</span><span class="p">:</span> <span class="s1">&#39;data/v1&#39;</span><span class="p">,</span>
     <span class="s1">&#39;follow_up_&#39;</span><span class="p">:</span> <span class="s1">&#39;data/v3&#39;</span>
 <span class="p">}</span>
-<span class="n">sala</span> <span class="o">=</span> <span class="n">SALA</span><span class="p">(</span><span class="n">directory</span> <span class="o">=</span> <span class="n">directory</span><span class="p">)</span>
+<span class="n">timezone</span> <span class="o">=</span> <span class="s2">&quot;America/Los_Angeles&quot;</span>
+<span class="n">latitude</span> <span class="o">=</span> <span class="mf">47.65</span>
+<span class="n">longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">122.30</span>
+
+<span class="n">sala_from_directory</span> <span class="o">=</span> <span class="n">SALA</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">timezone</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="n">directory</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;example_output/timing.parquet&quot;</span><span class="p">)</span>
+<span class="n">sala_from_data</span> <span class="o">=</span> <span class="n">SALA</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">timezone</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -184,20 +207,10 @@ longitude: float (optional)
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Loading-Actiwatch-Data">Loading Actiwatch Data<a class="anchor-link" href="#Loading-Actiwatch-Data"> </a></h2><p>Actiwatch data should be loaded in a directory style setup with key value pairings. This is intended to provide a generally flexible method for labeling groups within the data for easier by-group searching and analysis.</p>
-<p>For example:</p>
-<p>The above directory uses</p>
-<ul>
-<li><strong>key</strong> = indicates the group name (for example, base_ or follow<em>up</em>), that is used to both name the grouping within the Group column, and as the front of the generated UID.</li>
-</ul>
-<ul>
-<li><p><strong>value</strong> = indicates that the csv files to be loaded are stored in a folder called "data/v1 or data/v3". The trailing part of the naming convention (after the / ) is appended to the UID. The remaining part of the UID is built using the file name within the subfolder.</p>
-<p>Following this structure an example file titled 'user1234' would net a UID of <em>base_v1\user1234</em> as
- its key is <em>base_</em>, its stored in <em>v1</em>, and the title of the csv is <em>user1234</em>.</p>
-<p>Also note that the name for their "group" will match the key value used for the directory.</p>
-</li>
-</ul>
-<p>Combined and loaded data can be retrieved using:</p>
+<h2 id="Loading-Actiwatch-Data-and-Raw-Data-Manipulation">Loading Actiwatch Data and Raw Data Manipulation<a class="anchor-link" href="#Loading-Actiwatch-Data-and-Raw-Data-Manipulation"> </a></h2><p>Actiwatch data should be loaded in a directory-style setup with key value pairings. This is intended to provide a generally flexible method for group labeling within the data for easier grouped searching and analysis.</p>
+<h4 id="Keys">Keys<a class="anchor-link" href="#Keys"> </a></h4><p>Keys should be indicative of the group name and are used in generating UIDs. The in-documentation example below uses base_ and follow<em>up</em> as its keys.</p>
+<h4 id="Values">Values<a class="anchor-link" href="#Values"> </a></h4><p>Corresponding Values should be relative file paths to find csv data to be loaded for a respective group. The example data uses csvs within two folders "data/v1" and "data/v3" which correspond to the keys "base_" and "follow<em>up</em>" respectively. Note that the trailing part of the folder path (after the final /) is appended to the UID. The remaining part of the UID is build using the filename within the subfolder.</p>
+<p>Following this structure, an example file titled "user1234" in "data/v1" would generate a UID of "base_v1\user1234".</p>
 
 </div>
 </div>
@@ -213,29 +226,30 @@ longitude: float (optional)
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.get_raw_data" class="doc_header"><code>SALA.get_raw_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L141" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.get_raw_data</code>(<strong><code>key</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>)</p>
+<h3 id="SALA.get_raw_data_from_key" class="doc_header"><code>SALA.get_raw_data_from_key</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L157" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.get_raw_data_from_key</code>(<strong><code>key</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>)</p>
 </blockquote>
-<p>Loads raw actiwatch data for a particular group based on a string key.</p>
+<p>Loads and combines raw actiwatch data from any csv files found in
+the specified directory matching a particular key within the directory.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>key: str</p>
 
-<pre><code>The key to load actiwatch data from (for example, "v1")
+<pre><code> The key to load actiwatch data from (for example, "v1").
 
 </code></pre>
 <p>directory: dict</p>
 
-<pre><code>Dictionary of valid folders to load actiwatch data from.
-Folders should have .csv files in them. If no dictionary
-is provided, it uses the one initialized as part of the SALA
-object.
+<pre><code> Dictionary of valid folders to load actiwatch data from.
+ Folders should have .csv files in them. If no dictionary
+ is provided, it uses the one initialized as part of the SALA
+ object.
 
 </code></pre>
 <p>grouping: str</p>
 
-<pre><code>Name of the generated column for specifying groupings, where
-the values will be the name of the key given. Default = 'Group'.
+<pre><code> Name of the generated column for specifying groupings, where
+ the values will be the name of the key given. Default = 'Group'.
 
 </code></pre>
-<h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4><p>All of the raw unprocessed data within the directory.</p>
+<h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4><p>All of the raw unprocessed data within the directory matching a specified key.</p>
 
 </div>
 
@@ -247,6 +261,13 @@ the values will be the name of the key given. Default = 'Group'.
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Loading-Data-for-a-Single-Key">Loading Data for a Single Key<a class="anchor-link" href="#Loading-Data-for-a-Single-Key"> </a></h3><p>Raw data for a particular key within the directory can be gathered by giving this function a key and a directory to load data from. If no directory is given, the function will automatically use the directory specified when creating a SALA object.</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -254,8 +275,8 @@ the values will be the name of the key given. Default = 'Group'.
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">raw_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">get_raw_data</span><span class="p">(</span><span class="s1">&#39;base_&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="p">)</span>
-<span class="n">raw_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">raw_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">get_raw_data_from_key</span><span class="p">(</span><span class="s2">&quot;base_&quot;</span><span class="p">)</span>
+<span class="n">raw_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -413,185 +434,7 @@ Pass #2, data summary
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Exporting-Data">Exporting Data<a class="anchor-link" href="#Exporting-Data"> </a></h2><p>SALA provides its own export function for taking existing SALA data and saving it to a parquet file. This is automatically done when running SALA's main processing command as well. An existing directory to save the file to should be provided by the user.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.export" class="doc_header"><code>SALA.export</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L175" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.export</code>(<strong><code>timing_data</code></strong>, <strong><code>outfile</code></strong>)</p>
-</blockquote>
-<p>Exports existing timing data to a parquet format.</p>
-<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4>
-<pre><code>timing_data: pd.DataFrame
-
-Timing data
-
-outfile: str
-
-    Directory to save to. (e.g. ../SALA/example_output/)</code></pre>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Processing-Data">Processing Data<a class="anchor-link" href="#Processing-Data"> </a></h2><p>The main functionality of SALA's core module is collecting and processing both raw and timing data. In most cases, SALA objects will be created without existing dataframes. This function serves to generate processed data with necessary features for plot generation in other SALA modules.</p>
-<p>For more details, see the provided example below.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.process_data" class="doc_header"><code>SALA.process_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L197" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.process_data</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>calc_raw</code></strong>=<em><code>False</code></em>, <strong><code>calc_timing</code></strong>=<em><code>False</code></em>, <strong><code>export_hook</code></strong>=<em><code>None</code></em>)</p>
-</blockquote>
-<p>Process existing timing and raw data dataframes by loading them
-from disk or calculating their values if specified.</p>
-<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>outfile: str</p>
-
-<pre><code>File for re-written data to be placed in, or for data to be loaded from.
-
-</code></pre>
-<p>thresholds: list</p>
-
-<pre><code>List of light thresholds for the watch data.
-
-</code></pre>
-<p>key: str</p>
-
-<pre><code>The key to load actiwatch data from.
-
-</code></pre>
-<p>calc_raw: bool</p>
-
-<pre><code>Forces calculation process if true, loads processed data from disk otherwise.
-Default value is 'False'
-
-</code></pre>
-<p>calc_timing: bool</p>
-
-<pre><code>Forces calculation of light timing data and exports the resulting data,
-loads it from disk otherwise.
-Default value is 'False'
-
-</code></pre>
-<p>export_hook: function</p>
-
-<pre><code>Placeholder for user to use their own function during data processing.
-This function should take in the timing data as a parameter. See
-documentation for example.
-</code></pre>
-<h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4>
-<pre><code>(as a tuple of pd.DataFrames) all the data, the processed timing data</code></pre>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Adding-Extra-Functions-to-Processing">Adding Extra Functions to Processing<a class="anchor-link" href="#Adding-Extra-Functions-to-Processing"> </a></h3><p>The main processing function provides the ability for users to run their own custom function before exporting. A very minimal example of such a function is provided below.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L453" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>timing_data</code></strong>)</p>
-</blockquote>
-<p>Example function hook for removing data for the first day
-where its obvious that light data is non-existent (NaT)</p>
-<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>timing_data: pd.DataFrame</p>
-
-<pre><code>Timing data</code></pre>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_first_day</span><span class="p">(</span><span class="n">timing_data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Example function hook for removing data for the first day</span>
-<span class="sd">    where its obvious that light data is non-existent (NaT)</span>
-
-<span class="sd">     #### Parameters</span>
-
-<span class="sd">    timing_data: pd.DataFrame</span>
-
-<span class="sd">        Timing data</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">timing_data</span><span class="p">[(</span><span class="n">timing_data</span><span class="p">[</span><span class="s2">&quot;Last Light&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnat</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)</span>
-               <span class="o">&amp;</span> <span class="p">(</span><span class="n">timing_data</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">timing_data</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())]</span>
-            <span class="p">)</span>
-    <span class="k">return</span> <span class="n">data</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Example">Example<a class="anchor-link" href="#Example"> </a></h4><p>An example of output for this function would be:</p>
-<p><strong>Note</strong>: The resulting data is split into three images for easier viewing</p>
+<h3 id="Loading-Data-for-All-Keys">Loading Data for All Keys<a class="anchor-link" href="#Loading-Data-for-All-Keys"> </a></h3><p>Raw data for all keys can similarly be loaded by providing an outfile to save the generated file to. Saving is controlled via a boolean command. A directory to load data from is also necessary. If no directory is given, the function will automatically use the directory specified when creating a SALA object.</p>
 
 </div>
 </div>
@@ -603,57 +446,9 @@ where its obvious that light data is non-existent (NaT)</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">thresholds</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">1000</span><span class="p">]</span> <span class="p">]</span> 
-<span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;../SALA/example_output/&quot;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_data</span><span class="p">,</span> <span class="n">timing_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">process_data</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">remove_first_day</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Loading raw data from disk...
-Processing light timing data...
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;../SALA/example_output/&quot;</span>
+<span class="n">all_raw_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">get_raw_data</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">export</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">all_raw_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -796,6 +591,92 @@ Processing light timing data...
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Exporting-Data">Exporting Data<a class="anchor-link" href="#Exporting-Data"> </a></h2><p>SALA provides its own export function for taking existing SALA data and saving it to a parquet file. To save existing SALA data an outfile location must be provided. By default SALA exports the data stored within the object.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="SALA.export" class="doc_header"><code>SALA.export</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L241" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.export</code>(<strong><code>outfile</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Exports existing timing data to a parquet format.</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4>
+<pre><code>outfile: str
+
+    Directory to save to. (e.g. ../SALA/example_output/)
+data: pd.DataFrame
+
+Desired dataframe for exporting.</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Processing-Data">Processing Data<a class="anchor-link" href="#Processing-Data"> </a></h2><p>The main functionality of SALA's is data processing. SALA's processing functions handle unprocessed combined raw data to outputt first and last light times, and group identifiers for specified light thresholds. SALA also supports adding sunrise and sunset data based on latitude and longitude.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="SALA.process_data" class="doc_header"><code>SALA.process_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L264" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.process_data</code>(<strong><code>raw_data</code></strong>, <strong><code>thresholds</code></strong>)</p>
+</blockquote>
+<p>Handles unprocessed combined raw data outputting first and last light times,
+    and group identifiers for all specified light thresholds.</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>raw_data: pd.DataFrame</p>
+
+<pre><code>Combined dataframe of all raw data from desired directory. This can be
+accomplished by using the get_raw_data function within the SALA class.
+
+</code></pre>
+<p>thresholds: list</p>
+
+<pre><code>List of light thresholds for the watch data.
+
+</code></pre>
+<h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4>
+<pre><code>Processed timing data in a dataframe format, with specific identifier columns based
+on weekday and weekend/holiday groupings.</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -803,7 +684,105 @@ Processing light timing data...
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">timing_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">thresholds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">1000</span><span class="p">]]</span> 
+<span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;../SALA/example_output/&quot;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>At this stage, any extra processing functions can be directly applied to the data.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L520" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>timing_data</code></strong>)</p>
+</blockquote>
+<p>An example function that removes data
+from the first day of recording. Typically the first
+day has no light data for these watches (represented
+as (NaT)</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_first_day</span><span class="p">(</span><span class="n">timing_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An example function that removes data</span>
+<span class="sd">    from the first day of recording. Typically the first</span>
+<span class="sd">    day has no light data for these watches (represented</span>
+<span class="sd">    as (NaT)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">timing_data</span><span class="p">[(</span><span class="n">timing_data</span><span class="p">[</span><span class="s2">&quot;Last Light&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnat</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)</span>
+               <span class="o">&amp;</span> <span class="p">(</span><span class="n">timing_data</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">timing_data</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())]</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sala</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">process_data</span><span class="p">(</span><span class="n">all_raw_data</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">)</span>
+<span class="n">sala</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">remove_first_day</span><span class="p">(</span><span class="n">sala</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sala</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -848,35 +827,45 @@ Processing light timing data...
     <tr>
       <th>0</th>
       <td>base_v1\user1234</td>
-      <td>2018-07-09</td>
+      <td>2018-06-30</td>
       <td>5</td>
-      <td>2018-07-09 23:19:00</td>
-      <td>1159.0</td>
-      <td>2018-07-09 06:39:00</td>
-      <td>159.0</td>
+      <td>2018-06-30 22:22:00</td>
+      <td>1102.0</td>
+      <td>2018-06-30 07:56:30</td>
+      <td>236.0</td>
     </tr>
     <tr>
       <th>1</th>
       <td>base_v1\user1234</td>
-      <td>2018-07-16</td>
+      <td>2018-06-28</td>
       <td>5</td>
-      <td>2018-07-16 16:24:30</td>
-      <td>744.0</td>
-      <td>2018-07-16 14:40:00</td>
-      <td>640.0</td>
+      <td>2018-06-29 03:12:30</td>
+      <td>1392.0</td>
+      <td>2018-06-28 07:02:00</td>
+      <td>182.0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>base_v1\user1234</td>
-      <td>2018-07-06</td>
+      <td>2018-06-29</td>
       <td>5</td>
-      <td>2018-07-06 23:24:00</td>
-      <td>1164.0</td>
-      <td>2018-07-06 06:44:30</td>
-      <td>164.0</td>
+      <td>2018-06-29 22:18:30</td>
+      <td>1098.0</td>
+      <td>2018-06-29 06:47:00</td>
+      <td>167.0</td>
     </tr>
     <tr>
       <th>3</th>
+      <td>base_v1\user1234</td>
+      <td>2018-07-08</td>
+      <td>5</td>
+      <td>2018-07-08 20:45:30</td>
+      <td>1005.0</td>
+      <td>2018-07-08 06:45:00</td>
+      <td>165.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
       <td>base_v1\user1234</td>
       <td>2018-07-03</td>
       <td>5</td>
@@ -884,16 +873,6 @@ Processing light timing data...
       <td>1171.0</td>
       <td>2018-07-03 07:00:30</td>
       <td>180.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>base_v1\user1234</td>
-      <td>2018-07-01</td>
-      <td>5</td>
-      <td>2018-07-01 23:11:00</td>
-      <td>1151.0</td>
-      <td>2018-07-01 08:36:00</td>
-      <td>276.0</td>
     </tr>
   </tbody>
 </table>
@@ -915,7 +894,7 @@ Processing light timing data...
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">timing_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">7</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sala</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">7</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -959,52 +938,52 @@ Processing light timing data...
   <tbody>
     <tr>
       <th>0</th>
-      <td>0 days 13:56:00</td>
-      <td>0 days 04:35:30</td>
-      <td>836.0</td>
-      <td>275.5</td>
-      <td>1132776.31</td>
-      <td>678370.985</td>
+      <td>0 days 10:04:00</td>
+      <td>0 days 03:26:30</td>
+      <td>604.0</td>
+      <td>206.5</td>
+      <td>779254.835</td>
+      <td>473764.040</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0 days 00:02:30</td>
-      <td>0 days 00:00:00</td>
-      <td>2.5</td>
-      <td>0.0</td>
-      <td>214.50</td>
-      <td>0.000</td>
+      <td>0 days 11:54:00</td>
+      <td>0 days 03:04:00</td>
+      <td>714.0</td>
+      <td>184.0</td>
+      <td>787975.200</td>
+      <td>89557.715</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0 days 09:38:30</td>
-      <td>0 days 05:00:00</td>
-      <td>578.5</td>
-      <td>300.0</td>
-      <td>432815.22</td>
-      <td>298955.700</td>
+      <td>0 days 05:00:30</td>
+      <td>0 days 03:26:30</td>
+      <td>300.5</td>
+      <td>206.5</td>
+      <td>65985.730</td>
+      <td>64188.250</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0 days 12:47:30</td>
-      <td>0 days 03:37:30</td>
-      <td>767.5</td>
-      <td>217.5</td>
-      <td>377968.04</td>
-      <td>143815.500</td>
+      <td>0 days 11:46:30</td>
+      <td>0 days 04:39:30</td>
+      <td>706.5</td>
+      <td>279.5</td>
+      <td>478718.375</td>
+      <td>154556.710</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0 days 10:19:30</td>
-      <td>0 days 03:06:00</td>
-      <td>619.5</td>
-      <td>186.0</td>
-      <td>949194.78</td>
-      <td>165889.685</td>
+      <td>0 days 12:47:30</td>
+      <td>0 days 03:37:30</td>
+      <td>767.5</td>
+      <td>217.5</td>
+      <td>377968.040</td>
+      <td>143815.500</td>
       <td>base_</td>
     </tr>
   </tbody>
@@ -1027,7 +1006,7 @@ Processing light timing data...
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">timing_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">14</span><span class="p">:]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sala</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">14</span><span class="p">:]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -1070,16 +1049,16 @@ Processing light timing data...
     <tr>
       <th>0</th>
       <td>0 days 00:00:30</td>
-      <td>0</td>
-      <td>base_Mon</td>
-      <td>base_Weekday</td>
-      <td>False</td>
+      <td>5</td>
+      <td>base_Sat</td>
+      <td>base_Weekend/Holiday</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>1</th>
       <td>0 days 00:00:30</td>
-      <td>0</td>
-      <td>base_Mon</td>
+      <td>3</td>
+      <td>base_Thu</td>
       <td>base_Weekday</td>
       <td>False</td>
     </tr>
@@ -1094,18 +1073,18 @@ Processing light timing data...
     <tr>
       <th>3</th>
       <td>0 days 00:00:30</td>
-      <td>1</td>
-      <td>base_Tues</td>
-      <td>base_Weekday</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0 days 00:00:30</td>
       <td>6</td>
       <td>base_Sun</td>
       <td>base_Weekend/Holiday</td>
       <td>True</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0 days 00:00:30</td>
+      <td>1</td>
+      <td>base_Tues</td>
+      <td>base_Weekday</td>
+      <td>False</td>
     </tr>
   </tbody>
 </table>
@@ -1122,7 +1101,7 @@ Processing light timing data...
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Setting-Sunset-and-Sunrise-Timings">Setting Sunset and Sunrise Timings<a class="anchor-link" href="#Setting-Sunset-and-Sunrise-Timings"> </a></h2><p>SALA provides the ability to add sunrise and sunset timings to the processed data. To do so, the specific locat ion (longitude and latitude) is required. Labels for location and region are also helpful for user clarity.</p>
+<h2 id="Setting-Sunset-and-Sunrise">Setting Sunset and Sunrise<a class="anchor-link" href="#Setting-Sunset-and-Sunrise"> </a></h2><p>SALA provides the ability to add sunrise and sunset information to processed data. To do so, the specific location (longitude and latitude) is required.</p>
 
 </div>
 </div>
@@ -1138,20 +1117,10 @@ Processing light timing data...
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.sun_timings" class="doc_header"><code>SALA.sun_timings</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L295" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.sun_timings</code>(<strong><code>location</code></strong>, <strong><code>region</code></strong>)</p>
+<h3 id="SALA.sun_timings" class="doc_header"><code>SALA.sun_timings</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L319" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.sun_timings</code>()</p>
 </blockquote>
-<p>Given a location (city) and region as additional markers,
-calculate sunset and sunrise timings.</p>
-<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>location: str (any string)</p>
-
-<pre><code>Name of the location to lookup.
-
-</code></pre>
-<p>region: str (any string)</p>
-
-<pre><code>Region that the location is located in.
-
-</code></pre>
+<p>Calculates sunrise and sunset timing information for data present in the
+SALA object.</p>
 <h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4>
 <pre><code>Modified timing data with sunrise and sunset calculations</code></pre>
 
@@ -1165,13 +1134,6 @@ calculate sunset and sunrise timings.</p>
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In this example, we'll add sunrise and sunset calculations under the assumption that the data is from Seattle. The corresponding timezone for Seattle is "America/Los_Angeles". Since timezone, latitude, and longitude were not provided upon initialization, they must be separately provided before sun timings can be calculated.</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1179,10 +1141,7 @@ calculate sunset and sunrise timings.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sala</span><span class="o">.</span><span class="n">timezone</span> <span class="o">=</span> <span class="s2">&quot;America/Los_Angeles&quot;</span>
-<span class="n">sala</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="mf">47.65</span>
-<span class="n">sala</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">122.30</span>
-<span class="n">sala</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">sun_timings</span><span class="p">(</span><span class="s2">&quot;Seattle&quot;</span><span class="p">,</span> <span class="s2">&quot;United States&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sala</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">sun_timings</span><span class="p">()</span>
 <span class="n">sala</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="s2">&quot;Sunrise&quot;</span><span class="p">,</span> <span class="s2">&quot;Sunset&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
@@ -1222,28 +1181,28 @@ calculate sunset and sunrise timings.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>2018-07-09 05:21:39.214048-07:00</td>
-      <td>2018-07-09 21:06:51.768689-07:00</td>
+      <td>2018-06-30 05:15:10.009843-07:00</td>
+      <td>2018-06-30 21:10:28.189308-07:00</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>2018-07-16 05:28:18.610888-07:00</td>
-      <td>2018-07-16 21:01:42.757393-07:00</td>
+      <td>2018-06-28 05:14:05.956095-07:00</td>
+      <td>2018-06-28 21:10:47.592726-07:00</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2018-07-06 05:19:12.313737-07:00</td>
-      <td>2018-07-06 21:08:27.123116-07:00</td>
+      <td>2018-06-29 05:14:36.884762-07:00</td>
+      <td>2018-06-29 21:10:39.206298-07:00</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>2018-07-03 05:17:02.116743-07:00</td>
-      <td>2018-07-03 21:09:39.386344-07:00</td>
+      <td>2018-07-08 05:20:48.480661-07:00</td>
+      <td>2018-07-08 21:07:26.089296-07:00</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2018-07-01 05:15:45.287540-07:00</td>
-      <td>2018-07-01 21:10:14.543651-07:00</td>
+      <td>2018-07-03 05:17:02.116743-07:00</td>
+      <td>2018-07-03 21:09:39.386344-07:00</td>
     </tr>
   </tbody>
 </table>
@@ -1260,14 +1219,7 @@ calculate sunset and sunrise timings.</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Adding-Sleep-Information">Adding Sleep Information<a class="anchor-link" href="#Adding-Sleep-Information"> </a></h2><p>Adding sleep information to the processed data is also possible. The below function adds sleep data, allowing a "sleep day" to be split at a customizable time. The outputs of the function are</p>
-
-<pre><code>1. short_frame: 
-    a separate dataframe meant to be a quick way of visually subsetting and viewing bi/polyphasic instances. 
-    This frame defaults to storing occurances of at least 3 sleep periods within a "sleep day", but can be modified.
-
-2. timing_data:
-    modifies stored data to have sleep period information</code></pre>
+<h2 id="Complete-Processing">Complete Processing<a class="anchor-link" href="#Complete-Processing"> </a></h2><p>SALA additionally has a do-it-all function that handles the entire process from loading data from a directory up to adding sunrise and sunset information. It additionally defaults to exporting the information. It requires an outfile for potential saving, and light thresholds to work with. If a directory is not provided, it will use the directory present within the SALA object that was provided upon object creation.</p>
 
 </div>
 </div>
@@ -1283,12 +1235,109 @@ calculate sunset and sunrise timings.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.process_sleep" class="doc_header"><code>SALA.process_sleep</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L327" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.process_sleep</code>(<strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
+<h3 id="SALA.do_everything" class="doc_header"><code>SALA.do_everything</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L342" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.do_everything</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
+</blockquote>
+<p>Handles the full SALA pipeline (excluding sleep period analysis), from processing and combining raw data
+to parsing and calculating processed data with sunrise and sunset information. First loads and compiles
+all existing raw data for every key within the given directory. Then processes all raw data, calculating
+additional information for all specified light thresholds. Also adds sunrise and sunset information.</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>outfile: str</p>
+
+<pre><code>    Directory to save to. (e.g. ../SALA/example_output/)
+
+</code></pre>
+<p>thresholds: list</p>
+
+<pre><code>List of light thresholds for the watch data.
+
+</code></pre>
+<p>directory: dict</p>
+
+<pre><code>Dictionary of valid folders to load actiwatch data from.
+Folders should have .csv files in them. If no dictionary
+is provided, it uses the one initialized as part of the SALA
+object.
+
+</code></pre>
+<p>grouping: str</p>
+
+<pre><code>Name of the generated column for specifying groupings, where
+the values will be the name of the key given. Default = 'Group'.
+
+</code></pre>
+<p>export: bool</p>
+
+<pre><code>Whether or not to export processed timing data to a parquet file saved in the designated
+outfile location.
+
+</code></pre>
+<h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4>
+<pre><code>Processed timing data in a dataframe format, with specific identifier columns based
+on weekday and weekend/holiday groupings, and included sunrise and sunset calculations.</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">thresholds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">1000</span><span class="p">]]</span> 
+<span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;../SALA/example_output/&quot;</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">do_everything</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">export</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Additional-Sleep-Information">Additional Sleep Information<a class="anchor-link" href="#Additional-Sleep-Information"> </a></h2><p>Adding sleep information to the processed data is also possible. The below function adds sleep data, allowing a "sleep day" to be split at a customizable time. The outputs of the function are:</p>
+<ol>
+<li><p>short_frame: 
+ a separate dataframe meant to be a quick way of visually subsetting and viewing bi/polyphasic instances. 
+ This frame defaults to storing occurances of at least 3 sleep periods within a "sleep day", but can be modified.</p>
+</li>
+<li><p>timing_data:
+ modifies stored data to have sleep period information</p>
+</li>
+</ol>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="SALA.process_sleep" class="doc_header"><code>SALA.process_sleep</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L393" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.process_sleep</code>(<strong><code>raw_data</code></strong>, <strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
 </blockquote>
 <p>Processes sleep data for existing timing data.</p>
-<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>timing_data: pd.DataFrame</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>raw_data: pd.DataFrame</p>
 
-<pre><code>Timing data
+<pre><code>Combined dataframe of all raw data from desired directory. This can be
+accomplished by using the get_raw_data function within the SALA class.
 
 </code></pre>
 <p>sleep_split: str</p>
@@ -1322,13 +1371,6 @@ timing_data: pd.DataFrame
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Example">Example<a class="anchor-link" href="#Example"> </a></h4><p>Example outputs after processing sleep data include:</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1336,7 +1378,7 @@ timing_data: pd.DataFrame
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">short_frame</span><span class="p">,</span> <span class="n">timing_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">process_sleep</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">short_frame</span><span class="p">,</span> <span class="n">timing_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">process_sleep</span><span class="p">(</span><span class="n">all_raw_data</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1504,6 +1546,22 @@ timing_data: pd.DataFrame
   <tbody>
     <tr>
       <th>0</th>
+      <td>2018-07-01 20:56:30</td>
+      <td>2018-07-02 07:48:30</td>
+      <td>0 days 10:52:00</td>
+      <td>1256.5</td>
+      <td>468.5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2018-07-08 22:22:30</td>
+      <td>2018-07-09 06:18:30</td>
+      <td>0 days 07:56:00</td>
+      <td>1342.5</td>
+      <td>378.5</td>
+    </tr>
+    <tr>
+      <th>2</th>
       <td>2018-07-09 23:38:30</td>
       <td>2018-07-10 06:57:00</td>
       <td>0 days 07:18:30</td>
@@ -1511,36 +1569,20 @@ timing_data: pd.DataFrame
       <td>417.0</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>2018-07-16 00:00:00</td>
-      <td>2018-07-16 00:00:00</td>
-      <td>0 days 00:00:00</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2018-07-07 00:08:00</td>
-      <td>2018-07-07 06:53:30</td>
-      <td>0 days 06:45:30</td>
-      <td>1448.0</td>
-      <td>413.5</td>
-    </tr>
-    <tr>
       <th>3</th>
-      <td>2018-07-03 23:57:30</td>
-      <td>2018-07-04 06:14:00</td>
-      <td>0 days 06:16:30</td>
-      <td>1437.5</td>
-      <td>374.0</td>
+      <td>2018-07-02 23:35:30</td>
+      <td>2018-07-03 06:35:30</td>
+      <td>0 days 07:00:00</td>
+      <td>1415.5</td>
+      <td>395.5</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2018-07-01 20:56:30</td>
-      <td>2018-07-02 07:48:30</td>
-      <td>0 days 10:52:00</td>
-      <td>1256.5</td>
-      <td>468.5</td>
+      <td>2018-06-27 23:07:30</td>
+      <td>2018-06-28 06:57:00</td>
+      <td>0 days 07:49:30</td>
+      <td>1387.5</td>
+      <td>417.0</td>
     </tr>
   </tbody>
 </table>
@@ -1549,23 +1591,6 @@ timing_data: pd.DataFrame
 
 </div>
 
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sala</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">sala</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;../SALA/example_output/&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
