@@ -236,7 +236,7 @@ class SALA:
             all_data.to_parquet(outfile + "raw.parquet", engine = 'fastparquet',
                                    compression = "gzip")
 
-        return pd.read_parquet(outfile + "raw.parquet")
+        return all_data
 
     def export(self, outfile, data=None):
         """
