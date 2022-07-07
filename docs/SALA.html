@@ -432,6 +432,59 @@ Pass #2, data summary
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="SALA.get_raw_data" class="doc_header"><code>SALA.get_raw_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L192" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.get_raw_data</code>(<strong><code>outfile</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
+</blockquote>
+<p>Loads and combines raw actiwatch data from any csv files found in
+the specified directory for all keys within the directory.</p>
+<h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>outfile: str</p>
+
+<pre><code> Directory to save to. (e.g. ../SALA/example_output/)
+
+</code></pre>
+<p>directory: dict</p>
+
+<pre><code> Dictionary of valid folders to load actiwatch data from.
+ Folders should have .csv files in them. If no dictionary
+ is provided, it uses the one initialized as part of the SALA
+ object.
+
+</code></pre>
+<p>grouping: str</p>
+
+<pre><code> Name of the generated column for specifying groupings, where
+ the values will be the name of the key given. Default = 'Group'.
+
+</code></pre>
+<p>export: bool</p>
+
+<pre><code> Whether or not to export combined raw data to a parquet file saved in the designated
+ outfile location.
+
+</code></pre>
+<h4 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h4><p>All of the raw unprocessed data within the directory for all keys as a single
+ dataframe.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Loading-Data-for-All-Keys">Loading Data for All Keys<a class="anchor-link" href="#Loading-Data-for-All-Keys"> </a></h3><p>Raw data for all keys can similarly be loaded by providing an outfile to save the generated file to. Saving is controlled via a boolean command. A directory to load data from is also necessary. If no directory is given, the function will automatically use the directory specified when creating a SALA object.</p>
@@ -447,7 +500,7 @@ Pass #2, data summary
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;../SALA/example_output/&quot;</span>
-<span class="n">all_raw_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">get_raw_data</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">export</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">all_raw_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">get_raw_data</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">export</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">all_raw_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
@@ -713,12 +766,12 @@ on weekday and weekend/holiday groupings.</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L520" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>timing_data</code></strong>)</p>
+<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L520" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>data</code></strong>)</p>
 </blockquote>
 <p>An example function that removes data
 from the first day of recording. Typically the first
 day has no light data for these watches (represented
-as (NaT)</p>
+as 'NaT')</p>
 
 </div>
 
@@ -737,17 +790,14 @@ as (NaT)</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_first_day</span><span class="p">(</span><span class="n">timing_data</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_first_day</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An example function that removes data</span>
 <span class="sd">    from the first day of recording. Typically the first</span>
 <span class="sd">    day has no light data for these watches (represented</span>
-<span class="sd">    as (NaT)</span>
+<span class="sd">    as &#39;NaT&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">timing_data</span><span class="p">[(</span><span class="n">timing_data</span><span class="p">[</span><span class="s2">&quot;Last Light&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnat</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)</span>
-               <span class="o">&amp;</span> <span class="p">(</span><span class="n">timing_data</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">timing_data</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())]</span>
-            <span class="p">)</span>
-    <span class="k">return</span> <span class="n">data</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Last Light&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnat</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)</span>
+               <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())]</span>
 </pre></div>
 
     </div>
@@ -837,25 +887,35 @@ as (NaT)</p>
     <tr>
       <th>1</th>
       <td>base_v1\user1234</td>
-      <td>2018-06-28</td>
+      <td>2018-07-04</td>
       <td>5</td>
-      <td>2018-06-29 03:12:30</td>
-      <td>1392.0</td>
-      <td>2018-06-28 07:02:00</td>
-      <td>182.0</td>
+      <td>2018-07-04 22:22:30</td>
+      <td>1102.0</td>
+      <td>2018-07-04 06:26:00</td>
+      <td>146.0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>base_v1\user1234</td>
-      <td>2018-06-29</td>
+      <td>2018-07-07</td>
       <td>5</td>
-      <td>2018-06-29 22:18:30</td>
-      <td>1098.0</td>
-      <td>2018-06-29 06:47:00</td>
-      <td>167.0</td>
+      <td>2018-07-08 00:01:30</td>
+      <td>1201.0</td>
+      <td>2018-07-07 06:54:30</td>
+      <td>174.0</td>
     </tr>
     <tr>
       <th>3</th>
+      <td>base_v1\user1234</td>
+      <td>2018-06-26</td>
+      <td>5</td>
+      <td>2018-06-26 23:46:00</td>
+      <td>1186.0</td>
+      <td>2018-06-26 07:01:30</td>
+      <td>181.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
       <td>base_v1\user1234</td>
       <td>2018-07-08</td>
       <td>5</td>
@@ -863,16 +923,6 @@ as (NaT)</p>
       <td>1005.0</td>
       <td>2018-07-08 06:45:00</td>
       <td>165.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>base_v1\user1234</td>
-      <td>2018-07-03</td>
-      <td>5</td>
-      <td>2018-07-03 23:31:00</td>
-      <td>1171.0</td>
-      <td>2018-07-03 07:00:30</td>
-      <td>180.0</td>
     </tr>
   </tbody>
 </table>
@@ -948,42 +998,42 @@ as (NaT)</p>
     </tr>
     <tr>
       <th>1</th>
-      <td>0 days 11:54:00</td>
-      <td>0 days 03:04:00</td>
-      <td>714.0</td>
-      <td>184.0</td>
-      <td>787975.200</td>
-      <td>89557.715</td>
+      <td>0 days 10:01:00</td>
+      <td>0 days 05:24:00</td>
+      <td>601.0</td>
+      <td>324.0</td>
+      <td>607621.150</td>
+      <td>448941.815</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0 days 05:00:30</td>
-      <td>0 days 03:26:30</td>
-      <td>300.5</td>
-      <td>206.5</td>
-      <td>65985.730</td>
-      <td>64188.250</td>
+      <td>0 days 11:45:30</td>
+      <td>0 days 04:37:30</td>
+      <td>705.5</td>
+      <td>277.5</td>
+      <td>814059.620</td>
+      <td>355668.225</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>3</th>
+      <td>0 days 10:22:30</td>
+      <td>0 days 04:15:00</td>
+      <td>622.5</td>
+      <td>255.0</td>
+      <td>1221873.310</td>
+      <td>646422.485</td>
+      <td>base_</td>
+    </tr>
+    <tr>
+      <th>4</th>
       <td>0 days 11:46:30</td>
       <td>0 days 04:39:30</td>
       <td>706.5</td>
       <td>279.5</td>
       <td>478718.375</td>
       <td>154556.710</td>
-      <td>base_</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0 days 12:47:30</td>
-      <td>0 days 03:37:30</td>
-      <td>767.5</td>
-      <td>217.5</td>
-      <td>377968.040</td>
-      <td>143815.500</td>
       <td>base_</td>
     </tr>
   </tbody>
@@ -1057,34 +1107,34 @@ as (NaT)</p>
     <tr>
       <th>1</th>
       <td>0 days 00:00:30</td>
-      <td>3</td>
-      <td>base_Thu</td>
-      <td>base_Weekday</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0 days 00:00:30</td>
-      <td>4</td>
-      <td>base_Fri</td>
-      <td>base_Weekday</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>0 days 00:00:30</td>
-      <td>6</td>
-      <td>base_Sun</td>
+      <td>2</td>
+      <td>base_Wed</td>
       <td>base_Weekend/Holiday</td>
       <td>True</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>2</th>
+      <td>0 days 00:00:30</td>
+      <td>5</td>
+      <td>base_Sat</td>
+      <td>base_Weekend/Holiday</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>3</th>
       <td>0 days 00:00:30</td>
       <td>1</td>
       <td>base_Tues</td>
       <td>base_Weekday</td>
       <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0 days 00:00:30</td>
+      <td>6</td>
+      <td>base_Sun</td>
+      <td>base_Weekend/Holiday</td>
+      <td>True</td>
     </tr>
   </tbody>
 </table>
@@ -1186,23 +1236,23 @@ SALA object.</p>
     </tr>
     <tr>
       <th>1</th>
-      <td>2018-06-28 05:14:05.956095-07:00</td>
-      <td>2018-06-28 21:10:47.592726-07:00</td>
+      <td>2018-07-04 05:17:43.572176-07:00</td>
+      <td>2018-07-04 21:09:17.890736-07:00</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2018-06-29 05:14:36.884762-07:00</td>
-      <td>2018-06-29 21:10:39.206298-07:00</td>
+      <td>2018-07-07 05:19:59.495724-07:00</td>
+      <td>2018-07-07 21:07:57.880755-07:00</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>2018-07-08 05:20:48.480661-07:00</td>
-      <td>2018-07-08 21:07:26.089296-07:00</td>
+      <td>2018-06-26 05:13:10.853540-07:00</td>
+      <td>2018-06-26 21:10:56.479092-07:00</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2018-07-03 05:17:02.116743-07:00</td>
-      <td>2018-07-03 21:09:39.386344-07:00</td>
+      <td>2018-07-08 05:20:48.480661-07:00</td>
+      <td>2018-07-08 21:07:26.089296-07:00</td>
     </tr>
   </tbody>
 </table>
@@ -1467,18 +1517,18 @@ timing_data: pd.DataFrame
     </tr>
     <tr>
       <th rowspan="2" valign="top">follow_up_v3\user1234</th>
-      <th>2018-09-24</th>
+      <th>2018-09-17</th>
       <td>0</td>
-      <td>2018-09-24 21:31:00</td>
-      <td>2018-09-25 04:44:30</td>
-      <td>0 days 07:13:30</td>
+      <td>2018-09-17 23:11:00</td>
+      <td>2018-09-18 06:29:30</td>
+      <td>0 days 07:18:30</td>
     </tr>
     <tr>
-      <th>2018-09-24</th>
-      <td>1</td>
-      <td>2018-09-25 09:16:00</td>
-      <td>2018-09-25 10:30:00</td>
-      <td>0 days 01:14:00</td>
+      <th>2018-09-17</th>
+      <td>2</td>
+      <td>2018-09-18 16:11:00</td>
+      <td>2018-09-18 16:40:30</td>
+      <td>0 days 00:29:30</td>
     </tr>
   </tbody>
 </table>
@@ -1546,43 +1596,43 @@ timing_data: pd.DataFrame
   <tbody>
     <tr>
       <th>0</th>
+      <td>2018-07-04 22:23:00</td>
+      <td>2018-07-05 06:36:00</td>
+      <td>0 days 08:13:00</td>
+      <td>1343.0</td>
+      <td>396.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2018-07-10 00:00:00</td>
+      <td>2018-07-10 00:00:00</td>
+      <td>0 days 00:00:00</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2018-06-29 00:40:30</td>
+      <td>2018-06-29 06:41:00</td>
+      <td>0 days 06:00:30</td>
+      <td>1480.5</td>
+      <td>401.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2018-07-05 23:27:00</td>
+      <td>2018-07-06 06:29:00</td>
+      <td>0 days 07:02:00</td>
+      <td>1407.0</td>
+      <td>389.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
       <td>2018-07-01 20:56:30</td>
       <td>2018-07-02 07:48:30</td>
       <td>0 days 10:52:00</td>
       <td>1256.5</td>
       <td>468.5</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2018-07-08 22:22:30</td>
-      <td>2018-07-09 06:18:30</td>
-      <td>0 days 07:56:00</td>
-      <td>1342.5</td>
-      <td>378.5</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2018-07-09 23:38:30</td>
-      <td>2018-07-10 06:57:00</td>
-      <td>0 days 07:18:30</td>
-      <td>1418.5</td>
-      <td>417.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2018-07-02 23:35:30</td>
-      <td>2018-07-03 06:35:30</td>
-      <td>0 days 07:00:00</td>
-      <td>1415.5</td>
-      <td>395.5</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2018-06-27 23:07:30</td>
-      <td>2018-06-28 06:57:00</td>
-      <td>0 days 07:49:30</td>
-      <td>1387.5</td>
-      <td>417.0</td>
     </tr>
   </tbody>
 </table>

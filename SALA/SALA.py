@@ -517,14 +517,11 @@ class SALA:
         return short_frame, timing_data
 
 # Cell
-def remove_first_day(timing_data):
+def remove_first_day(data):
     """An example function that removes data
     from the first day of recording. Typically the first
     day has no light data for these watches (represented
-    as (NaT)
+    as 'NaT')
     """
-    data = (
-    timing_data[(timing_data["Last Light"].apply(np.isnat) == False)
-               & (timing_data["Date"] != timing_data["Date"].min())]
-            )
-    return data
+    return data[(data["Last Light"].apply(np.isnat) == False)
+               & (data["Date"] != data["Date"].min())]
