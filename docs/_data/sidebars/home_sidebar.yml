@@ -11,7 +11,7 @@ entries:
       url: /
     - output: web,pdf
       title: SALA
-      url: SALA.html
+      url: SALA_Frame.html
     - output: web,pdf
       title: Plots
       url: plots.html
