@@ -2,12 +2,12 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"SALAFrame": "00_SALA_Frame.ipynb",
-         "remove_first_day": "00_SALA_Frame.ipynb",
+index = {"SALAFrame": "00_Processing.ipynb",
+         "remove_first_day": "00_Processing.ipynb",
          "ClockPlot": "01_plots.ipynb",
          "LightPlot": "01_plots.ipynb"}
 
-modules = ["SALA_Frame.py",
+modules = ["SALA_Processing.py",
            "plots.py"]
 
 doc_url = "https://tktran11.github.io/SALA/"

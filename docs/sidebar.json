@@ -1,7 +1,7 @@
 {
   "SALA": {
     "Overview": "/",
-    "SALA": "SALA_Frame.html",
+    "Processing": "Processing.html",
     "Plots": "plots.html"
   }
 }

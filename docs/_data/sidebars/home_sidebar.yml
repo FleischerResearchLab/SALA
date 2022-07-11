@@ -10,8 +10,8 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: SALA
-      url: SALA_Frame.html
+      title: Processing
+      url: Processing.html
     - output: web,pdf
       title: Plots
       url: plots.html
