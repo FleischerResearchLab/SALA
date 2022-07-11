@@ -256,7 +256,7 @@ class LightPlot:
 
     @staticmethod
     def plot(data_list, labels, palette = "deep",
-                plot_type= "mean/sem", y_lim = 2500):
+                plot_type= "mean/sem", y_lim = None):
         """Generates light plots.
 
         #### Parameters
@@ -274,7 +274,7 @@ class LightPlot:
 
             The type of plot you'd like to create. Default is "mean/sem". Other choices are
             "counts", and "quantiles"
-        y_limit: int
+        y_limit: int or None
 
             Desired default range for y_limit of the outputted plots.
         """
@@ -343,7 +343,8 @@ class LightPlot:
         tFmt = md.DateFormatter('%H:%M')
         ax.xaxis.set_major_locator(md.HourLocator(byhour=range(0,24,4)))
         ax.xaxis.set_major_formatter(tFmt)
-        ax.set_ylim(0,y_lim)
+        if y_lim is not None:
+            ax.set_ylim(0,y_lim)
         ax.yaxis.set_ticks(np.arange(tinc,y_lim,tinc))
 
         ax.grid(True)

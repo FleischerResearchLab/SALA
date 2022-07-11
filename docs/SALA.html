@@ -53,6 +53,11 @@ data: pd.DataFrame or None
     pre-set to an existing dataframe when trying to migrate existing data to a SALA
     object.
 
+directory: dictionary or None
+    Dictionary style pairing of grouping names serving as keys (e.g. baseline,
+    intervention), with corresponding values as relative file paths storing csv
+    files to be read as data.
+
 timezone: str
     Single timezone specified for all data within the object. A list of
     valid timezones can be obtained from pytz.all_timezones. Note that it is impossible
@@ -135,7 +140,7 @@ process_sleep_data
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.__init__" class="doc_header"><code>SALA.__init__</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L64" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.__init__</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="SALA.__init__" class="doc_header"><code>SALA.__init__</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L69" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.__init__</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Initializes a SALA object either from existing parsed timing data, or from a directory
 of csvs. Timezone information can be optionally included to allow for sunset, sunrise
@@ -226,7 +231,7 @@ directory: dictionary (optional)
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.get_raw_data_from_key" class="doc_header"><code>SALA.get_raw_data_from_key</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L157" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.get_raw_data_from_key</code>(<strong><code>key</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>)</p>
+<h3 id="SALA.get_raw_data_from_key" class="doc_header"><code>SALA.get_raw_data_from_key</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L162" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.get_raw_data_from_key</code>(<strong><code>key</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>)</p>
 </blockquote>
 <p>Loads and combines raw actiwatch data from any csv files found in
 the specified directory matching a particular key within the directory.</p>
@@ -443,7 +448,7 @@ Pass #2, data summary
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.get_raw_data" class="doc_header"><code>SALA.get_raw_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L192" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.get_raw_data</code>(<strong><code>outfile</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
+<h3 id="SALA.get_raw_data" class="doc_header"><code>SALA.get_raw_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L197" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.get_raw_data</code>(<strong><code>outfile</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Loads and combines raw actiwatch data from any csv files found in
 the specified directory for all keys within the directory.</p>
@@ -662,7 +667,7 @@ the specified directory for all keys within the directory.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.export" class="doc_header"><code>SALA.export</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L241" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.export</code>(<strong><code>outfile</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="SALA.export" class="doc_header"><code>SALA.export</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L246" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.export</code>(<strong><code>outfile</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Exports existing timing data to a parquet format.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4>
@@ -701,7 +706,7 @@ Desired dataframe for exporting.</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.process_data" class="doc_header"><code>SALA.process_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L264" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.process_data</code>(<strong><code>raw_data</code></strong>, <strong><code>thresholds</code></strong>)</p>
+<h3 id="SALA.process_data" class="doc_header"><code>SALA.process_data</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L269" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.process_data</code>(<strong><code>raw_data</code></strong>, <strong><code>thresholds</code></strong>)</p>
 </blockquote>
 <p>Handles unprocessed combined raw data outputting first and last light times,
     and group identifiers for all specified light thresholds.</p>
@@ -766,7 +771,7 @@ on weekday and weekend/holiday groupings.</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L520" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>data</code></strong>)</p>
+<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L525" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>data</code></strong>)</p>
 </blockquote>
 <p>An example function that removes data
 from the first day of recording. Typically the first
@@ -1151,7 +1156,7 @@ as 'NaT')</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Setting-Sunset-and-Sunrise">Setting Sunset and Sunrise<a class="anchor-link" href="#Setting-Sunset-and-Sunrise"> </a></h2><p>SALA provides the ability to add sunrise and sunset information to processed data. To do so, the specific location (longitude and latitude) is required.</p>
+<h2 id="Setting-Sunset-and-Sunrise">Setting Sunset and Sunrise<a class="anchor-link" href="#Setting-Sunset-and-Sunrise"> </a></h2><p>SALA provides the ability to add sunrise and sunset information to processed data. To do so, the specific location (longitude and latitude) is required. To get correct sunrise and sunset times relative to a specific location, a timezone is also required. These fields are necessary when creating a SALA object and do not specifically need to be re-entered when calling SALA's sun timing function.</p>
 
 </div>
 </div>
@@ -1167,7 +1172,7 @@ as 'NaT')</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.sun_timings" class="doc_header"><code>SALA.sun_timings</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L319" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.sun_timings</code>()</p>
+<h3 id="SALA.sun_timings" class="doc_header"><code>SALA.sun_timings</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L324" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.sun_timings</code>()</p>
 </blockquote>
 <p>Calculates sunrise and sunset timing information for data present in the
 SALA object.</p>
@@ -1285,7 +1290,7 @@ SALA object.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.do_everything" class="doc_header"><code>SALA.do_everything</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L342" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.do_everything</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
+<h3 id="SALA.do_everything" class="doc_header"><code>SALA.do_everything</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L347" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.do_everything</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Handles the full SALA pipeline (excluding sleep period analysis), from processing and combining raw data
 to parsing and calculating processed data with sunrise and sunset information. First loads and compiles
@@ -1381,7 +1386,7 @@ on weekday and weekend/holiday groupings, and included sunrise and sunset calcul
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALA.process_sleep" class="doc_header"><code>SALA.process_sleep</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L393" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.process_sleep</code>(<strong><code>raw_data</code></strong>, <strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
+<h3 id="SALA.process_sleep" class="doc_header"><code>SALA.process_sleep</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/SALA.py#L398" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALA.process_sleep</code>(<strong><code>raw_data</code></strong>, <strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
 </blockquote>
 <p>Processes sleep data for existing timing data.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>raw_data: pd.DataFrame</p>

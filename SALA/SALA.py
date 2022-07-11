@@ -17,6 +17,11 @@ class SALA:
             pre-set to an existing dataframe when trying to migrate existing data to a SALA
             object.
 
+        directory: dictionary or None
+            Dictionary style pairing of grouping names serving as keys (e.g. baseline,
+            intervention), with corresponding values as relative file paths storing csv
+            files to be read as data.
+
         timezone: str
             Single timezone specified for all data within the object. A list of
             valid timezones can be obtained from pytz.all_timezones. Note that it is impossible

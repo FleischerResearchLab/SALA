@@ -135,7 +135,7 @@ timezone: str
 <li>'Sunset'</li>
 <li>'Mins to FL from 4AM'  (FL = First Light)</li>
 <li>'Mins to LL from 4AM'  (LL = Last Light)</li>
-<li>'Sleep offset MSLM'</li>
+<li>'Sleep offset MSLM' (MSLM = Minutes from Last Midnight)</li>
 <li>'Sleep onset MSLM'</li>
 <li>'Threshold'</li>
 <li>A categorical grouping within the data</li>
@@ -155,7 +155,10 @@ timezone: str
 <li>Black and white are used to visually distinguish night from day by using timezone information to calculate the appropriate sunrise and sunset timings based on the days within the data. This requires the data to have a valid timezone. Plot generation requires specifying timezone information in order to mathematically convert the timing into a radian format. In cases where the data is lacking timezone information, it is localized to the provided timezone. A list of valid timezones can be found in pytz timezones. </li>
 </ul>
 <ul>
-<li>A range of onset and offset for each of the thresholds specified is plotted. These thresholds should be present in the 'Threshold' column of the inputted data. A black bar representing the median of each of these thresholds is also created. </li>
+<li>The median sunrise and sunset times are used to distinguish night from day. Therefore <strong>it is crucial that all data entered into a clock plot comes from a similar time of year</strong> (e.g. weeks to months)</li>
+</ul>
+<ul>
+<li>A range (IQR) of onset and offset for each of the thresholds specified is plotted. These thresholds should be present in the 'Threshold' column of the inputted data. A black bar representing the median of each of these thresholds is also created. </li>
 </ul>
 
 </div>
@@ -415,7 +418,7 @@ timezone: str
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="LightPlot.plot" class="doc_header"><code>LightPlot.plot</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/plots.py#L257" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>LightPlot.plot</code>(<strong><code>data_list</code></strong>, <strong><code>labels</code></strong>, <strong><code>palette</code></strong>=<em><code>'deep'</code></em>, <strong><code>plot_type</code></strong>=<em><code>'mean/sem'</code></em>, <strong><code>y_lim</code></strong>=<em><code>2500</code></em>)</p>
+<h3 id="LightPlot.plot" class="doc_header"><code>LightPlot.plot</code><a href="https://github.com/tktran11/SALA/tree/master/SALA/plots.py#L257" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>LightPlot.plot</code>(<strong><code>data_list</code></strong>, <strong><code>labels</code></strong>, <strong><code>palette</code></strong>=<em><code>'deep'</code></em>, <strong><code>plot_type</code></strong>=<em><code>'mean/sem'</code></em>, <strong><code>y_lim</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Generates light plots.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>data_list: list</p>
@@ -435,7 +438,7 @@ timezone: str
 <pre><code>The type of plot you'd like to create. Default is "mean/sem". Other choices are
 "counts", and "quantiles"
 </code></pre>
-<p>y_limit: int</p>
+<p>y_limit: int or None</p>
 
 <pre><code>Desired default range for y_limit of the outputted plots.</code></pre>
 
@@ -451,7 +454,7 @@ timezone: str
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Creating-Light-Plots">Creating Light Plots<a class="anchor-link" href="#Creating-Light-Plots"> </a></h2><p>The other core plot type for SALA are specialized light plots. There are three available light plot styles:</p>
+<h2 id="Creating-Light-Plots">Creating Light Plots<a class="anchor-link" href="#Creating-Light-Plots"> </a></h2><p>The other core plot type for SALA are specialized light plots. The y-axis size can be controlled for mean/sem plots or quantile plots. There are three available light plot styles:</p>
 <ul>
 <li>"mean/sem"</li>
 </ul>
