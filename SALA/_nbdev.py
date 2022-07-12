@@ -7,8 +7,8 @@ index = {"SALAFrame": "00_Processing.ipynb",
          "ClockPlot": "01_plots.ipynb",
          "LightPlot": "01_plots.ipynb"}
 
-modules = ["SALA_Processing.py",
-           "plots.py"]
+modules = ["SALA/processing.py",
+           "SALA/plots.py"]
 
 doc_url = "https://tktran11.github.io/SALA/"
 
