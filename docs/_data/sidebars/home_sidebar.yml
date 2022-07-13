@@ -11,7 +11,7 @@ entries:
       url: /
     - output: web,pdf
       title: Processing
-      url: Processing.html
+      url: processing.html
     - output: web,pdf
       title: Plots
       url: plots.html
