@@ -2,6 +2,243 @@
 
 __all__ = ['SALAFrame', 'remove_first_day']
 
+# Internal Cell
+def load_actiwatch_data(path,uidprefix=''):
+
+    if path[-1]!='/':    # make sure path has a trailing slash
+        path = path + '/'
+    files = glob.glob(path+'*.csv') # gets all .csv filenames in directory
+    if not files: # let us know if there's no .csv files in path!
+        print('Oops! No csv files in ' + path)
+        raise OSError
+    else:
+        print('Found {} csv files in {}. Pass #1, raw data'.format(len(files),path))
+        for _ in range(len(files)):
+            sys.stdout.write('.')
+        sys.stdout.write('\n')
+
+    frames = [] # list of data frames we will get from processing the files
+    for afile in files:
+        sys.stdout.write('.')
+        sys.stdout.flush()
+        with open(afile,'r') as f:
+            # we need to skip any previous analysis that's at the top of the
+            # file and get to the raw data below it
+            while True:
+                currentFilePosition = f.tell()
+                line = f.readline()
+                if line == '': # empty line read if EOF
+                    print('EOF without retrieving raw data: ' + afile)
+                    break # get out of this loop so we can go on to next file
+                cells = line.split(',') # comma seperated values (CSV)
+                columns = tuple(filter( None, [el.strip().strip('\"') for el in cells])) #need tuple because in python3 filter is evaluated in lazy fasion
+                # DEBUG print len(columns),': ', columns
+                # the raw data has a 12 element long header line:
+                # Line , Date , Time , Off-wrist status , ....
+                if ( (len(columns)==12) and (columns[0] == 'Line') ):
+                    break
+
+
+            if line == '': #empty line read if EOF
+                continue # go on to the next file
+
+            # move the file pointer back to the beginning of the header line
+            # so we can read it in as a header for the DataFrame
+            f.seek(currentFilePosition)
+
+            # generate unique identifier for this individual based on filename
+            # assumes filename has format:
+            # /path/to/file/UID_Month_Date_Year_Time_*.csv
+            UID = uidprefix + afile.split('/')[-1].split('_')[0]
+
+            # grab the data, ignore the first column which just has line numbers
+            # stuff the two Date/Time columns into a single Date variable
+            fileData = pd.read_csv(f, index_col=False, usecols=columns[1:],
+                                       parse_dates={'DateTime': [0,1]})
+            fileData['UID'] = UID
+
+            frames.append(fileData)
+
+    rawWatchData = pd.concat(frames) # make one big dataframe
+    rawWatchData.index = rawWatchData['DateTime']
+    del rawWatchData['DateTime']
+#%%
+    print('\nPass #2, data summary')
+    for _ in range(len(files)):
+        sys.stdout.write('.')
+    sys.stdout.write('\n')
+
+    frames = [] # list of data frames we will get from processing the files
+    for afile in files:
+        sys.stdout.write('.')
+        sys.stdout.flush()
+        with open(afile,'r') as f:
+            # we need to skip to the summary statistics
+            while True:
+                summaryFilePosition = f.tell()
+                line = f.readline()
+                if line == '': #empty line read if EOF
+                    print('EOF without retrieving summary data: ' + afile)
+                    break # get out of this loop so we can go on to next file
+                cells = line.split(',') # comma seperated values (CSV)
+                columns = tuple(filter( None, [el.strip().strip('\"') for el in cells])) #need tuple because in python3 filter is evaluated in lazy fasion
+                # print len(columns), columns[0]
+                # the raw data has a 35 element long header line:
+                # Interval Type , Interval #, Start Date, ....
+                if ( (len(columns)==35) and (columns[0] == 'Interval Type') ):
+                    break
+
+            if line == '': #empty line read if EOF
+                continue # go on to the next file
+
+            # advance to find out how many lines the summary includes
+            # since we don't care about excluded intervals and they
+            # also don't have a full set of columns, we stop there
+            nlines = 0
+            toskip = [1] # we skip the line after the header, it has units
+            while True:
+                line = f.readline()
+                if line == '': #empty line read if EOF
+                    print('EOF without retrieving summary data: ' + afile)
+                    break # get out of this loop so we can go on to next file
+                cells = line.split(',') # comma seperated values (CSV)
+                columns = tuple(filter( None, [el.strip().strip('\"') for el in cells])) #need tuple because in python3 filter is evaluated in lazy fasion
+                nlines += 1
+
+                if columns:
+                    if columns[0].find('Summary'):
+                        toskip.append(nlines)
+
+                    if columns[0] == 'EXCLUDED':
+                        break
+
+            if line == '': #empty line read if EOF
+                continue # go on to the next file
+
+            # move the file pointer back to the beginning of the header line
+            # so we can read it in as a header for the DataFrame
+            f.seek(summaryFilePosition)
+
+            # generate unique identifier for this individual based on filename
+            # assumes filename has format:
+            # /path/to/file/UID_Month_Date_Year_Time_*.csv
+            UID = uidprefix + afile.split('/')[-1].split('_')[0]
+
+            # grab the data, ignore the first column which just has line numbers
+            # stuff the two Date/Time columns into a single Date variable
+            fileData = pd.read_csv(f, index_col=False, skiprows=toskip,
+                                       nrows=nlines, skip_blank_lines=True)
+            fileData['UID'] = UID
+
+            frames.append(fileData)
+
+    if frames:
+        summaryWatchData = pd.concat(frames)
+    else:
+        summaryWatchData = None
+    #%%
+
+    return (rawWatchData, summaryWatchData)
+
+
+# Internal Cell
+
+def firstAndLastLight(data, threshold_list, resamp=False):
+    ''' firstAndLastLight(data, threshold_list, resamp=False) applies all thresholds in the list to each unique person-day in the data, finding the first and last times as well as total times light intensity is above those thresholds for any non-zero number.  A 0 threshold is a request to calc amount of time spent at 5 lux and under.  Time resampling of the data is done if resamp is of the form [func name,'time'], such as [np.mean,'5T'] or [np.max,'15T'].'''
+    ids = data.UID.unique()
+    firstlight = []
+    lastlight = []
+    min2fl = []
+    min2ll = []
+    whoswatch = []
+    watchperiod = []
+    thresholds = []
+    datelist = []
+    grouplist = []
+    totalact=[]
+    tabvlight=[]
+    tabvlightAM=[]
+    tluxmin = []
+    tluxminAM = []
+
+    for uid in ids:
+            these_rows = (data.UID == uid) & (data['Interval Status'].isin(['ACTIVE','REST'])) & np.logical_not(data['Off-Wrist Status'])
+
+            assert (these_rows.sum() > 0),"ISSUE: "+uid+" has no ACTIVE rows"
+
+
+            daysofdata = set( data[ these_rows ].index.date )
+
+            if 'Group' in data.columns:
+                group = data[data.UID == uid].iloc[0,:]["Group"]
+            elif 'Season' in data.columns:
+                group = data[data.UID == uid].iloc[0,:]["Season"]
+            else:
+                print("ISSUE: Potentially no group variable?")
+                raise ValueError
+
+            for a_day in daysofdata:
+                nextday = a_day + pd.tseries.offsets.Day()
+                nextday = nextday.date().isoformat()
+                thisday = a_day.isoformat()
+                daylight = data[these_rows][thisday + ' 04:00:00' : nextday + ' 03:59:00']['White Light']
+                if resamp: # resample if the function argument is set
+                    daylight = daylight.resample(resamp[1]).apply(resamp[0])
+
+                # watch update period for todays data
+                dperiod = daylight.index.to_series().diff().min()
+                dpmult = dperiod/pd.Timedelta('1 min') # multiplier to get lux-minutes later
+
+                lxmin =  dpmult * daylight.sum()
+                lxminAM = dpmult * daylight[:thisday + ' 12:00'].sum()
+
+                for a_thresh in threshold_list:
+                    thresholds.append(a_thresh)
+                    if a_thresh == 0 :
+                        abovethresh = daylight.index[ daylight < 5] # 0 theshold is a request to calculate under 5 lux
+                        abovethreshAM = daylight[:thisday + ' 12:00'].index[ daylight[:thisday + ' 12:00'] < 5]
+                    else:
+                        abovethresh = daylight.index[ daylight > a_thresh]
+                        abovethreshAM = daylight[:thisday + ' 12:00'].index[ daylight[:thisday + ' 12:00'] > a_thresh]
+                    tabvlight.append( dperiod * len(abovethresh))
+                    tabvlightAM.append( dperiod * len(abovethreshAM))
+                    tluxmin.append( lxmin )
+                    tluxminAM.append( lxminAM )
+                    watchperiod.append(dperiod)
+                    datelist.append(a_day)
+                    grouplist.append(group)
+                    try:
+                        timelight = abovethresh[-1] # last time is above threshold
+                        mins4am = (timelight.time().hour - 4) * 60 + timelight.time().minute
+                        if mins4am < 0: # if after midnight, then value above is negative
+                            mins4am += 24 * 60 # fix by adding 24 hours (in minutes) to it
+                    except IndexError: # there is no above threshold level all day long
+                        timelight = np.nan
+                        mins4am = np.nan
+                    lastlight.append(timelight)
+                    min2ll.append(mins4am)
+                    try:
+                        timelight = abovethresh[0] # first time is above threshold
+                        mins4am = (timelight.time().hour - 4) * 60 + timelight.time().minute
+                        if mins4am < 0: # if after midnight, then value above is negative
+                            mins4am += 24 * 60 # fix by adding 24 hours (in minutes) to it
+                    except IndexError: # there is no above threshold level all day long
+                        timelight = np.nan
+                        mins4am = np.nan
+                    firstlight.append(timelight)
+                    min2fl.append(mins4am)
+                    whoswatch.append(uid)
+    return pd.DataFrame( {'UID': whoswatch, 'Date': datelist, 'Threshold': thresholds,
+                          'Last Light': lastlight, 'Mins to LL from 4AM': min2ll,
+                          'First Light': firstlight, 'Mins to FL from 4AM': min2fl,
+                          'Time above threshold': tabvlight, 'Time above threshold AM': tabvlightAM,
+                          'Minutes above threshold': [ el.total_seconds()/60.0 for el in tabvlight],
+                          'Minutes above threshold AM': [ el.total_seconds()/60.0 for el in tabvlightAM],
+                          'Lux minutes': tluxmin, 'Lux minutes AM': tluxminAM,
+                          'Group': grouplist,
+                          'Watch period': watchperiod
+                         } )
+
 # Cell
 class SALAFrame:
     """
