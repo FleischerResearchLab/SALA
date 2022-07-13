@@ -40,7 +40,7 @@ nb_path: "00_processing.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="SALAFrame" class="doc_header"><code>class</code> <code>SALAFrame</code><a href="SALA/processing.py#L248" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SALAFrame</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="SALAFrame" class="doc_header"><code>class</code> <code>SALAFrame</code><a href="SALA/processing.py#L246" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SALAFrame</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>DataFrame-like storage for actiwatch data loaded either from a directory of csv files
 or an existing SALA or dataframe object.</p>
@@ -140,7 +140,7 @@ process_sleep_data
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.__init__" class="doc_header"><code>SALAFrame.__init__</code><a href="SALA/processing.py#L311" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.__init__</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="SALAFrame.__init__" class="doc_header"><code>SALAFrame.__init__</code><a href="SALA/processing.py#L309" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.__init__</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Initializes a SALA object either from existing parsed timing data, or from a directory
 of csvs. Timezone information can be optionally included to allow for sunset, sunrise
@@ -231,7 +231,7 @@ directory: dictionary (optional)
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.get_raw_data_from_key" class="doc_header"><code>SALAFrame.get_raw_data_from_key</code><a href="SALA/processing.py#L404" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.get_raw_data_from_key</code>(<strong><code>key</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>)</p>
+<h3 id="SALAFrame.get_raw_data_from_key" class="doc_header"><code>SALAFrame.get_raw_data_from_key</code><a href="SALA/processing.py#L402" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.get_raw_data_from_key</code>(<strong><code>key</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>)</p>
 </blockquote>
 <p>Loads and combines raw actiwatch data from any csv files found in
 the specified directory matching a particular key within the directory.</p>
@@ -446,7 +446,7 @@ Pass #2, data summary
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.get_raw_data" class="doc_header"><code>SALAFrame.get_raw_data</code><a href="SALA/processing.py#L439" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.get_raw_data</code>(<strong><code>outfile</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
+<h3 id="SALAFrame.get_raw_data" class="doc_header"><code>SALAFrame.get_raw_data</code><a href="SALA/processing.py#L437" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.get_raw_data</code>(<strong><code>outfile</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Loads and combines raw actiwatch data from any csv files found in
 the specified directory for all keys within the directory.</p>
@@ -663,7 +663,7 @@ the specified directory for all keys within the directory.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.export" class="doc_header"><code>SALAFrame.export</code><a href="SALA/processing.py#L488" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.export</code>(<strong><code>outfile</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="SALAFrame.export" class="doc_header"><code>SALAFrame.export</code><a href="SALA/processing.py#L486" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.export</code>(<strong><code>outfile</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Exports existing timing data to a parquet format.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4>
@@ -702,7 +702,7 @@ Desired dataframe for exporting.</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.process_data" class="doc_header"><code>SALAFrame.process_data</code><a href="SALA/processing.py#L511" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_data</code>(<strong><code>raw_data</code></strong>, <strong><code>thresholds</code></strong>)</p>
+<h3 id="SALAFrame.process_data" class="doc_header"><code>SALAFrame.process_data</code><a href="SALA/processing.py#L509" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_data</code>(<strong><code>raw_data</code></strong>, <strong><code>thresholds</code></strong>)</p>
 </blockquote>
 <p>Handles unprocessed combined raw data outputting first and last light times,
     and group identifiers for all specified light thresholds.</p>
@@ -767,7 +767,7 @@ on weekday and weekend/holiday groupings.</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="SALA/processing.py#L767" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>data</code></strong>)</p>
+<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="SALA/processing.py#L765" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>data</code></strong>)</p>
 </blockquote>
 <p>An example function that removes data
 from the first day of recording. Typically the first
@@ -1162,7 +1162,7 @@ as 'NaT')</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.sun_timings" class="doc_header"><code>SALAFrame.sun_timings</code><a href="SALA/processing.py#L566" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.sun_timings</code>()</p>
+<h3 id="SALAFrame.sun_timings" class="doc_header"><code>SALAFrame.sun_timings</code><a href="SALA/processing.py#L564" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.sun_timings</code>()</p>
 </blockquote>
 <p>Calculates sunrise and sunset timing information for data present in the
 SALA object.</p>
@@ -1278,7 +1278,7 @@ SALA object.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.do_everything" class="doc_header"><code>SALAFrame.do_everything</code><a href="SALA/processing.py#L589" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.do_everything</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
+<h3 id="SALAFrame.do_everything" class="doc_header"><code>SALAFrame.do_everything</code><a href="SALA/processing.py#L587" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.do_everything</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Handles the full SALA pipeline (excluding sleep period analysis), from processing and combining raw data
 to parsing and calculating processed data with sunrise and sunset information. First loads and compiles
@@ -1374,7 +1374,7 @@ on weekday and weekend/holiday groupings, and included sunrise and sunset calcul
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.process_sleep" class="doc_header"><code>SALAFrame.process_sleep</code><a href="SALA/processing.py#L640" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_sleep</code>(<strong><code>raw_data</code></strong>, <strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
+<h3 id="SALAFrame.process_sleep" class="doc_header"><code>SALAFrame.process_sleep</code><a href="SALA/processing.py#L638" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_sleep</code>(<strong><code>raw_data</code></strong>, <strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
 </blockquote>
 <p>Processes sleep data for existing timing data.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>raw_data: pd.DataFrame</p>

@@ -3,7 +3,6 @@
 __all__ = ['SALAFrame', 'remove_first_day']
 
 # Internal Cell
-
 def firstAndLastLight(data, threshold_list, resamp=False):
     ''' firstAndLastLight(data, threshold_list, resamp=False) applies all thresholds in the list to each unique person-day in the data, finding the first and last times as well as total times light intensity is above those thresholds for any non-zero number.  A 0 threshold is a request to calc amount of time spent at 5 lux and under.  Time resampling of the data is done if resamp is of the form [func name,'time'], such as [np.mean,'5T'] or [np.max,'15T'].'''
     ids = data.UID.unique()
@@ -102,10 +101,9 @@ def firstAndLastLight(data, threshold_list, resamp=False):
 
 
 # Internal Cell
-
 import glob
 import sys
-
+import pandas as pd
 def load_actiwatch_data(path,uidprefix=''):
 
     if path[-1]!='/':    # make sure path has a trailing slash
