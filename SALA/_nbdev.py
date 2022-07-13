@@ -5,7 +5,6 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 index = {"load_actiwatch_data": "00_processing.ipynb",
          "firstAndLastLight": "00_processing.ipynb",
          "SALAFrame": "00_processing.ipynb",
-         "remove_first_day": "00_processing.ipynb",
          "ClockPlot": "01_plots.ipynb",
          "LightPlot": "01_plots.ipynb"}
 
