@@ -3,6 +3,10 @@
 __all__ = ['SALAFrame', 'remove_first_day']
 
 # Internal Cell
+import glob
+import sys
+import pandas as pd
+
 def load_actiwatch_data(path,uidprefix=''):
 
     if path[-1]!='/':    # make sure path has a trailing slash

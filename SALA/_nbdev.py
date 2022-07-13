@@ -9,8 +9,8 @@ index = {"load_actiwatch_data": "00_processing.ipynb",
          "ClockPlot": "01_plots.ipynb",
          "LightPlot": "01_plots.ipynb"}
 
-modules = ["SALA/processing.py",
-           "SALA/plots.py"]
+modules = ["processing.py",
+           "plots.py"]
 
 doc_url = "https://tktran11.github.io/SALA/"
 
