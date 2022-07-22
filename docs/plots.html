@@ -29,6 +29,13 @@ nb_path: "01_plots.ipynb"
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Plots created within this module require particular information to be present within the data. Specifically, data related to sleep, light, or location are of importance for this dataset. Therefore, the plotting functions here take in dataframes like those found within SALA objects.</p>
@@ -47,7 +54,7 @@ nb_path: "01_plots.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ClockPlot" class="doc_header"><code>class</code> <code>ClockPlot</code><a href="SALA/plots.py#L6" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ClockPlot</code>()</p>
+<h2 id="ClockPlot" class="doc_header"><code>class</code> <code>ClockPlot</code><a href="SALA/plots.py#L17" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ClockPlot</code>()</p>
 </blockquote>
 <p>Clock-style plots for groupings within timing data. Requires specific information
 about light and location in order to properly render all portions of the plot. This
@@ -91,7 +98,7 @@ plot(timing_data, group_by, thresholds=[], figsize=(5,10), timezone=None)
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="ClockPlot.plot" class="doc_header"><code>ClockPlot.plot</code><a href="SALA/plots.py#L64" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>ClockPlot.plot</code>(<strong><code>timing_data</code></strong>, <strong><code>group_by</code></strong>, <strong><code>thresholds</code></strong>=<em><code>[]</code></em>, <strong><code>figsize</code></strong>=<em><code>(5, 10)</code></em>, <strong><code>timezone</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="ClockPlot.plot" class="doc_header"><code>ClockPlot.plot</code><a href="SALA/plots.py#L75" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>ClockPlot.plot</code>(<strong><code>timing_data</code></strong>, <strong><code>group_by</code></strong>, <strong><code>thresholds</code></strong>=<em><code>[]</code></em>, <strong><code>figsize</code></strong>=<em><code>(5, 10)</code></em>, <strong><code>timezone</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Creates clock plots for a grouping within SALA-styled timing data. For
 full functionality, the data should have specifically labeled columns for
@@ -384,7 +391,7 @@ timezone: str
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="LightPlot" class="doc_header"><code>class</code> <code>LightPlot</code><a href="SALA/plots.py#L254" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LightPlot</code>()</p>
+<h2 id="LightPlot" class="doc_header"><code>class</code> <code>LightPlot</code><a href="SALA/plots.py#L265" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LightPlot</code>()</p>
 </blockquote>
 <p>Creates various light plots for grouped data based on time of day.</p>
 
@@ -416,7 +423,7 @@ timezone: str
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="LightPlot.plot" class="doc_header"><code>LightPlot.plot</code><a href="SALA/plots.py#L257" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>LightPlot.plot</code>(<strong><code>data_list</code></strong>, <strong><code>labels</code></strong>, <strong><code>palette</code></strong>=<em><code>'deep'</code></em>, <strong><code>plot_type</code></strong>=<em><code>'mean/sem'</code></em>, <strong><code>y_lim</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="LightPlot.plot" class="doc_header"><code>LightPlot.plot</code><a href="SALA/plots.py#L268" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>LightPlot.plot</code>(<strong><code>data_list</code></strong>, <strong><code>labels</code></strong>, <strong><code>palette</code></strong>=<em><code>'deep'</code></em>, <strong><code>plot_type</code></strong>=<em><code>'mean/sem'</code></em>, <strong><code>y_lim</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Generates light plots.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>data_list: list</p>

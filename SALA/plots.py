@@ -3,6 +3,17 @@
 __all__ = ['ClockPlot', 'LightPlot']
 
 # Cell
+from joblib import Parallel, delayed
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+import numpy as np
+import matplotlib.dates as md
+import matplotlib as mpl
+
+from datetime import time
+
+# Cell
 class ClockPlot:
     """
     Clock-style plots for groupings within timing data. Requires specific information
