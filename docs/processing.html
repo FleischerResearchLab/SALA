@@ -541,7 +541,7 @@ the specified directory for all keys within the directory.</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;../SALA/example_output/&quot;</span>
-<span class="n">all_raw_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">get_raw_data</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">export</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">all_raw_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">get_raw_data</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">export</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">all_raw_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
@@ -805,7 +805,7 @@ on weekday and weekend/holiday groupings.</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="SALA/processing.py#L773" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>data</code></strong>)</p>
+<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="SALA/processing.py#L776" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>data</code></strong>)</p>
 </blockquote>
 <p>An example function that removes data
 from the first day of recording. Typically the first
@@ -915,26 +915,6 @@ as 'NaT')</p>
     <tr>
       <th>0</th>
       <td>base_v1\user1234</td>
-      <td>2018-06-30</td>
-      <td>5</td>
-      <td>2018-06-30 22:22:00</td>
-      <td>1102.0</td>
-      <td>2018-06-30 07:56:30</td>
-      <td>236.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>base_v1\user1234</td>
-      <td>2018-07-03</td>
-      <td>5</td>
-      <td>2018-07-03 23:31:00</td>
-      <td>1171.0</td>
-      <td>2018-07-03 07:00:30</td>
-      <td>180.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>base_v1\user1234</td>
       <td>2018-06-27</td>
       <td>5</td>
       <td>2018-06-27 22:57:00</td>
@@ -943,24 +923,44 @@ as 'NaT')</p>
       <td>312.0</td>
     </tr>
     <tr>
+      <th>1</th>
+      <td>base_v1\user1234</td>
+      <td>2018-07-02</td>
+      <td>5</td>
+      <td>2018-07-02 23:25:00</td>
+      <td>1165.0</td>
+      <td>2018-07-02 07:57:30</td>
+      <td>237.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>base_v1\user1234</td>
+      <td>2018-07-06</td>
+      <td>5</td>
+      <td>2018-07-06 23:24:00</td>
+      <td>1164.0</td>
+      <td>2018-07-06 06:44:30</td>
+      <td>164.0</td>
+    </tr>
+    <tr>
       <th>3</th>
       <td>base_v1\user1234</td>
-      <td>2018-07-07</td>
+      <td>2018-07-09</td>
       <td>5</td>
-      <td>2018-07-08 00:01:30</td>
-      <td>1201.0</td>
-      <td>2018-07-07 06:54:30</td>
-      <td>174.0</td>
+      <td>2018-07-09 23:19:00</td>
+      <td>1159.0</td>
+      <td>2018-07-09 06:39:00</td>
+      <td>159.0</td>
     </tr>
     <tr>
       <th>4</th>
       <td>base_v1\user1234</td>
-      <td>2018-07-08</td>
+      <td>2018-06-30</td>
       <td>5</td>
-      <td>2018-07-08 20:45:30</td>
-      <td>1005.0</td>
-      <td>2018-07-08 06:45:00</td>
-      <td>165.0</td>
+      <td>2018-06-30 22:22:00</td>
+      <td>1102.0</td>
+      <td>2018-06-30 07:56:30</td>
+      <td>236.0</td>
     </tr>
   </tbody>
 </table>
@@ -1024,26 +1024,6 @@ as 'NaT')</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0 days 10:04:00</td>
-      <td>0 days 03:26:30</td>
-      <td>604.0</td>
-      <td>206.5</td>
-      <td>779254.835</td>
-      <td>473764.040</td>
-      <td>base_</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0 days 12:47:30</td>
-      <td>0 days 03:37:30</td>
-      <td>767.5</td>
-      <td>217.5</td>
-      <td>377968.040</td>
-      <td>143815.500</td>
-      <td>base_</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>0 days 10:25:00</td>
       <td>0 days 02:23:00</td>
       <td>625.0</td>
@@ -1053,23 +1033,43 @@ as 'NaT')</p>
       <td>base_</td>
     </tr>
     <tr>
+      <th>1</th>
+      <td>0 days 09:06:30</td>
+      <td>0 days 03:49:00</td>
+      <td>546.5</td>
+      <td>229.0</td>
+      <td>221486.770</td>
+      <td>69199.365</td>
+      <td>base_</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0 days 09:38:30</td>
+      <td>0 days 05:00:00</td>
+      <td>578.5</td>
+      <td>300.0</td>
+      <td>432815.220</td>
+      <td>298955.700</td>
+      <td>base_</td>
+    </tr>
+    <tr>
       <th>3</th>
-      <td>0 days 11:45:30</td>
-      <td>0 days 04:37:30</td>
-      <td>705.5</td>
-      <td>277.5</td>
-      <td>814059.620</td>
-      <td>355668.225</td>
+      <td>0 days 13:56:00</td>
+      <td>0 days 04:35:30</td>
+      <td>836.0</td>
+      <td>275.5</td>
+      <td>1132776.310</td>
+      <td>678370.985</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0 days 11:46:30</td>
-      <td>0 days 04:39:30</td>
-      <td>706.5</td>
-      <td>279.5</td>
-      <td>478718.375</td>
-      <td>154556.710</td>
+      <td>0 days 10:04:00</td>
+      <td>0 days 03:26:30</td>
+      <td>604.0</td>
+      <td>206.5</td>
+      <td>779254.835</td>
+      <td>473764.040</td>
       <td>base_</td>
     </tr>
   </tbody>
@@ -1133,40 +1133,40 @@ as 'NaT')</p>
     <tr>
       <th>0</th>
       <td>0 days 00:00:30</td>
-      <td>5</td>
-      <td>base_Sat</td>
-      <td>base_Weekend/Holiday</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0 days 00:00:30</td>
-      <td>1</td>
-      <td>base_Tues</td>
-      <td>base_Weekday</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0 days 00:00:30</td>
       <td>2</td>
       <td>base_Wed</td>
       <td>base_Weekday</td>
       <td>False</td>
     </tr>
     <tr>
+      <th>1</th>
+      <td>0 days 00:00:30</td>
+      <td>0</td>
+      <td>base_Mon</td>
+      <td>base_Weekday</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0 days 00:00:30</td>
+      <td>4</td>
+      <td>base_Fri</td>
+      <td>base_Weekday</td>
+      <td>False</td>
+    </tr>
+    <tr>
       <th>3</th>
       <td>0 days 00:00:30</td>
-      <td>5</td>
-      <td>base_Sat</td>
-      <td>base_Weekend/Holiday</td>
-      <td>True</td>
+      <td>0</td>
+      <td>base_Mon</td>
+      <td>base_Weekday</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>4</th>
       <td>0 days 00:00:30</td>
-      <td>6</td>
-      <td>base_Sun</td>
+      <td>5</td>
+      <td>base_Sat</td>
       <td>base_Weekend/Holiday</td>
       <td>True</td>
     </tr>
@@ -1263,28 +1263,28 @@ SALA object.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>2018-06-30 05:15:10.009843-07:00</td>
-      <td>2018-06-30 21:10:28.189308-07:00</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2018-07-03 05:17:02.116743-07:00</td>
-      <td>2018-07-03 21:09:39.386344-07:00</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>2018-06-27 05:13:37.265731-07:00</td>
       <td>2018-06-27 21:10:53.349244-07:00</td>
     </tr>
     <tr>
+      <th>1</th>
+      <td>2018-07-02 05:16:22.672261-07:00</td>
+      <td>2018-07-02 21:09:58.273719-07:00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2018-07-06 05:19:12.313737-07:00</td>
+      <td>2018-07-06 21:08:27.123116-07:00</td>
+    </tr>
+    <tr>
       <th>3</th>
-      <td>2018-07-07 05:19:59.495724-07:00</td>
-      <td>2018-07-07 21:07:57.880755-07:00</td>
+      <td>2018-07-09 05:21:39.214048-07:00</td>
+      <td>2018-07-09 21:06:51.768689-07:00</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2018-07-08 05:20:48.480661-07:00</td>
-      <td>2018-07-08 21:07:26.089296-07:00</td>
+      <td>2018-06-30 05:15:10.009843-07:00</td>
+      <td>2018-06-30 21:10:28.189308-07:00</td>
     </tr>
   </tbody>
 </table>
@@ -1316,7 +1316,7 @@ SALA object.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.do_everything" class="doc_header"><code>SALAFrame.do_everything</code><a href="SALA/processing.py#L595" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.do_everything</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
+<h3 id="SALAFrame.do_everything" class="doc_header"><code>SALAFrame.do_everything</code><a href="SALA/processing.py#L594" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.do_everything</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Handles the full SALA pipeline (excluding sleep period analysis), from processing and combining raw data
 to parsing and calculating processed data with sunrise and sunset information. First loads and compiles
@@ -1412,7 +1412,7 @@ on weekday and weekend/holiday groupings, and included sunrise and sunset calcul
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.process_sleep" class="doc_header"><code>SALAFrame.process_sleep</code><a href="SALA/processing.py#L646" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_sleep</code>(<strong><code>raw_data</code></strong>, <strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
+<h3 id="SALAFrame.process_sleep" class="doc_header"><code>SALAFrame.process_sleep</code><a href="SALA/processing.py#L645" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_sleep</code>(<strong><code>raw_data</code></strong>, <strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
 </blockquote>
 <p>Processes sleep data for existing timing data.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>raw_data: pd.DataFrame</p>
@@ -1547,18 +1547,18 @@ timing_data: pd.DataFrame
     </tr>
     <tr>
       <th rowspan="2" valign="top">follow_up_v3\user1234</th>
-      <th>2018-09-17</th>
+      <th>2018-09-24</th>
       <td>0</td>
-      <td>2018-09-17 23:11:00</td>
-      <td>2018-09-18 06:29:30</td>
-      <td>0 days 07:18:30</td>
+      <td>2018-09-24 21:31:00</td>
+      <td>2018-09-25 04:44:30</td>
+      <td>0 days 07:13:30</td>
     </tr>
     <tr>
-      <th>2018-09-17</th>
-      <td>2</td>
-      <td>2018-09-18 16:11:00</td>
-      <td>2018-09-18 16:40:30</td>
-      <td>0 days 00:29:30</td>
+      <th>2018-09-24</th>
+      <td>1</td>
+      <td>2018-09-25 09:16:00</td>
+      <td>2018-09-25 10:30:00</td>
+      <td>0 days 01:14:00</td>
     </tr>
   </tbody>
 </table>
@@ -1624,22 +1624,6 @@ timing_data: pd.DataFrame
   <tbody>
     <tr>
       <th>0</th>
-      <td>2018-06-25 20:55:30</td>
-      <td>2018-06-26 06:51:00</td>
-      <td>0 days 09:55:30</td>
-      <td>1255.5</td>
-      <td>411.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2018-07-04 22:23:00</td>
-      <td>2018-07-05 06:36:00</td>
-      <td>0 days 08:13:00</td>
-      <td>1343.0</td>
-      <td>396.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>2018-07-05 23:27:00</td>
       <td>2018-07-06 06:29:00</td>
       <td>0 days 07:02:00</td>
@@ -1647,20 +1631,36 @@ timing_data: pd.DataFrame
       <td>389.0</td>
     </tr>
     <tr>
+      <th>1</th>
+      <td>2018-07-09 23:38:30</td>
+      <td>2018-07-10 06:57:00</td>
+      <td>0 days 07:18:30</td>
+      <td>1418.5</td>
+      <td>417.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2018-06-25 20:55:30</td>
+      <td>2018-06-26 06:51:00</td>
+      <td>0 days 09:55:30</td>
+      <td>1255.5</td>
+      <td>411.0</td>
+    </tr>
+    <tr>
       <th>3</th>
-      <td>2018-06-29 00:40:30</td>
-      <td>2018-06-29 06:41:00</td>
-      <td>0 days 06:00:30</td>
-      <td>1480.5</td>
-      <td>401.0</td>
+      <td>2018-07-02 23:35:30</td>
+      <td>2018-07-03 06:35:30</td>
+      <td>0 days 07:00:00</td>
+      <td>1415.5</td>
+      <td>395.5</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2018-07-03 23:57:30</td>
-      <td>2018-07-04 06:14:00</td>
-      <td>0 days 06:16:30</td>
-      <td>1437.5</td>
-      <td>374.0</td>
+      <td>2018-07-04 22:23:00</td>
+      <td>2018-07-05 06:36:00</td>
+      <td>0 days 08:13:00</td>
+      <td>1343.0</td>
+      <td>396.0</td>
     </tr>
   </tbody>
 </table>

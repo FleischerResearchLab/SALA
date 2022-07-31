@@ -105,12 +105,20 @@ class ClockPlot:
         # in data from a SALA object
 
         sns.set_style("white")
-        data = (
+        if group_by == 'UID':
+            data = (
             timing_data[["UID", "Date", "Threshold",
-                         group_by, "Sunrise", "Sunset",
+                        "Sunrise", "Sunset",
                         "Sleep onset MSLM", "Sleep offset MSLM",
                         "Mins to FL from 4AM", "Mins to LL from 4AM"]]
         ).copy()
+        else:
+            data = (
+                timing_data[["UID", "Date", "Threshold",
+                            group_by, "Sunrise", "Sunset",
+                            "Sleep onset MSLM", "Sleep offset MSLM",
+                            "Mins to FL from 4AM", "Mins to LL from 4AM"]]
+            ).copy()
 
         if thresholds is None or len(thresholds) < 1 or not thresholds:
             thresholds = data["Threshold"].unique()
