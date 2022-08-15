@@ -12,6 +12,7 @@ import matplotlib.dates as md
 import matplotlib as mpl
 
 from datetime import time
+from .processing import SALAFrame
 
 # Cell
 class ClockPlot:
@@ -101,8 +102,8 @@ class ClockPlot:
                 of valid timezones can be found in pytz.timezones.
         """
 
-        # TO-DO: After re-generating .py files with nbdev, make it possible to read
-        # in data from a SALA object
+        if isinstance(timing_data, SALAFrame):
+            timing_data = timing_data.data
 
         sns.set_style("white")
         if group_by == 'UID':

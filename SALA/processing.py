@@ -276,10 +276,12 @@ class SALAFrame:
             for different timezones to be present (all data must be converted to a single timezone)
 
         latitude: float
-            Latitude position for sunrise/sunset calculations.
+            Latitude position for sunrise/sunset calculations. Northern latitudes should be entered as positive
+            values, while southern latitudes should be entered as negatives.
 
         longitude: float
-            Longitude position for sunrise/sunset calculations.
+            Longitude position for sunrise/sunset calculations. Eastern longitudes should be entered as positive,
+            while western latitudes should be entered as negatives.
 
         Methods
         -------
@@ -306,12 +308,14 @@ class SALAFrame:
             Calculates sunset and sunrise timing information for currently stored SALA
             data, based on the timezone info within the stored data.
 
-        do_everything()
-            TO ADD AFTER TESTING OTHER NEW FUNCTIONS.
-
         process_sleep_data
             Processes sleep data for existing timing data, generating a summary dataframe
             based on the number of sleep periods within the data.
+
+        do_everything()
+            Complete all-in-one SALA function that handles processing raw data, adding sunrise/sunset
+            information, and sleep information.
+
     """
 
     def __init__(self, latitude, longitude, timezone, data=None, directory = None):
@@ -509,7 +513,7 @@ class SALAFrame:
         if data is None:
             data = self.data
         # putting date information in a parquet valid format
-        data["Date"] = data["Date"].values.astype("datetime64[s]")
+        data["Date"] = data["Date"].astype("datetime64[s]")
         data.to_parquet(f"{outfile}timing.parquet",
                                engine = "fastparquet", compression="gzip")
 
@@ -589,58 +593,6 @@ class SALAFrame:
                                                                          x,
                                                                          tzinfo = city.tzinfo))
         return self._data
-
-
-    def do_everything(self, outfile, thresholds, directory = None, grouping = "Group", export = True):
-        """Handles the full SALA pipeline (excluding sleep period analysis), from processing and combining raw data
-        to parsing and calculating processed data with sunrise and sunset information. First loads and compiles
-        all existing raw data for every key within the given directory. Then processes all raw data, calculating
-        additional information for all specified light thresholds. Also adds sunrise and sunset information.
-
-        #### Parameters
-
-        outfile: str
-
-                Directory to save to. (e.g. ../SALA/example_output/)
-
-        thresholds: list
-
-            List of light thresholds for the watch data.
-
-        directory: dict
-
-            Dictionary of valid folders to load actiwatch data from.
-            Folders should have .csv files in them. If no dictionary
-            is provided, it uses the one initialized as part of the SALA
-            object.
-
-        grouping: str
-
-            Name of the generated column for specifying groupings, where
-            the values will be the name of the key given. Default = 'Group'.
-
-        export: bool
-
-            Whether or not to export processed timing data to a parquet file saved in the designated
-            outfile location.
-
-        #### Returns
-
-            Processed timing data in a dataframe format, with specific identifier columns based
-            on weekday and weekend/holiday groupings, and included sunrise and sunset calculations.
-        """
-        if directory == None:
-            directory = self.directory
-
-        raw_data = self.get_raw_data(outfile, directory, grouping)
-        data = self.process_data(raw_data, thresholds)
-        self.sun_timings()
-
-        if export:
-            self.export(data = self.data, outfile = outfile)
-
-        return self._data
-
 
     def process_sleep(self, raw_data, sleep_split = "18:00", num_sleeps = 3):
         """Processes sleep data for existing timing data.
@@ -754,6 +706,13 @@ class SALAFrame:
                 sleeps['DT'] = DT
                 sleeps.reset_index(drop = True).set_index(['UID','DT'])
                 sleepers.append(sleeps)
+        timing_data["Sleep onset"] = sleep_onsets
+        timing_data["Sleep offset"] = sleep_offsets
+        timing_data["Sleep duration"] = sleep_durations
+        timing_data["Sleep onset MSLM"] = sleep_onsetMSLMs
+        timing_data["Sleep offset MSLM"] = sleep_offsetMSLMs
+
+        self._data = timing_data
         try:
             short_frame = (
                            pd.concat(sleepers).reset_index().drop('DateTime',axis=1)
@@ -762,15 +721,57 @@ class SALAFrame:
         except:
             print("Error: Could not concatenate multiple sleep instance data.")
             return timing_data
-        timing_data["Sleep onset"] = sleep_onsets
-        timing_data["Sleep offset"] = sleep_offsets
-        timing_data["Sleep duration"] = sleep_durations
-        timing_data["Sleep onset MSLM"] = sleep_onsetMSLMs
-        timing_data["Sleep offset MSLM"] = sleep_offsetMSLMs
-
-        self._data = timing_data
 
         return short_frame, timing_data
+
+    def do_everything(self, outfile, thresholds, directory = None, grouping = "Group", export = True):
+        """Handles the full SALA pipeline (excluding sleep period analysis), from processing and combining raw data
+        to parsing and calculating processed data with sunrise,sunset and sleep information.
+
+        #### Parameters
+
+        outfile: str
+
+                Directory to save to. (e.g. ../SALA/example_output/)
+
+        thresholds: list
+
+            List of light thresholds for the watch data.
+
+        directory: dict
+
+            Dictionary of valid folders to load actiwatch data from.
+            Folders should have .csv files in them. If no dictionary
+            is provided, it uses the one initialized as part of the SALA
+            object.
+
+        grouping: str
+
+            Name of the generated column for specifying groupings, where
+            the values will be the name of the key given. Default = 'Group'.
+
+        export: bool
+
+            Whether or not to export processed timing data to a parquet file saved in the designated
+            outfile location.
+
+        #### Returns
+
+            Processed timing data in a dataframe format, with specific identifier columns based
+            on weekday and weekend/holiday groupings, and included sunrise and sunset calculations.
+        """
+        if directory == None:
+            directory = self.directory
+
+        raw_data = self.get_raw_data(outfile, directory, grouping)
+        data = self.process_data(raw_data, thresholds)
+        self.sun_timings()
+        sala.process_sleep(raw_data)
+        if export:
+            self.export(data = self.data, outfile = outfile)
+
+        return self._data
+
 
 # Cell
 def remove_first_day(data):

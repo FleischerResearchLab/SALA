@@ -102,10 +102,12 @@ timezone: str
     for different timezones to be present (all data must be converted to a single timezone)
 
 latitude: float
-    Latitude position for sunrise/sunset calculations.
+    Latitude position for sunrise/sunset calculations. Northern latitudes should be entered as positive
+    values, while southern latitudes should be entered as negatives.
 
 longitude: float
-    Longitude position for sunrise/sunset calculations.
+    Longitude position for sunrise/sunset calculations. Eastern longitudes should be entered as positive,
+    while western latitudes should be entered as negatives.
 
 Methods
 -------
@@ -132,12 +134,13 @@ sun_timings()
     Calculates sunset and sunrise timing information for currently stored SALA
     data, based on the timezone info within the stored data.
 
-do_everything()
-    TO ADD AFTER TESTING OTHER NEW FUNCTIONS.
-
 process_sleep_data
     Processes sleep data for existing timing data, generating a summary dataframe
-    based on the number of sleep periods within the data.</code></pre>
+    based on the number of sleep periods within the data.
+
+do_everything()
+    Complete all-in-one SALA function that handles processing raw data, adding sunrise/sunset
+    information, and sleep information.</code></pre>
 
 </div>
 
@@ -159,7 +162,8 @@ process_sleep_data
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Creating-SALA-Objects">Creating SALA Objects<a class="anchor-link" href="#Creating-SALA-Objects"> </a></h2><p>SALA objects can be created by using the initialization method provided. This method requires location specific information and either existing data or a data source directory:</p>
-<h4 id="Latitude,-Longitude,-Timezone">Latitude, Longitude, Timezone<a class="anchor-link" href="#Latitude,-Longitude,-Timezone"> </a></h4><p>These location specific information pieces are necessary in generating accurate sunrise and sunset timings.</p>
+<h4 id="Latitude,-Longitude,-Timezone">Latitude, Longitude, Timezone<a class="anchor-link" href="#Latitude,-Longitude,-Timezone"> </a></h4><p>These location specific information pieces are necessary in generating accurate sunrise and sunset timings. Northern latitudes and eastern longitudes should be represented with positive
+numbers, while southern latitudes and western longitudes should be entered as negative numbers.</p>
 <h4 id="Data">Data<a class="anchor-link" href="#Data"> </a></h4><p>This should consist of a processed dataframe in SALA-style, with corresponding columns such as 
 "First Light", "Date", "Lux Minutes", etc. Data should be entered as a variable in cases where existing data missing sunrise or sunset data is available or for immediate use with SALA-style plots.</p>
 <h4 id="Directory">Directory<a class="anchor-link" href="#Directory"> </a></h4><p>In most cases, it is preferred to have a directory entered. A directory should be in dictionary style, where keys denote file groupings (e.g. baseline versus intervention) and the values denote relative file paths/folders to find csv stored data in.</p>
@@ -178,7 +182,7 @@ process_sleep_data
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.__init__" class="doc_header"><code>SALAFrame.__init__</code><a href="SALA/processing.py#L317" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.__init__</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="SALAFrame.__init__" class="doc_header"><code>SALAFrame.__init__</code><a href="SALA/processing.py#L321" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.__init__</code>(<strong><code>latitude</code></strong>, <strong><code>longitude</code></strong>, <strong><code>timezone</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>, <strong><code>directory</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Initializes a SALA object either from existing parsed timing data, or from a directory
 of csvs. Timezone information can be optionally included to allow for sunset, sunrise
@@ -232,8 +236,8 @@ directory: dictionary (optional)
     <span class="s1">&#39;follow_up_&#39;</span><span class="p">:</span> <span class="s1">&#39;data/v3&#39;</span>
 <span class="p">}</span>
 <span class="n">timezone</span> <span class="o">=</span> <span class="s2">&quot;America/Los_Angeles&quot;</span>
-<span class="n">latitude</span> <span class="o">=</span> <span class="mf">47.65</span>
-<span class="n">longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">122.30</span>
+<span class="n">latitude</span> <span class="o">=</span> <span class="mf">32.8801</span>
+<span class="n">longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">117.234</span>
 
 <span class="n">sala_from_directory</span> <span class="o">=</span> <span class="n">SALAFrame</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">timezone</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="n">directory</span><span class="p">)</span>
 
@@ -269,7 +273,7 @@ directory: dictionary (optional)
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.get_raw_data_from_key" class="doc_header"><code>SALAFrame.get_raw_data_from_key</code><a href="SALA/processing.py#L410" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.get_raw_data_from_key</code>(<strong><code>key</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>)</p>
+<h3 id="SALAFrame.get_raw_data_from_key" class="doc_header"><code>SALAFrame.get_raw_data_from_key</code><a href="SALA/processing.py#L414" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.get_raw_data_from_key</code>(<strong><code>key</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>)</p>
 </blockquote>
 <p>Loads and combines raw actiwatch data from any csv files found in
 the specified directory matching a particular key within the directory.</p>
@@ -484,7 +488,7 @@ Pass #2, data summary
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.get_raw_data" class="doc_header"><code>SALAFrame.get_raw_data</code><a href="SALA/processing.py#L445" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.get_raw_data</code>(<strong><code>outfile</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
+<h3 id="SALAFrame.get_raw_data" class="doc_header"><code>SALAFrame.get_raw_data</code><a href="SALA/processing.py#L449" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.get_raw_data</code>(<strong><code>outfile</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Loads and combines raw actiwatch data from any csv files found in
 the specified directory for all keys within the directory.</p>
@@ -541,7 +545,7 @@ the specified directory for all keys within the directory.</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;../SALA/example_output/&quot;</span>
-<span class="n">all_raw_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">get_raw_data</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">export</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">all_raw_data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">get_raw_data</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">export</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">all_raw_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
@@ -701,7 +705,7 @@ the specified directory for all keys within the directory.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.export" class="doc_header"><code>SALAFrame.export</code><a href="SALA/processing.py#L494" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.export</code>(<strong><code>outfile</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>)</p>
+<h3 id="SALAFrame.export" class="doc_header"><code>SALAFrame.export</code><a href="SALA/processing.py#L498" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.export</code>(<strong><code>outfile</code></strong>, <strong><code>data</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Exports existing timing data to a parquet format.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4>
@@ -740,7 +744,7 @@ Desired dataframe for exporting.</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.process_data" class="doc_header"><code>SALAFrame.process_data</code><a href="SALA/processing.py#L517" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_data</code>(<strong><code>raw_data</code></strong>, <strong><code>thresholds</code></strong>)</p>
+<h3 id="SALAFrame.process_data" class="doc_header"><code>SALAFrame.process_data</code><a href="SALA/processing.py#L521" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_data</code>(<strong><code>raw_data</code></strong>, <strong><code>thresholds</code></strong>)</p>
 </blockquote>
 <p>Handles unprocessed combined raw data outputting first and last light times,
     and group identifiers for all specified light thresholds.</p>
@@ -805,7 +809,7 @@ on weekday and weekend/holiday groupings.</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="SALA/processing.py#L776" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>data</code></strong>)</p>
+<h4 id="remove_first_day" class="doc_header"><code>remove_first_day</code><a href="SALA/processing.py#L777" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>remove_first_day</code>(<strong><code>data</code></strong>)</p>
 </blockquote>
 <p>An example function that removes data
 from the first day of recording. Typically the first
@@ -915,52 +919,52 @@ as 'NaT')</p>
     <tr>
       <th>0</th>
       <td>base_v1\user1234</td>
-      <td>2018-06-27</td>
+      <td>2018-06-29</td>
       <td>5</td>
-      <td>2018-06-27 22:57:00</td>
-      <td>1137.0</td>
-      <td>2018-06-27 09:12:30</td>
-      <td>312.0</td>
+      <td>2018-06-29 22:18:30</td>
+      <td>1098.0</td>
+      <td>2018-06-29 06:47:00</td>
+      <td>167.0</td>
     </tr>
     <tr>
       <th>1</th>
       <td>base_v1\user1234</td>
-      <td>2018-07-02</td>
+      <td>2018-07-08</td>
       <td>5</td>
-      <td>2018-07-02 23:25:00</td>
-      <td>1165.0</td>
-      <td>2018-07-02 07:57:30</td>
-      <td>237.0</td>
+      <td>2018-07-08 20:45:30</td>
+      <td>1005.0</td>
+      <td>2018-07-08 06:45:00</td>
+      <td>165.0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>base_v1\user1234</td>
-      <td>2018-07-06</td>
+      <td>2018-06-26</td>
       <td>5</td>
-      <td>2018-07-06 23:24:00</td>
-      <td>1164.0</td>
-      <td>2018-07-06 06:44:30</td>
-      <td>164.0</td>
+      <td>2018-06-26 23:46:00</td>
+      <td>1186.0</td>
+      <td>2018-06-26 07:01:30</td>
+      <td>181.0</td>
     </tr>
     <tr>
       <th>3</th>
       <td>base_v1\user1234</td>
-      <td>2018-07-09</td>
+      <td>2018-07-01</td>
       <td>5</td>
-      <td>2018-07-09 23:19:00</td>
-      <td>1159.0</td>
-      <td>2018-07-09 06:39:00</td>
-      <td>159.0</td>
+      <td>2018-07-01 23:11:00</td>
+      <td>1151.0</td>
+      <td>2018-07-01 08:36:00</td>
+      <td>276.0</td>
     </tr>
     <tr>
       <th>4</th>
       <td>base_v1\user1234</td>
-      <td>2018-06-30</td>
+      <td>2018-07-03</td>
       <td>5</td>
-      <td>2018-06-30 22:22:00</td>
-      <td>1102.0</td>
-      <td>2018-06-30 07:56:30</td>
-      <td>236.0</td>
+      <td>2018-07-03 23:31:00</td>
+      <td>1171.0</td>
+      <td>2018-07-03 07:00:30</td>
+      <td>180.0</td>
     </tr>
   </tbody>
 </table>
@@ -1024,52 +1028,52 @@ as 'NaT')</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0 days 10:25:00</td>
-      <td>0 days 02:23:00</td>
-      <td>625.0</td>
-      <td>143.0</td>
-      <td>640912.350</td>
-      <td>247699.580</td>
+      <td>0 days 05:00:30</td>
+      <td>0 days 03:26:30</td>
+      <td>300.5</td>
+      <td>206.5</td>
+      <td>65985.730</td>
+      <td>64188.250</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0 days 09:06:30</td>
-      <td>0 days 03:49:00</td>
-      <td>546.5</td>
-      <td>229.0</td>
-      <td>221486.770</td>
-      <td>69199.365</td>
+      <td>0 days 11:46:30</td>
+      <td>0 days 04:39:30</td>
+      <td>706.5</td>
+      <td>279.5</td>
+      <td>478718.375</td>
+      <td>154556.710</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0 days 09:38:30</td>
-      <td>0 days 05:00:00</td>
-      <td>578.5</td>
-      <td>300.0</td>
-      <td>432815.220</td>
-      <td>298955.700</td>
+      <td>0 days 10:22:30</td>
+      <td>0 days 04:15:00</td>
+      <td>622.5</td>
+      <td>255.0</td>
+      <td>1221873.310</td>
+      <td>646422.485</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0 days 13:56:00</td>
-      <td>0 days 04:35:30</td>
-      <td>836.0</td>
-      <td>275.5</td>
-      <td>1132776.310</td>
-      <td>678370.985</td>
+      <td>0 days 10:19:30</td>
+      <td>0 days 03:06:00</td>
+      <td>619.5</td>
+      <td>186.0</td>
+      <td>949194.780</td>
+      <td>165889.685</td>
       <td>base_</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0 days 10:04:00</td>
-      <td>0 days 03:26:30</td>
-      <td>604.0</td>
-      <td>206.5</td>
-      <td>779254.835</td>
-      <td>473764.040</td>
+      <td>0 days 12:47:30</td>
+      <td>0 days 03:37:30</td>
+      <td>767.5</td>
+      <td>217.5</td>
+      <td>377968.040</td>
+      <td>143815.500</td>
       <td>base_</td>
     </tr>
   </tbody>
@@ -1133,42 +1137,42 @@ as 'NaT')</p>
     <tr>
       <th>0</th>
       <td>0 days 00:00:30</td>
-      <td>2</td>
-      <td>base_Wed</td>
-      <td>base_Weekday</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0 days 00:00:30</td>
-      <td>0</td>
-      <td>base_Mon</td>
-      <td>base_Weekday</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0 days 00:00:30</td>
       <td>4</td>
       <td>base_Fri</td>
       <td>base_Weekday</td>
       <td>False</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>1</th>
       <td>0 days 00:00:30</td>
-      <td>0</td>
-      <td>base_Mon</td>
+      <td>6</td>
+      <td>base_Sun</td>
+      <td>base_Weekend/Holiday</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0 days 00:00:30</td>
+      <td>1</td>
+      <td>base_Tues</td>
       <td>base_Weekday</td>
       <td>False</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>3</th>
       <td>0 days 00:00:30</td>
-      <td>5</td>
-      <td>base_Sat</td>
+      <td>6</td>
+      <td>base_Sun</td>
       <td>base_Weekend/Holiday</td>
       <td>True</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0 days 00:00:30</td>
+      <td>1</td>
+      <td>base_Tues</td>
+      <td>base_Weekday</td>
+      <td>False</td>
     </tr>
   </tbody>
 </table>
@@ -1200,7 +1204,7 @@ as 'NaT')</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.sun_timings" class="doc_header"><code>SALAFrame.sun_timings</code><a href="SALA/processing.py#L572" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.sun_timings</code>()</p>
+<h3 id="SALAFrame.sun_timings" class="doc_header"><code>SALAFrame.sun_timings</code><a href="SALA/processing.py#L576" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.sun_timings</code>()</p>
 </blockquote>
 <p>Calculates sunrise and sunset timing information for data present in the
 SALA object.</p>
@@ -1263,28 +1267,28 @@ SALA object.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>2018-06-27 05:13:37.265731-07:00</td>
-      <td>2018-06-27 21:10:53.349244-07:00</td>
+      <td>2018-06-29 05:43:47.073555-07:00</td>
+      <td>2018-06-29 20:01:04.028805-07:00</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>2018-07-02 05:16:22.672261-07:00</td>
-      <td>2018-07-02 21:09:58.273719-07:00</td>
+      <td>2018-07-08 05:47:52.422692-07:00</td>
+      <td>2018-07-08 20:00:03.891732-07:00</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2018-07-06 05:19:12.313737-07:00</td>
-      <td>2018-07-06 21:08:27.123116-07:00</td>
+      <td>2018-06-26 05:42:43.671604-07:00</td>
+      <td>2018-06-26 20:00:56.207091-07:00</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>2018-07-09 05:21:39.214048-07:00</td>
-      <td>2018-07-09 21:06:51.768689-07:00</td>
+      <td>2018-07-01 05:44:34.822411-07:00</td>
+      <td>2018-07-01 20:01:01.614246-07:00</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2018-06-30 05:15:10.009843-07:00</td>
-      <td>2018-06-30 21:10:28.189308-07:00</td>
+      <td>2018-07-03 05:45:26.661576-07:00</td>
+      <td>2018-07-03 20:00:52.991415-07:00</td>
     </tr>
   </tbody>
 </table>
@@ -1316,12 +1320,10 @@ SALA object.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.do_everything" class="doc_header"><code>SALAFrame.do_everything</code><a href="SALA/processing.py#L594" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.do_everything</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
+<h3 id="SALAFrame.do_everything" class="doc_header"><code>SALAFrame.do_everything</code><a href="SALA/processing.py#L727" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.do_everything</code>(<strong><code>outfile</code></strong>, <strong><code>thresholds</code></strong>, <strong><code>directory</code></strong>=<em><code>None</code></em>, <strong><code>grouping</code></strong>=<em><code>'Group'</code></em>, <strong><code>export</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Handles the full SALA pipeline (excluding sleep period analysis), from processing and combining raw data
-to parsing and calculating processed data with sunrise and sunset information. First loads and compiles
-all existing raw data for every key within the given directory. Then processes all raw data, calculating
-additional information for all specified light thresholds. Also adds sunrise and sunset information.</p>
+to parsing and calculating processed data with sunrise,sunset and sleep information.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>outfile: str</p>
 
 <pre><code>    Directory to save to. (e.g. ../SALA/example_output/)
@@ -1397,6 +1399,7 @@ on weekday and weekend/holiday groupings, and included sunrise and sunset calcul
  modifies stored data to have sleep period information</p>
 </li>
 </ol>
+<p>Note that modifying a SALA-style dataframe to have sleep period information (onset and offset, etc.) is necessary for plot creation.</p>
 
 </div>
 </div>
@@ -1412,7 +1415,7 @@ on weekday and weekend/holiday groupings, and included sunrise and sunset calcul
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="SALAFrame.process_sleep" class="doc_header"><code>SALAFrame.process_sleep</code><a href="SALA/processing.py#L645" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_sleep</code>(<strong><code>raw_data</code></strong>, <strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
+<h3 id="SALAFrame.process_sleep" class="doc_header"><code>SALAFrame.process_sleep</code><a href="SALA/processing.py#L597" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>SALAFrame.process_sleep</code>(<strong><code>raw_data</code></strong>, <strong><code>sleep_split</code></strong>=<em><code>'18:00'</code></em>, <strong><code>num_sleeps</code></strong>=<em><code>3</code></em>)</p>
 </blockquote>
 <p>Processes sleep data for existing timing data.</p>
 <h4 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h4><p>raw_data: pd.DataFrame</p>
@@ -1624,43 +1627,43 @@ timing_data: pd.DataFrame
   <tbody>
     <tr>
       <th>0</th>
+      <td>2018-07-07 00:08:00</td>
+      <td>2018-07-07 06:53:30</td>
+      <td>0 days 06:45:30</td>
+      <td>1448.0</td>
+      <td>413.5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2018-06-27 00:04:30</td>
+      <td>2018-06-27 09:12:00</td>
+      <td>0 days 09:07:30</td>
+      <td>1444.5</td>
+      <td>552.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2018-07-03 23:57:30</td>
+      <td>2018-07-04 06:14:00</td>
+      <td>0 days 06:16:30</td>
+      <td>1437.5</td>
+      <td>374.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2018-06-29 22:20:00</td>
+      <td>2018-06-30 07:44:00</td>
+      <td>0 days 09:24:00</td>
+      <td>1340.0</td>
+      <td>464.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
       <td>2018-07-05 23:27:00</td>
       <td>2018-07-06 06:29:00</td>
       <td>0 days 07:02:00</td>
       <td>1407.0</td>
       <td>389.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2018-07-09 23:38:30</td>
-      <td>2018-07-10 06:57:00</td>
-      <td>0 days 07:18:30</td>
-      <td>1418.5</td>
-      <td>417.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2018-06-25 20:55:30</td>
-      <td>2018-06-26 06:51:00</td>
-      <td>0 days 09:55:30</td>
-      <td>1255.5</td>
-      <td>411.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2018-07-02 23:35:30</td>
-      <td>2018-07-03 06:35:30</td>
-      <td>0 days 07:00:00</td>
-      <td>1415.5</td>
-      <td>395.5</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2018-07-04 22:23:00</td>
-      <td>2018-07-05 06:36:00</td>
-      <td>0 days 08:13:00</td>
-      <td>1343.0</td>
-      <td>396.0</td>
     </tr>
   </tbody>
 </table>
@@ -1668,6 +1671,23 @@ timing_data: pd.DataFrame
 
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sala</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">sala</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">outfile</span> <span class="o">=</span> <span class="n">outfile</span><span class="p">)</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 
